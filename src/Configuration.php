@@ -6,10 +6,10 @@ use Stackflows\GatewayApi\Configuration as ApiConfiguration;
 
 class Configuration
 {
-    /** @var string  Address of the Stack Flow Gateway API */
+    /** @var string Address of the Stack Flow Gateway API */
     private string $host;
 
-    /** @var string  Stackflows engine uuid. */
+    /** @var string Stackflows engine uuid. */
     private string $engine;
 
     private ApiConfiguration $apiConf;

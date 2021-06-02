@@ -3,7 +3,6 @@
 namespace Stackflows\StackflowsPlugin\Commands;
 
 use Illuminate\Console\Command;
-use Stackflows\GatewayApi\ApiException;
 use Stackflows\GatewayApi\Model\Variable;
 use Stackflows\StackflowsPlugin\Stackflows;
 
@@ -25,14 +24,17 @@ class SignalThrowCommand extends Command
             $variables = $this->convertVariables($vars);
         } catch (\InvalidArgumentException $e) {
             $this->error($e->getMessage());
+
             return;
         }
 
         $this->info("Sending...");
+
         try {
             $signal->throw($name, $variables);
         } catch (\Throwable $e) {
             $this->error($e->getMessage());
+
             return;
         }
 

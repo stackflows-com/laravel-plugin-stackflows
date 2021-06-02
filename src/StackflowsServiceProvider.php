@@ -6,7 +6,6 @@ use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Stackflows\StackflowsPlugin\Commands\SignalThrowCommand;
 use Stackflows\StackflowsPlugin\Commands\StackflowsCommand;
-use Stackflows\StackflowsPlugin\Commands\UserTaskCommand;
 use Stackflows\StackflowsPlugin\Exceptions\InvalidConfiguration;
 
 class StackflowsServiceProvider extends PackageServiceProvider
