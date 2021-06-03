@@ -33,6 +33,7 @@ class StackflowsServiceProvider extends PackageServiceProvider
                 return new Configuration(config('stackflows.host'), config('stackflows.instance'));
             }
         );
+
     }
 
     /**

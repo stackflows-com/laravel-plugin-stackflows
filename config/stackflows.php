@@ -10,4 +10,11 @@ return [
      * Stackflows instance UUID.
      */
     'instance' => env('STACKFLOWS_INSTANCE'),
+
+    /*
+     * Service task executors are classes that handle Stackflows service tasks.
+     * Must implements interface \Stackflows\StackflowsPlugin\ServiceTaskExecutorInterface
+     */
+    'service_task_executors' => [],
+
 ];
