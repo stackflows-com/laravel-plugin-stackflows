@@ -1,6 +1,6 @@
 <?php
 
-namespace Stackflows\StackflowsPlugin;
+namespace Stackflows\StackflowsPlugin\Services;
 
 use Stackflows\GatewayApi\Model\ServiceTask;
 
@@ -18,5 +18,13 @@ interface ServiceTaskExecutorInterface
      */
     public function getLockDuration(): int;
 
-    public function execute(ServiceTask $task): void;
+    /**
+     * Execute the service task.
+     *
+     * @param ServiceTask $task
+     * @return ServiceTask
+     *
+     * @throws \Exception
+     */
+    public function execute(ServiceTask $task): ServiceTask;
 }

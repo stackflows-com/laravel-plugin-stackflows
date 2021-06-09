@@ -55,7 +55,8 @@ class SignalThrowCommand extends Command
             }
             $v = new Variable();
             $v->setName($data[0]);
-            $v->setValue([$data[1]]);
+            $v->setValue((object)[$data[1]]);
+            $v->setType('String');
             $result[] = $v;
         }
 

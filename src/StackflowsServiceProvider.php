@@ -4,8 +4,8 @@ namespace Stackflows\StackflowsPlugin;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Stackflows\StackflowsPlugin\Commands\ServiceTaskSubscribeCommand;
 use Stackflows\StackflowsPlugin\Commands\SignalThrowCommand;
-use Stackflows\StackflowsPlugin\Commands\StackflowsCommand;
 use Stackflows\StackflowsPlugin\Exceptions\InvalidConfiguration;
 
 class StackflowsServiceProvider extends PackageServiceProvider
@@ -20,7 +20,7 @@ class StackflowsServiceProvider extends PackageServiceProvider
         $package
             ->name('stackflows')
             ->hasConfigFile('stackflows')
-            ->hasCommands([StackflowsCommand::class, SignalThrowCommand::class]);
+            ->hasCommands([SignalThrowCommand::class, ServiceTaskSubscribeCommand::class]);
     }
 
     public function packageRegistered()
@@ -34,6 +34,7 @@ class StackflowsServiceProvider extends PackageServiceProvider
             }
         );
 
+        $this->app->tag(config('stackflows.service_task_executors'), 'stackflows-service-task');
     }
 
     /**
