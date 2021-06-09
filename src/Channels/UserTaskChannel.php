@@ -2,10 +2,7 @@
 
 namespace Stackflows\StackflowsPlugin\Channels;
 
-use Stackflows\GatewayApi\Api\SignalApi;
 use Stackflows\GatewayApi\Api\UserTaskApi;
-use Stackflows\GatewayApi\Model\ThrowSignalRequest;
-use Stackflows\GatewayApi\Model\Variable;
 use Stackflows\StackflowsPlugin\Configuration;
 
 class UserTaskChannel

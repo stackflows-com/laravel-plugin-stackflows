@@ -22,6 +22,7 @@ class ServiceTaskSubscribeCommand extends Command implements SignalableCommandIn
         $executors = $app->tagged('stackflows-service-task');
         if ($executors->count() === 0) {
             $this->error('Stackflows service task executors are not registered. Check the configuration file stackflows.php');
+
             return;
         }
 
@@ -65,6 +66,7 @@ class ServiceTaskSubscribeCommand extends Command implements SignalableCommandIn
 
             return;
         }
+
         return;
     }
 }

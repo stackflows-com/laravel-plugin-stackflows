@@ -2,7 +2,6 @@
 
 namespace Stackflows\StackflowsPlugin;
 
-use GuzzleHttp\Client;
 use Stackflows\GatewayApi\Api\ServiceTaskApi;
 use Stackflows\GatewayApi\Api\SignalApi;
 use Stackflows\GatewayApi\Api\UserTaskApi;

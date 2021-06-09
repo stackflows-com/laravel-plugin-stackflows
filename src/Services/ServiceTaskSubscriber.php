@@ -30,6 +30,7 @@ final class ServiceTaskSubscriber
     {
         $this->executors = $executors;
         $this->executorErrors = $this->getErrorMap($executors);
+
         return $this;
     }
 
@@ -42,7 +43,7 @@ final class ServiceTaskSubscriber
             return;
         }
 
-        while (!$this->stopped) {
+        while (! $this->stopped) {
             foreach ($this->executors as $executor) {
                 $tasks = $this->fetch($executor);
                 if (is_null($tasks)) {
@@ -94,7 +95,7 @@ final class ServiceTaskSubscriber
      * @throws TooManyErrors
      * @throws ApiException
      */
-    private function fetch(ServiceTaskExecutorInterface $executor): array|null
+    private function fetch(ServiceTaskExecutorInterface $executor): array | null
     {
         return $this->api->getPending($executor);
     }

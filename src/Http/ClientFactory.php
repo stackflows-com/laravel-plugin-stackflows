@@ -52,6 +52,7 @@ class ClientFactory
                 } elseif ($response) {
                     $msg .= 'status code: ' . $response->getStatusCode();
                 }
+
                 throw TooManyErrors::tooManyHttpErrors($msg);
             }
 
@@ -68,6 +69,7 @@ class ClientFactory
                     ),
                     [$request->getHeader('Host')[0]]
                 );
+
                 return true;
             }
 
@@ -85,6 +87,7 @@ class ClientFactory
                         ),
                         [$request->getHeader('Host')[0]]
                     );
+
                     return true;
                 }
             }

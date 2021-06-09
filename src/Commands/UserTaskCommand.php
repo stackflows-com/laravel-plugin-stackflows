@@ -16,10 +16,12 @@ class UserTaskCommand extends Command
         $taskCh = $client->getUserTaskChannel();
 
         $this->info("Sending...");
+
         try {
             $tasks = $taskCh->getList();
         } catch (\Throwable $e) {
             $this->error($e->getMessage());
+
             return;
         }
 
