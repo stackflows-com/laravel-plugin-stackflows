@@ -13,7 +13,7 @@ return [
 
     /*
      * Service task executors are classes that handle Stackflows service tasks.
-     * Must implements interface \Stackflows\StackflowsPlugin\ServiceTaskExecutorInterface
+     * Must implements interface \Stackflows\StackflowsPlugin\Services\ServiceTask\ServiceTaskExecutorInterface
      */
     'service_task_executors' => [],
 

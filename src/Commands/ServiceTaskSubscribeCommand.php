@@ -2,10 +2,12 @@
 
 namespace Stackflows\StackflowsPlugin\Commands;
 
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Application;
 use Stackflows\StackflowsPlugin\Exceptions\TooManyErrors;
-use Stackflows\StackflowsPlugin\Services\ServiceTaskSubscriber;
+use Stackflows\StackflowsPlugin\Services\Loop\Loop;
+use Stackflows\StackflowsPlugin\Services\ServiceTask\ServiceTaskSubscriber;
 use Stackflows\StackflowsPlugin\Stackflows;
 use Symfony\Component\Console\Command\SignalableCommandInterface;
 
@@ -15,29 +17,29 @@ class ServiceTaskSubscribeCommand extends Command implements SignalableCommandIn
 
     public $description = 'Subscribe to service tasks';
 
-    private ServiceTaskSubscriber $subscriber;
+    private Loop $subscriber;
 
     public function handle(Application $app, Stackflows $client)
     {
         $executors = $app->tagged('stackflows-service-task');
-        if ($executors->count() === 0) {
-            $this->error('Stackflows service task executors are not registered. Check the configuration file stackflows.php');
+        if (empty($executors)) {
+            $this->error(
+                'Stackflows service task executors are not registered. Check the configuration file stackflows.php'
+            );
 
             return;
         }
 
         $logger = $app->make('log');
-
         $taskCh = $client->getServiceTaskChannel();
-        $this->subscriber = (new ServiceTaskSubscriber($taskCh, $logger))->setExecutors($executors);
+        $handler = new ServiceTaskSubscriber($taskCh, $logger, $executors);
+        $this->subscriber = new Loop($handler);
 
         try {
             $this->info('Listening to a pending service task');
             // Infinity Loop
-            $this->subscriber->listen();
-        } catch (TooManyErrors $e) {
-            $this->error($e->getMessage());
-        } catch (\Throwable $e) {
+            $this->subscriber->run();
+        } catch (TooManyErrors | Exception $e) {
             $this->error($e->getMessage());
         }
     }
@@ -63,10 +65,6 @@ class ServiceTaskSubscribeCommand extends Command implements SignalableCommandIn
         if ($signal === SIGINT || $signal === SIGTERM) {
             $this->info('Stopping service task subscriber...');
             $this->subscriber->stop();
-
-            return;
         }
-
-        return;
     }
 }

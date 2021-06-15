@@ -1,6 +1,6 @@
 <?php
 
-namespace Stackflows\StackflowsPlugin\Services;
+namespace Stackflows\StackflowsPlugin\Services\ServiceTask;
 
 use Stackflows\GatewayApi\Model\ServiceTask;
 

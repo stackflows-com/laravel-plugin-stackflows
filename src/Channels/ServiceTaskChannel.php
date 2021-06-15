@@ -8,7 +8,6 @@ use Stackflows\GatewayApi\Model\GetPendingServiceTaskRequest;
 use Stackflows\GatewayApi\Model\ServiceTask;
 use Stackflows\GatewayApi\Model\Variable;
 use Stackflows\StackflowsPlugin\Configuration;
-use Stackflows\StackflowsPlugin\Services\ServiceTaskExecutorInterface;
 
 final class ServiceTaskChannel
 {
@@ -27,19 +26,20 @@ final class ServiceTaskChannel
     /**
      * Get pending service tasks.
      *
-     * @param ServiceTaskExecutorInterface $handler
+     * @param array $topics
+     * @param int $lockDuration
      * @return ServiceTask[]
      *
      * @throws \Stackflows\GatewayApi\ApiException
      */
-    public function getPending(ServiceTaskExecutorInterface $handler): array
+    public function getPending(array $topics, int $lockDuration): array
     {
         $request = new GetPendingServiceTaskRequest(
             [
                 'engine' => $this->conf->getEngine(),
                 'limit' => $this->limit,
-                'topics' => $handler->getReference(),
-                'lockDuration' => $handler->getLockDuration(),
+                'topics' => $topics,
+                'lockDuration' => $lockDuration,
             ]
         );
 
