@@ -2,7 +2,11 @@
 
 namespace Stackflows\StackflowsPlugin\Channels;
 
+use DateTime;
 use Stackflows\GatewayApi\Api\UserTaskApi;
+use Stackflows\GatewayApi\ApiException;
+use Stackflows\GatewayApi\Model\CompleteUserTaskRequest;
+use Stackflows\GatewayApi\Model\UserTask;
 use Stackflows\StackflowsPlugin\Configuration;
 
 class UserTaskChannel
@@ -17,13 +21,26 @@ class UserTaskChannel
     }
 
     /**
-     * Throw a Signal.
+     * Get the user's task list.
      *
-     * @return \Stackflows\GatewayApi\Model\UserTask[]
-     * @throws \Stackflows\GatewayApi\ApiException
+     * @param DateTime|null $createdAfter
+     * @return UserTask[]
+     * @throws ApiException
      */
-    public function getList(): array
+    public function getList(DateTime $createdAfter = null): array
     {
-        return $this->api->getList($this->conf->getEngine());
+        return $this->api->getList($this->conf->getEngine(), $createdAfter);
+    }
+
+    /**
+     * Complete the user's task.
+     *
+     * @param string $id Task ID.
+     * @throws ApiException
+     */
+    public function complete(string $id)
+    {
+        $request = new CompleteUserTaskRequest(['engine' => $this->conf->getEngine()]);
+        $this->api->completeTask($id, $request);
     }
 }

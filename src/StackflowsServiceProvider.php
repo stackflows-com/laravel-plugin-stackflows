@@ -35,6 +35,7 @@ class StackflowsServiceProvider extends PackageServiceProvider
         );
 
         $this->app->tag(config('stackflows.service_task_executors'), 'stackflows-service-task');
+        $this->app->tag(config('stackflows.user_task_sync'), 'stackflows-user-task');
     }
 
     /**

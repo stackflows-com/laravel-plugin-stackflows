@@ -14,6 +14,12 @@ class TooManyErrors extends Exception
     }
 
     #[Pure]
+    public static function synchronizerHasTooManyErrors(string $class): static
+    {
+        return new static("The synchronizer {$class} has too many errors.");
+    }
+
+    #[Pure]
     public static function tooManyHttpErrors(string $msg): static
     {
         return new static("Too many http errors. {$msg}");

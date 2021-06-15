@@ -17,4 +17,9 @@ return [
      */
     'service_task_executors' => [],
 
+    /*
+     * User task synchronizers are classes that handle Stackflows service tasks.
+     * Must implements interface \Stackflows\StackflowsPlugin\Services\UserTask\UserTaskSyncInterface
+     */
+    'user_task_sync' => [],
 ];
