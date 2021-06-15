@@ -19,7 +19,7 @@ final class Loop
      */
     public function run(int $interval = 10): void
     {
-        while (!$this->stopped) {
+        while (! $this->stopped) {
             $this->handler->handle();
             // Todo: make more gracefully
             sleep($interval);

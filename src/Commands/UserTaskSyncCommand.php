@@ -25,6 +25,7 @@ class UserTaskSyncCommand extends Command implements SignalableCommandInterface
             $this->error(
                 'Stackflows service task executors are not registered. Check the configuration file stackflows.php'
             );
+
             return;
         }
 
@@ -69,6 +70,7 @@ class UserTaskSyncCommand extends Command implements SignalableCommandInterface
 
             return;
         }
+
         return;
     }
 }

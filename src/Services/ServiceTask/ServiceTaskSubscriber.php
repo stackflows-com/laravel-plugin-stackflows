@@ -44,7 +44,7 @@ final class ServiceTaskSubscriber implements LoopHandlerInterface
      * @return ServiceTask[]|null
      * @throws TooManyErrors|ApiException
      */
-    private function fetch(ServiceTaskExecutorInterface $executor): array|null
+    private function fetch(ServiceTaskExecutorInterface $executor): array | null
     {
         return $this->api->getPending($executor->getReference(), $executor->getLockDuration());
     }
