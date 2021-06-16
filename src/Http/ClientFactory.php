@@ -32,7 +32,7 @@ class ClientFactory
         return new Client(
             [
                 'timeout' => $timeout,
-                'handler' => $stack,
+                //'handler' => $stack,
             ]
         );
     }
@@ -46,7 +46,7 @@ class ClientFactory
             TransferException $e = null
         ) use ($maxRetries) {
             if ($retries >= $maxRetries) {
-                $msg = sprintf("%s %s", $request->getMethod(), $request->getUri());
+                $msg = sprintf("%s %s", $request->getMethod(), $request->getUri()->__toString());
                 if ($e) {
                     $msg .= $e->getMessage();
                 } elseif ($response) {
@@ -62,7 +62,7 @@ class ClientFactory
                     sprintf(
                         'Retrying %s %s %s/%s, %s',
                         $request->getMethod(),
-                        $request->getUri(),
+                        $request->getUri()->__toString(),
                         $retries + 1,
                         $maxRetries,
                         $e->getMessage()
@@ -80,7 +80,7 @@ class ClientFactory
                         sprintf(
                             'Retrying %s %s %s/%s, %s',
                             $request->getMethod(),
-                            $request->getUri(),
+                            $request->getUri()->__toString(),
                             $retries + 1,
                             $maxRetries,
                             'status code: ' . $response->getStatusCode()

@@ -14,7 +14,7 @@ final class ServiceTaskSubscriber implements LoopHandlerInterface
     private ServiceTaskChannel $api;
     private LogManager $logger;
 
-    /** @var ServiceTaskExecutorInterface[] */
+    /** ServiceTaskExecutorInterface[] */
     private iterable $executors;
 
     /** @var array<string, int> */
@@ -59,7 +59,7 @@ final class ServiceTaskSubscriber implements LoopHandlerInterface
                 $executedTask = $executor->execute($task);
                 $this->complete($executedTask);
                 $this->errors[$executor::class] = 0;
-            } catch (\Throwable $e) {
+            } catch (\Exception $e) {
                 $this->logger->error(sprintf("%s %s(%s)", $e->getMessage(), $e->getFile(), $e->getLine()));
                 $this->errors[$executor::class] += 1;
             }

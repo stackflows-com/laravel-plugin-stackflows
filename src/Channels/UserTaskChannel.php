@@ -29,7 +29,8 @@ class UserTaskChannel
      */
     public function getList(DateTime $createdAfter = null): array
     {
-        return $this->api->getList($this->conf->getEngine(), $createdAfter);
+        $after = $createdAfter?->format(\DateTimeInterface::ISO8601);
+        return $this->api->getList($this->conf->getEngine(), $after);
     }
 
     /**
@@ -42,5 +43,13 @@ class UserTaskChannel
     {
         $request = new CompleteUserTaskRequest(['engine' => $this->conf->getEngine()]);
         $this->api->completeTask($id, $request);
+    }
+
+    /**
+     * @return UserTaskApi
+     */
+    public function getApi(): UserTaskApi
+    {
+        return $this->api;
     }
 }

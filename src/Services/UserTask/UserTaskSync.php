@@ -2,7 +2,10 @@
 
 namespace Stackflows\StackflowsPlugin\Services\UserTask;
 
+use DateTime;
+use Illuminate\Log\LogManager;
 use Stackflows\GatewayApi\ApiException;
+use Stackflows\GatewayApi\Model\UserTask;
 use Stackflows\StackflowsPlugin\Channels\UserTaskChannel;
 use Stackflows\StackflowsPlugin\Exceptions\TooManyErrors;
 use Stackflows\StackflowsPlugin\Services\Loop\LoopHandlerInterface;
@@ -10,20 +13,28 @@ use Stackflows\StackflowsPlugin\Services\Loop\LoopHandlerInterface;
 class UserTaskSync implements LoopHandlerInterface
 {
     private UserTaskChannel $api;
+    private LogManager $logger;
 
-    /** @var UserTaskSyncInterface[] */
-    private array $synchronizers;
+    private iterable $synchronizers;
 
-    public function __construct(UserTaskChannel $api, array $synchronizers)
+    /** @var array<string, int> */
+    private array $errors;
+
+    private ?DateTime $createdAfter = null;
+
+    public function __construct(UserTaskChannel $api, LogManager $logger, iterable $synchronizers)
     {
         $this->api = $api;
+        $this->logger = $logger;
         $this->synchronizers = $synchronizers;
+        $this->errors = $this->getErrorMap($synchronizers);
     }
 
     public function handle(): void
     {
         $tasks = $this->fetch();
         $this->execute($tasks);
+        $this->setCreatedAfter($tasks);
     }
 
     /**
@@ -31,7 +42,7 @@ class UserTaskSync implements LoopHandlerInterface
      */
     private function fetch(): array
     {
-        return $this->api->getList();
+        return $this->api->getList($this->createdAfter);
     }
 
     /**
@@ -40,7 +51,17 @@ class UserTaskSync implements LoopHandlerInterface
     private function execute(array $tasks): void
     {
         foreach ($this->synchronizers as $sync) {
-            $sync->sync($tasks);
+            try {
+                $sync->sync($tasks, ['createdAt' => $this->createdAfter]);
+                $this->errors[$sync::class] = 0;
+            } catch (\Exception $e) {
+                $this->logger->error(sprintf("%s %s(%s)", $e->getMessage(), $e->getFile(), $e->getLine()));
+                $this->errors[$sync::class] += 1;
+            }
+
+            if ($this->errors[$sync::class] >= 7) {
+                throw TooManyErrors::synchronizerHasTooManyErrors($sync::class);
+            }
         }
     }
 
@@ -55,5 +76,23 @@ class UserTaskSync implements LoopHandlerInterface
         }
 
         return $errorMap;
+    }
+
+    /**
+     * @param UserTask[] $tasks
+     */
+    private function setCreatedAfter(array $tasks): void
+    {
+        if (empty($tasks)) {
+            return;
+        }
+        $last = $this->createdAfter;
+        foreach ($tasks as $task) {
+            if ($task->getCreatedAt() > $last) {
+                $last = $task->getCreatedAt();
+            }
+        }
+
+        $this->createdAfter = $last?->add(\DateInterval::createFromDateString('1 second'));
     }
 }
