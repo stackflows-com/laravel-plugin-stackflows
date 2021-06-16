@@ -8,12 +8,14 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Stackflows\GatewayApi\Api\UserTaskApi;
-use Stackflows\StackflowsPlugin\Channels\UserTaskChannel;
 use Stackflows\StackflowsPlugin\Stackflows;
 
 abstract class CompleteUserTaskJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * The User Task instance.

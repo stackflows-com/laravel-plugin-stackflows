@@ -30,6 +30,7 @@ class UserTaskChannel
     public function getList(DateTime $createdAfter = null): array
     {
         $after = $createdAfter?->format(\DateTimeInterface::ISO8601);
+
         return $this->api->getList($this->conf->getEngine(), $after);
     }
 
