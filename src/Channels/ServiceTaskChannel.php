@@ -9,7 +9,7 @@ use Stackflows\GatewayApi\Model\ServiceTask;
 use Stackflows\GatewayApi\Model\Variable;
 use Stackflows\StackflowsPlugin\Configuration;
 
-final class ServiceTaskChannel
+class ServiceTaskChannel
 {
     private ServiceTaskApi $api;
     private Configuration $conf;

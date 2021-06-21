@@ -3,7 +3,7 @@
 namespace Stackflows\StackflowsPlugin\Services\UserTask;
 
 use DateTime;
-use Illuminate\Log\LogManager;
+use Psr\Log\LoggerInterface;
 use Stackflows\GatewayApi\ApiException;
 use Stackflows\GatewayApi\Model\UserTask;
 use Stackflows\StackflowsPlugin\Channels\UserTaskChannel;
@@ -13,7 +13,7 @@ use Stackflows\StackflowsPlugin\Services\Loop\LoopHandlerInterface;
 class UserTaskSync implements LoopHandlerInterface
 {
     private UserTaskChannel $api;
-    private LogManager $logger;
+    private LoggerInterface $logger;
 
     private iterable $synchronizers;
 
@@ -22,7 +22,7 @@ class UserTaskSync implements LoopHandlerInterface
 
     private ?DateTime $createdAfter = null;
 
-    public function __construct(UserTaskChannel $api, LogManager $logger, iterable $synchronizers)
+    public function __construct(UserTaskChannel $api, LoggerInterface $logger, iterable $synchronizers)
     {
         $this->api = $api;
         $this->logger = $logger;

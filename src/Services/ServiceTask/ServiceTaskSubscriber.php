@@ -2,7 +2,7 @@
 
 namespace Stackflows\StackflowsPlugin\Services\ServiceTask;
 
-use Illuminate\Log\LogManager;
+use Psr\Log\LoggerInterface;
 use Stackflows\GatewayApi\ApiException;
 use Stackflows\GatewayApi\Model\ServiceTask;
 use Stackflows\StackflowsPlugin\Channels\ServiceTaskChannel;
@@ -12,7 +12,7 @@ use Stackflows\StackflowsPlugin\Services\Loop\LoopHandlerInterface;
 final class ServiceTaskSubscriber implements LoopHandlerInterface
 {
     private ServiceTaskChannel $api;
-    private LogManager $logger;
+    private LoggerInterface $logger;
 
     /** ServiceTaskExecutorInterface[] */
     private iterable $executors;
@@ -20,7 +20,7 @@ final class ServiceTaskSubscriber implements LoopHandlerInterface
     /** @var array<string, int> */
     private array $errors;
 
-    public function __construct(ServiceTaskChannel $api, LogManager $logger, iterable $executors)
+    public function __construct(ServiceTaskChannel $api, LoggerInterface $logger, iterable $executors)
     {
         $this->api = $api;
         $this->logger = $logger;
