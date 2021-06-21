@@ -2,11 +2,11 @@
 
 namespace Stackflows\StackflowsPlugin\Tests\Services\ServiceTask;
 
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Stackflows\StackflowsPlugin\Channels\ServiceTaskChannel;
 use Stackflows\StackflowsPlugin\Exceptions\TooManyErrors;
 use Stackflows\StackflowsPlugin\Services\ServiceTask\ServiceTaskSubscriber;
-use PHPUnit\Framework\TestCase;
 use Stackflows\StackflowsPlugin\Tests\Factories\ServiceTaskFactory;
 use Stackflows\StackflowsPlugin\Tests\Factories\VariableFactory;
 use Stackflows\StackflowsPlugin\Tests\Services\ServiceTask\Fixture\ChangeStatusExecutor;

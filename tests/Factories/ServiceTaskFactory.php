@@ -22,7 +22,7 @@ final class ServiceTaskFactory
             array_merge(
                 [
                     'id' => Str::uuid()->toString(),
-                    'processDefinitionKey' => 'demo-task'
+                    'processDefinitionKey' => 'demo-task',
                 ],
                 $extra
             )

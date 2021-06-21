@@ -2,11 +2,11 @@
 
 namespace Stackflows\StackflowsPlugin\Tests\Services\UserTask;
 
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Stackflows\StackflowsPlugin\Channels\UserTaskChannel;
 use Stackflows\StackflowsPlugin\Exceptions\TooManyErrors;
 use Stackflows\StackflowsPlugin\Services\UserTask\UserTaskSync;
-use PHPUnit\Framework\TestCase;
 use Stackflows\StackflowsPlugin\Services\UserTask\UserTaskSyncInterface;
 use Stackflows\StackflowsPlugin\Tests\Factories\UserTaskFactory;
 

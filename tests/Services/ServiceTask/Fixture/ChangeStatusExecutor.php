@@ -22,6 +22,7 @@ class ChangeStatusExecutor implements ServiceTaskExecutorInterface
     {
         $variables = $this->changeStatus($task->getVariables());
         $task->setVariables($variables);
+
         return $task;
     }
 
@@ -32,6 +33,7 @@ class ChangeStatusExecutor implements ServiceTaskExecutorInterface
                 if ($var->getName() === 'Status') {
                     $var->setValue((object)['approved']);
                 }
+
                 return $var;
             },
             $variables
