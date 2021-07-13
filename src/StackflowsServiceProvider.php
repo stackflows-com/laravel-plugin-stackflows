@@ -3,9 +3,12 @@
 namespace Stackflows\StackflowsPlugin;
 
 use GuzzleHttp\Client;
+use Illuminate\Filesystem\Filesystem;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Stackflows\StackflowsPlugin\Auth\BackofficeClient;
+use Stackflows\StackflowsPlugin\Auth\FileTokenProvider;
+use Stackflows\StackflowsPlugin\Auth\TokenProviderInterface;
 use Stackflows\StackflowsPlugin\Commands\ServiceTaskSubscribeCommand;
 use Stackflows\StackflowsPlugin\Commands\SignalThrowCommand;
 use Stackflows\StackflowsPlugin\Commands\UserTaskSyncCommand;
@@ -49,6 +52,10 @@ class StackflowsServiceProvider extends PackageServiceProvider
                 return new BackofficeClient(new Client(['base_uri' => config('stackflows.backofficeHost')]));
             }
         );
+
+        $this->app->bind(TokenProviderInterface::class, function ($app) {
+            return new FileTokenProvider($app->make(Filesystem::class));
+        });
 
         $this->app->tag(config('stackflows.service_task_executors'), 'stackflows-service-task');
         $this->app->tag(config('stackflows.user_task_sync'), 'stackflows-user-task');
