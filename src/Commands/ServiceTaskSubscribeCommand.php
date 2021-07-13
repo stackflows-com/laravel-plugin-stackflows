@@ -5,6 +5,7 @@ namespace Stackflows\StackflowsPlugin\Commands;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Application;
+use Stackflows\StackflowsPlugin\Auth\BackofficeAuth;
 use Stackflows\StackflowsPlugin\Exceptions\TooManyErrors;
 use Stackflows\StackflowsPlugin\Services\Loop\Loop;
 use Stackflows\StackflowsPlugin\Services\ServiceTask\ServiceTaskSubscriber;
@@ -29,6 +30,8 @@ class ServiceTaskSubscribeCommand extends Command implements SignalableCommandIn
 
             return;
         }
+
+        $this->authenticate($client->getAuth());
 
         $logger = $app->make('log');
         $taskCh = $client->getServiceTaskChannel();
@@ -65,6 +68,14 @@ class ServiceTaskSubscribeCommand extends Command implements SignalableCommandIn
         if ($signal === SIGINT || $signal === SIGTERM) {
             $this->info('Stopping service task subscriber...');
             $this->subscriber->stop();
+        }
+    }
+
+    private function authenticate(BackofficeAuth $auth)
+    {
+        if (! $auth->check()) {
+            $this->error('The authentication token is not set');
+            exit(1);
         }
     }
 }

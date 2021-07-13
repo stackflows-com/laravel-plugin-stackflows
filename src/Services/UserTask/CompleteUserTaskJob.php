@@ -41,6 +41,7 @@ abstract class CompleteUserTaskJob implements ShouldQueue
      */
     public function handle(Stackflows $client)
     {
+        $client->getAuth()->authenticate();
         $channel = $client->getUserTaskChannel();
         $this->beforeHandle($channel->getApi());
         $channel->complete($this->task->getStackflowsUserTaskKey());
