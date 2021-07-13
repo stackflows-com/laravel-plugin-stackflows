@@ -18,6 +18,14 @@ class InvalidConfiguration extends Exception
     #[Pure]
     public static function instanceNotSpecified(): static
     {
-        return new static("There was no Stackflows Instance specified.");
+        return new static('There was no Stackflows Instance specified.');
+    }
+
+    #[Pure]
+    public static function backofficeHostNotSpecified(): static
+    {
+        return new static(
+            'There was no Stackflows Backoffice host specified.'
+        );
     }
 }
