@@ -1,6 +1,6 @@
 <?php
 
-namespace Stackflows\StackflowsPlugin\Http;
+namespace Stackflows\StackflowsPlugin\Http\Client;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
