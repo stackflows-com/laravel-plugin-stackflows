@@ -58,15 +58,15 @@ final class ServiceTaskSubscriber implements LoopHandlerInterface
             try {
                 $executedTask = $executor->execute($task);
                 $this->complete($executedTask);
-                $this->errors[$executor::class] = 0;
+                $this->errors[get_class($executor)] = 0;
             } catch (\Exception $e) {
                 $this->logger->error(sprintf("%s %s(%s)", $e->getMessage(), $e->getFile(), $e->getLine()));
-                $this->errors[$executor::class] += 1;
+                $this->errors[get_class($executor)] += 1;
             }
         }
 
-        if ($this->errors[$executor::class] >= 7) {
-            throw TooManyErrors::executorHasTooManyErrors($executor::class);
+        if ($this->errors[get_class($executor)] >= 7) {
+            throw TooManyErrors::executorHasTooManyErrors(get_class($executor));
         }
     }
 
