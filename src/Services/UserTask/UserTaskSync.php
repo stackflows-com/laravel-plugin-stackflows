@@ -38,6 +38,7 @@ class UserTaskSync implements LoopHandlerInterface
     }
 
     /**
+     * @return UserTask[]
      * @throws TooManyErrors|ApiException
      */
     private function fetch(): array
@@ -46,6 +47,7 @@ class UserTaskSync implements LoopHandlerInterface
     }
 
     /**
+     * @param UserTask[] $tasks
      * @throws TooManyErrors
      */
     private function execute(array $tasks): void
