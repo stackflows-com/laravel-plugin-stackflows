@@ -2,10 +2,12 @@
 
 namespace Stackflows\StackflowsPlugin;
 
+use Stackflows\GatewayApi\Api\ProcessApi;
 use Stackflows\GatewayApi\Api\ServiceTaskApi;
 use Stackflows\GatewayApi\Api\SignalApi;
 use Stackflows\GatewayApi\Api\UserTaskApi;
 use Stackflows\StackflowsPlugin\Auth\BackofficeAuth;
+use Stackflows\StackflowsPlugin\Channels\ProcessChannel;
 use Stackflows\StackflowsPlugin\Channels\ServiceTaskChannel;
 use Stackflows\StackflowsPlugin\Channels\SignalChannel;
 use Stackflows\StackflowsPlugin\Channels\UserTaskChannel;
@@ -44,6 +46,14 @@ class Stackflows
     {
         return new UserTaskChannel(
             new UserTaskApi($this->clientFactory->create(), $this->conf->getApiConfiguration()),
+            $this->conf,
+        );
+    }
+
+    public function getProcessChannel(): ProcessChannel
+    {
+        return new ProcessChannel(
+            new ProcessApi($this->clientFactory->create(), $this->conf->getApiConfiguration()),
             $this->conf,
         );
     }
