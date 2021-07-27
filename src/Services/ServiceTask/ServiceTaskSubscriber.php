@@ -41,10 +41,10 @@ final class ServiceTaskSubscriber implements LoopHandlerInterface
 
     /**
      * @param ServiceTaskExecutorInterface $executor
-     * @return ServiceTask[]|null
+     * @return ServiceTask[]
      * @throws TooManyErrors|ApiException
      */
-    private function fetch(ServiceTaskExecutorInterface $executor): array | null
+    private function fetch(ServiceTaskExecutorInterface $executor): array
     {
         return $this->api->getPending($executor->getReference(), $executor->getLockDuration());
     }
@@ -85,7 +85,7 @@ final class ServiceTaskSubscriber implements LoopHandlerInterface
     {
         $errorMap = [];
         foreach ($executors as $obj) {
-            $errorMap[$obj::class] = 0;
+            $errorMap[get_class($obj)] = 0;
         }
 
         return $errorMap;
