@@ -41,10 +41,10 @@ final class ServiceTaskSubscriber implements LoopHandlerInterface
 
     /**
      * @param ServiceTaskExecutorInterface $executor
-     * @return ServiceTask[]|null
+     * @return ServiceTask[]
      * @throws TooManyErrors|ApiException
      */
-    private function fetch(ServiceTaskExecutorInterface $executor): array | null
+    private function fetch(ServiceTaskExecutorInterface $executor): array
     {
         return $this->api->getPending($executor->getReference(), $executor->getLockDuration());
     }
@@ -58,15 +58,15 @@ final class ServiceTaskSubscriber implements LoopHandlerInterface
             try {
                 $executedTask = $executor->execute($task);
                 $this->complete($executedTask);
-                $this->errors[$executor::class] = 0;
+                $this->errors[get_class($executor)] = 0;
             } catch (\Exception $e) {
                 $this->logger->error(sprintf("%s %s(%s)", $e->getMessage(), $e->getFile(), $e->getLine()));
-                $this->errors[$executor::class] += 1;
+                $this->errors[get_class($executor)] += 1;
             }
         }
 
-        if ($this->errors[$executor::class] >= 7) {
-            throw TooManyErrors::executorHasTooManyErrors($executor::class);
+        if ($this->errors[get_class($executor)] >= 7) {
+            throw TooManyErrors::executorHasTooManyErrors(get_class($executor));
         }
     }
 
@@ -85,7 +85,7 @@ final class ServiceTaskSubscriber implements LoopHandlerInterface
     {
         $errorMap = [];
         foreach ($executors as $obj) {
-            $errorMap[$obj::class] = 0;
+            $errorMap[get_class($obj)] = 0;
         }
 
         return $errorMap;

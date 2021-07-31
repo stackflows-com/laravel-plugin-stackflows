@@ -38,6 +38,7 @@ class UserTaskSync implements LoopHandlerInterface
     }
 
     /**
+     * @return UserTask[]
      * @throws TooManyErrors|ApiException
      */
     private function fetch(): array
@@ -46,6 +47,7 @@ class UserTaskSync implements LoopHandlerInterface
     }
 
     /**
+     * @param UserTask[] $tasks
      * @throws TooManyErrors
      */
     private function execute(array $tasks): void
@@ -53,14 +55,14 @@ class UserTaskSync implements LoopHandlerInterface
         foreach ($this->synchronizers as $sync) {
             try {
                 $sync->sync($tasks, ['createdAt' => $this->createdAfter]);
-                $this->errors[$sync::class] = 0;
+                $this->errors[get_class($sync)] = 0;
             } catch (\Exception $e) {
                 $this->logger->error(sprintf("%s %s(%s)", $e->getMessage(), $e->getFile(), $e->getLine()));
-                $this->errors[$sync::class] += 1;
+                $this->errors[get_class($sync)] += 1;
             }
 
-            if ($this->errors[$sync::class] >= 7) {
-                throw TooManyErrors::synchronizerHasTooManyErrors($sync::class);
+            if ($this->errors[get_class($sync)] >= 7) {
+                throw TooManyErrors::synchronizerHasTooManyErrors(get_class($sync));
             }
         }
     }
@@ -72,7 +74,7 @@ class UserTaskSync implements LoopHandlerInterface
     {
         $errorMap = [];
         foreach ($synchronizers as $obj) {
-            $errorMap[$obj::class] = 0;
+            $errorMap[get_class($obj)] = 0;
         }
 
         return $errorMap;
@@ -93,6 +95,6 @@ class UserTaskSync implements LoopHandlerInterface
             }
         }
 
-        $this->createdAfter = $last?->add(\DateInterval::createFromDateString('1 second'));
+        $this->createdAfter = is_null($last) ? null : $last->add(\DateInterval::createFromDateString('1 second'));
     }
 }

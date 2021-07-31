@@ -4,6 +4,7 @@ namespace Stackflows\StackflowsPlugin\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Application;
+use Stackflows\StackflowsPlugin\Auth\BackofficeAuth;
 use Stackflows\StackflowsPlugin\Exceptions\TooManyErrors;
 use Stackflows\StackflowsPlugin\Services\Loop\Loop;
 use Stackflows\StackflowsPlugin\Services\UserTask\UserTaskSync;
@@ -28,6 +29,8 @@ class UserTaskSyncCommand extends Command implements SignalableCommandInterface
 
             return;
         }
+
+        $this->authenticate($client->getAuth());
 
         $logger = $app->make('log');
 
@@ -72,5 +75,13 @@ class UserTaskSyncCommand extends Command implements SignalableCommandInterface
         }
 
         return;
+    }
+
+    private function authenticate(BackofficeAuth $auth)
+    {
+        if (! $auth->check()) {
+            $this->error('The authentication token is not set');
+            exit(1);
+        }
     }
 }

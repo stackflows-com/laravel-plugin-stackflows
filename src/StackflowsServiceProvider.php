@@ -2,8 +2,13 @@
 
 namespace Stackflows\StackflowsPlugin;
 
+use GuzzleHttp\Client;
+use Illuminate\Filesystem\Filesystem;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Stackflows\StackflowsPlugin\Auth\BackofficeClient;
+use Stackflows\StackflowsPlugin\Auth\FileTokenProvider;
+use Stackflows\StackflowsPlugin\Auth\TokenProviderInterface;
 use Stackflows\StackflowsPlugin\Commands\ServiceTaskSubscribeCommand;
 use Stackflows\StackflowsPlugin\Commands\SignalThrowCommand;
 use Stackflows\StackflowsPlugin\Commands\UserTaskSyncCommand;
@@ -31,9 +36,26 @@ class StackflowsServiceProvider extends PackageServiceProvider
             function () {
                 $this->guardAgainstInvalidConfiguration(config('stackflows'));
 
-                return new Configuration(config('stackflows.host'), config('stackflows.instance'));
+                return new Configuration(
+                    config('stackflows.host'),
+                    config('stackflows.instance'),
+                    config('stackflows.backofficeHost'),
+                );
             }
         );
+
+        $this->app->bind(
+            BackofficeClient::class,
+            function () {
+                $this->guardAgainstInvalidConfiguration(config('stackflows'));
+
+                return new BackofficeClient(new Client(['base_uri' => config('stackflows.backofficeHost')]));
+            }
+        );
+
+        $this->app->bind(TokenProviderInterface::class, function ($app) {
+            return new FileTokenProvider($app->make(Filesystem::class));
+        });
 
         $this->app->tag(config('stackflows.service_task_executors'), 'stackflows-service-task');
         $this->app->tag(config('stackflows.user_task_sync'), 'stackflows-user-task');
@@ -46,6 +68,10 @@ class StackflowsServiceProvider extends PackageServiceProvider
     {
         if (empty($config['host'])) {
             throw InvalidConfiguration::hostNotSpecified();
+        }
+
+        if (empty($config['backofficeHost'])) {
+            throw InvalidConfiguration::backofficeHostNotSpecified();
         }
 
         if (empty($config['instance'])) {

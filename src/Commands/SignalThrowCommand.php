@@ -4,6 +4,7 @@ namespace Stackflows\StackflowsPlugin\Commands;
 
 use Illuminate\Console\Command;
 use Stackflows\GatewayApi\Model\Variable;
+use Stackflows\StackflowsPlugin\Auth\BackofficeAuth;
 use Stackflows\StackflowsPlugin\Stackflows;
 
 class SignalThrowCommand extends Command
@@ -19,6 +20,8 @@ class SignalThrowCommand extends Command
         $name = $this->argument('name');
         $vars = $this->option('var');
         $signal = $client->getSignalChannel();
+
+        $this->authenticate($client->getAuth());
 
         try {
             $variables = $this->convertVariables($vars);
@@ -61,5 +64,13 @@ class SignalThrowCommand extends Command
         }
 
         return $result;
+    }
+
+    private function authenticate(BackofficeAuth $auth)
+    {
+        if (! $auth->check()) {
+            $this->error('The authentication token is not set');
+            exit(1);
+        }
     }
 }

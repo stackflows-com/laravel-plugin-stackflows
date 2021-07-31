@@ -6,18 +6,22 @@ use Stackflows\GatewayApi\Configuration as ApiConfiguration;
 
 class Configuration
 {
-    /** @var string Address of the Stack Flow Gateway API */
+    /** @var string Address of the StackFlows Gateway API */
     private string $host;
+
+    /** @var string Address of the StackFlows Backoffice */
+    private string $backofficeHost;
 
     /** @var string Stackflows engine uuid. */
     private string $engine;
 
     private ApiConfiguration $apiConf;
 
-    public function __construct(string $host, string $engine)
+    public function __construct(string $host, string $engine, string $backoffice)
     {
         $this->host = $host;
         $this->engine = $engine;
+        $this->backofficeHost = $backoffice;
 
         $conf = new ApiConfiguration();
         $conf->setHost($host);
@@ -37,5 +41,20 @@ class Configuration
     public function getApiConfiguration(): ApiConfiguration
     {
         return $this->apiConf;
+    }
+
+    public function setToken(string $token)
+    {
+        $this->apiConf->setAccessToken($token);
+    }
+
+    public function getToken()
+    {
+        return $this->apiConf->getAccessToken();
+    }
+
+    public function getBackofficeHost(): string
+    {
+        return $this->backofficeHost;
     }
 }
