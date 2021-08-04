@@ -45,7 +45,7 @@ class Stackflows
     public function getUserTaskChannel(): UserTaskChannel
     {
         return new UserTaskChannel(
-            new UserTaskApi($this->clientFactory->create(), $this->conf->getApiConfiguration()),
+            new UserTaskApi($this->clientFactory->create(30), $this->conf->getApiConfiguration()),
             $this->conf,
         );
     }
