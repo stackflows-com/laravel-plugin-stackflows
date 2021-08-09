@@ -10,6 +10,10 @@ return [
     // Stackflows instance UUID.
     'instance' => env('STACKFLOWS_INSTANCE'),
 
+    // Stackflows credentials.
+    'email' => env('STACKFLOWS_EMAIL'),
+    'password' => env('STACKFLOWS_PASSWORD'),
+
     /*
      * Service task executors are classes that handle Stackflows service tasks.
      * Must implements interface \Stackflows\StackflowsPlugin\Services\ServiceTask\ServiceTaskExecutorInterface

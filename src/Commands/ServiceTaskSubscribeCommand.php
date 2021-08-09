@@ -73,9 +73,17 @@ class ServiceTaskSubscribeCommand extends Command implements SignalableCommandIn
 
     private function authenticate(BackofficeAuth $auth)
     {
-        if (! $auth->check()) {
-            $this->error('The authentication token is not set');
-            exit(1);
+        if ($auth->check()) {
+            return;
         }
+
+        $this->info('Attempt to authenticate in the Backoffice...');
+        if ($auth->attempt(config('stackflows.email'), config('stackflows.password'))) {
+            $this->info("Successful authentication.");
+            return;
+        }
+
+        $this->error('The authentication is failed. Please check credentials.');
+        exit(1);
     }
 }

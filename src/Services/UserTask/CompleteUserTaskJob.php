@@ -8,6 +8,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Stackflows\GatewayApi\Api\UserTaskApi;
+use Stackflows\StackflowsPlugin\Auth\BackofficeAuth;
+use Stackflows\StackflowsPlugin\Exceptions\InvalidCredentials;
 use Stackflows\StackflowsPlugin\Stackflows;
 
 abstract class CompleteUserTaskJob implements ShouldQueue
@@ -41,7 +43,8 @@ abstract class CompleteUserTaskJob implements ShouldQueue
      */
     public function handle(Stackflows $client)
     {
-        $client->getAuth()->authenticate();
+        $this->authenticate($client->getAuth());
+
         $channel = $client->getUserTaskChannel();
         $this->beforeHandle($channel->getApi());
         $channel->complete($this->task->getStackflowsUserTaskKey());
@@ -55,5 +58,22 @@ abstract class CompleteUserTaskJob implements ShouldQueue
 
     public function afterHandle()
     {
+    }
+
+    /**
+     * @throws InvalidCredentials
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    private function authenticate(BackofficeAuth $auth)
+    {
+        if ($auth->check()) {
+            return;
+        }
+
+        if ($auth->attempt(config('stackflows.email'), config('stackflows.password'))) {
+            return;
+        }
+
+        throw InvalidCredentials::emailOrPassword();
     }
 }

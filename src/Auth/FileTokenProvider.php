@@ -3,6 +3,7 @@
 namespace Stackflows\StackflowsPlugin\Auth;
 
 use Exception;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
 
 class FileTokenProvider implements TokenProviderInterface
@@ -25,12 +26,15 @@ class FileTokenProvider implements TokenProviderInterface
         $this->filesystem->put($this->tokenPath, $token);
     }
 
-    /**
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
-     */
-    public function get(): string
+    public function get(): ?string
     {
-        return $this->filesystem->get($this->tokenPath);
+        try {
+            $token = $this->filesystem->get($this->tokenPath);
+        } catch (FileNotFoundException $e) {
+            return null;
+        }
+
+        return $token;
     }
 
     public function exists(): bool

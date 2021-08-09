@@ -12,7 +12,7 @@ interface TokenProviderInterface
     /**
      * Get the value of the authentication token.
      */
-    public function get(): string;
+    public function get(): ?string;
 
     /**
      * Determine whether the token is set.

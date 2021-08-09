@@ -63,9 +63,8 @@ class BackofficeAuth
             return;
         }
 
-        try {
-            $token = $this->provider->get();
-        } catch (FileNotFoundException $e) {
+        $token = $this->provider->get();
+        if ($token === null) {
             throw new TokenRequired();
         }
 
