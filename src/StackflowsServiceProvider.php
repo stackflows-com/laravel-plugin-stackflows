@@ -54,7 +54,14 @@ class StackflowsServiceProvider extends PackageServiceProvider
         );
 
         $this->app->bind(TokenProviderInterface::class, function ($app) {
-            return new FileTokenProvider($app->make(Filesystem::class));
+            $providerClass = config('stackflows.token_provider');
+            $provider = $app->make($providerClass);
+
+            if (! $provider instanceof TokenProviderInterface) {
+                throw InvalidConfiguration::invalidTokenProvider($providerClass);
+            }
+
+            return $provider;
         });
 
         $this->app->tag(config('stackflows.service_task_executors'), 'stackflows-service-task');

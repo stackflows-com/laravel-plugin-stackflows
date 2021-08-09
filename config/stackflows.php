@@ -15,6 +15,12 @@ return [
     'password' => env('STACKFLOWS_PASSWORD'),
 
     /*
+     * The Token Provider manages of the token string.
+     * Must implements interface \Stackflows\StackflowsPlugin\Auth\TokenProviderInterface
+     */
+    'token_provider' => \Stackflows\StackflowsPlugin\Auth\InMemoryTokenProvider::class,
+
+    /*
      * Service task executors are classes that handle Stackflows service tasks.
      * Must implements interface \Stackflows\StackflowsPlugin\Services\ServiceTask\ServiceTaskExecutorInterface
      */

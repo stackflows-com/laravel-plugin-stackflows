@@ -28,4 +28,12 @@ class InvalidConfiguration extends Exception
             'There was no Stackflows Backoffice host specified.'
         );
     }
+
+    #[Pure]
+    public static function invalidTokenProvider(string $class): self
+    {
+        return new static(
+            "The token provider {$class} must implement interface TokenProviderInterface."
+        );
+    }
 }
