@@ -3,7 +3,6 @@
 namespace Stackflows\StackflowsPlugin\Auth;
 
 use GuzzleHttp\Exception\GuzzleException;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Stackflows\StackflowsPlugin\Configuration;
 use Stackflows\StackflowsPlugin\Exceptions\InvalidCredentials;
 use Stackflows\StackflowsPlugin\Exceptions\TokenRequired;

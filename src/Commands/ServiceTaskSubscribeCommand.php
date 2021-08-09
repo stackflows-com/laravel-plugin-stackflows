@@ -80,6 +80,7 @@ class ServiceTaskSubscribeCommand extends Command implements SignalableCommandIn
         $this->info('Attempt to authenticate in the Backoffice...');
         if ($auth->attempt(config('stackflows.email'), config('stackflows.password'))) {
             $this->info("Successful authentication.");
+
             return;
         }
 

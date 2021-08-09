@@ -3,7 +3,6 @@
 namespace Stackflows\StackflowsPlugin\Auth;
 
 use Exception;
-use Illuminate\Filesystem\Filesystem;
 
 class InMemoryTokenProvider implements TokenProviderInterface
 {
@@ -30,6 +29,7 @@ class InMemoryTokenProvider implements TokenProviderInterface
     public function delete(): bool
     {
         $this->token = null;
+
         return true;
     }
 }
