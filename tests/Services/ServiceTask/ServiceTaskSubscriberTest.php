@@ -6,11 +6,13 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Stackflows\StackflowsPlugin\Channels\ServiceTaskChannel;
 use Stackflows\StackflowsPlugin\Exceptions\TooManyErrors;
+use Stackflows\StackflowsPlugin\Services\Loop\LoopLogger;
 use Stackflows\StackflowsPlugin\Services\ServiceTask\ServiceTaskSubscriber;
 use Stackflows\StackflowsPlugin\Tests\Factories\ServiceTaskFactory;
 use Stackflows\StackflowsPlugin\Tests\Factories\VariableFactory;
 use Stackflows\StackflowsPlugin\Tests\Services\ServiceTask\Fixture\ChangeStatusExecutor;
 use Stackflows\StackflowsPlugin\Tests\Services\ServiceTask\Fixture\ExecutorWithException;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class ServiceTaskSubscriberTest extends TestCase
 {
@@ -45,7 +47,7 @@ class ServiceTaskSubscriberTest extends TestCase
 
         $subscriber = new ServiceTaskSubscriber(
             $api,
-            $this->createMock(LoggerInterface::class),
+            $this->createMock(LoopLogger::class),
             [$executor]
         );
 
@@ -65,8 +67,12 @@ class ServiceTaskSubscriberTest extends TestCase
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects($this->once())
             ->method('error');
+        $loopLogger = new LoopLogger(
+            $logger,
+            $this->createMock(OutputInterface::class),
+        );
 
-        $subscriber = new ServiceTaskSubscriber($api, $logger, [$executor]);
+        $subscriber = new ServiceTaskSubscriber($api, $loopLogger, [$executor]);
 
         $subscriber->handle();
     }
@@ -84,8 +90,12 @@ class ServiceTaskSubscriberTest extends TestCase
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects($this->exactly(7))
             ->method('error');
+        $loopLogger = new LoopLogger(
+            $logger,
+            $this->createMock(OutputInterface::class),
+        );
 
-        $subscriber = new ServiceTaskSubscriber($api, $logger, [$executor]);
+        $subscriber = new ServiceTaskSubscriber($api, $loopLogger, [$executor]);
 
         $this->expectException(TooManyErrors::class);
 

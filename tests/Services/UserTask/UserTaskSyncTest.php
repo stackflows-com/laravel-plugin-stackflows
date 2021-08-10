@@ -6,9 +6,11 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Stackflows\StackflowsPlugin\Channels\UserTaskChannel;
 use Stackflows\StackflowsPlugin\Exceptions\TooManyErrors;
+use Stackflows\StackflowsPlugin\Services\Loop\LoopLogger;
 use Stackflows\StackflowsPlugin\Services\UserTask\UserTaskSync;
 use Stackflows\StackflowsPlugin\Services\UserTask\UserTaskSyncInterface;
 use Stackflows\StackflowsPlugin\Tests\Factories\UserTaskFactory;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class UserTaskSyncTest extends TestCase
 {
@@ -29,7 +31,7 @@ class UserTaskSyncTest extends TestCase
             ->method('getList')
             ->willReturn([$task]);
 
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger = $this->createMock(LoopLogger::class);
 
         $syncHandler = new UserTaskSync($api, $logger, [$sync]);
 
@@ -54,7 +56,9 @@ class UserTaskSyncTest extends TestCase
         $logger->expects($this->once())
             ->method('error');
 
-        $syncHandler = new UserTaskSync($api, $logger, [$sync]);
+        $loopLogger = new LoopLogger($logger, $this->createMock(OutputInterface::class));
+
+        $syncHandler = new UserTaskSync($api, $loopLogger, [$sync]);
 
         $syncHandler->handle();
     }
@@ -71,7 +75,7 @@ class UserTaskSyncTest extends TestCase
         $api->method('getList')
             ->willReturn([$task]);
 
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger = $this->createMock(LoopLogger::class);
 
         $syncHandler = new UserTaskSync($api, $logger, [$sync]);
 
@@ -92,7 +96,7 @@ class UserTaskSyncTest extends TestCase
         $api->method('getList')
             ->willReturn([$task]);
 
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger = $this->createMock(LoopLogger::class);
 
         $syncHandler = new UserTaskSync($api, $logger, [$sync]);
 
