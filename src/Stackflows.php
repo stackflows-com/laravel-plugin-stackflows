@@ -62,4 +62,9 @@ class Stackflows
     {
         return $this->auth;
     }
+
+    public function getConfiguration(): Configuration
+    {
+        return $this->conf;
+    }
 }

@@ -15,13 +15,16 @@ class Configuration
     /** @var string Stackflows engine uuid. */
     private string $engine;
 
+    private bool $debug;
+
     private ApiConfiguration $apiConf;
 
-    public function __construct(string $host, string $engine, string $backoffice)
+    public function __construct(string $host, string $engine, string $backoffice, bool $debug)
     {
         $this->host = $host;
         $this->engine = $engine;
         $this->backofficeHost = $backoffice;
+        $this->debug = $debug;
 
         $conf = new ApiConfiguration();
         $conf->setHost($host);
@@ -56,5 +59,10 @@ class Configuration
     public function getBackofficeHost(): string
     {
         return $this->backofficeHost;
+    }
+
+    public function isDebug(): bool
+    {
+        return $this->debug;
     }
 }

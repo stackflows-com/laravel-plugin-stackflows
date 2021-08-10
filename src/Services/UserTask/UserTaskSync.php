@@ -3,17 +3,17 @@
 namespace Stackflows\StackflowsPlugin\Services\UserTask;
 
 use DateTime;
-use Psr\Log\LoggerInterface;
 use Stackflows\GatewayApi\ApiException;
 use Stackflows\GatewayApi\Model\UserTask;
 use Stackflows\StackflowsPlugin\Channels\UserTaskChannel;
 use Stackflows\StackflowsPlugin\Exceptions\TooManyErrors;
 use Stackflows\StackflowsPlugin\Services\Loop\LoopHandlerInterface;
+use Stackflows\StackflowsPlugin\Services\Loop\LoopLogger;
 
 class UserTaskSync implements LoopHandlerInterface
 {
     private UserTaskChannel $api;
-    private LoggerInterface $logger;
+    private LoopLogger $logger;
 
     private iterable $synchronizers;
 
@@ -22,7 +22,7 @@ class UserTaskSync implements LoopHandlerInterface
 
     private ?DateTime $createdAfter = null;
 
-    public function __construct(UserTaskChannel $api, LoggerInterface $logger, iterable $synchronizers)
+    public function __construct(UserTaskChannel $api, LoopLogger $logger, iterable $synchronizers)
     {
         $this->api = $api;
         $this->logger = $logger;
@@ -33,6 +33,13 @@ class UserTaskSync implements LoopHandlerInterface
     public function handle(): void
     {
         $tasks = $this->fetch();
+        $this->logger->info(
+            sprintf(
+                "Retrieved a %d user tasks created after %s",
+                count($tasks),
+                $this->createdAfter === null ? 'null' : $this->createdAfter->format(DateTime::ISO8601),
+            )
+        );
         $this->execute($tasks);
         $this->setCreatedAfter($tasks);
     }

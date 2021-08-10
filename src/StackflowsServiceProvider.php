@@ -38,6 +38,7 @@ class StackflowsServiceProvider extends PackageServiceProvider
                     config('stackflows.host'),
                     config('stackflows.instance'),
                     config('stackflows.backofficeHost'),
+                    config('app.debug')
                 );
             }
         );

@@ -8,6 +8,7 @@ use Illuminate\Foundation\Application;
 use Stackflows\StackflowsPlugin\Auth\BackofficeAuth;
 use Stackflows\StackflowsPlugin\Exceptions\TooManyErrors;
 use Stackflows\StackflowsPlugin\Services\Loop\Loop;
+use Stackflows\StackflowsPlugin\Services\Loop\LoopLogger;
 use Stackflows\StackflowsPlugin\Services\ServiceTask\ServiceTaskSubscriber;
 use Stackflows\StackflowsPlugin\Stackflows;
 use Symfony\Component\Console\Command\SignalableCommandInterface;
@@ -33,7 +34,7 @@ class ServiceTaskSubscribeCommand extends Command implements SignalableCommandIn
 
         $this->authenticate($client->getAuth());
 
-        $logger = $app->make('log');
+        $logger = new LoopLogger($app->make('log'), $this->getOutput(), $client->getConfiguration()->isDebug());
         $taskCh = $client->getServiceTaskChannel();
         $handler = new ServiceTaskSubscriber($taskCh, $logger, $executors);
         $this->subscriber = new Loop($handler);

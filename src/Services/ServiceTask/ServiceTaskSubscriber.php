@@ -2,17 +2,17 @@
 
 namespace Stackflows\StackflowsPlugin\Services\ServiceTask;
 
-use Psr\Log\LoggerInterface;
 use Stackflows\GatewayApi\ApiException;
 use Stackflows\GatewayApi\Model\ServiceTask;
 use Stackflows\StackflowsPlugin\Channels\ServiceTaskChannel;
 use Stackflows\StackflowsPlugin\Exceptions\TooManyErrors;
 use Stackflows\StackflowsPlugin\Services\Loop\LoopHandlerInterface;
+use Stackflows\StackflowsPlugin\Services\Loop\LoopLogger;
 
 final class ServiceTaskSubscriber implements LoopHandlerInterface
 {
     private ServiceTaskChannel $api;
-    private LoggerInterface $logger;
+    private LoopLogger $logger;
 
     /** ServiceTaskExecutorInterface[] */
     private iterable $executors;
@@ -20,7 +20,7 @@ final class ServiceTaskSubscriber implements LoopHandlerInterface
     /** @var array<string, int> */
     private array $errors;
 
-    public function __construct(ServiceTaskChannel $api, LoggerInterface $logger, iterable $executors)
+    public function __construct(ServiceTaskChannel $api, LoopLogger $logger, iterable $executors)
     {
         $this->api = $api;
         $this->logger = $logger;
@@ -35,6 +35,13 @@ final class ServiceTaskSubscriber implements LoopHandlerInterface
     {
         foreach ($this->executors as $executor) {
             $tasks = $this->fetch($executor);
+            $this->logger->info(
+                sprintf(
+                    "Retrieved a %d service tasks. Reference: %s",
+                    count($tasks),
+                    implode(', ', $executor->getReference())
+                )
+            );
             $this->execute($executor, $tasks);
         }
     }

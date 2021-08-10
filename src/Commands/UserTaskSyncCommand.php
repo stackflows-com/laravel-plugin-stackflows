@@ -7,6 +7,7 @@ use Illuminate\Foundation\Application;
 use Stackflows\StackflowsPlugin\Auth\BackofficeAuth;
 use Stackflows\StackflowsPlugin\Exceptions\TooManyErrors;
 use Stackflows\StackflowsPlugin\Services\Loop\Loop;
+use Stackflows\StackflowsPlugin\Services\Loop\LoopLogger;
 use Stackflows\StackflowsPlugin\Services\UserTask\UserTaskSync;
 use Stackflows\StackflowsPlugin\Stackflows;
 use Symfony\Component\Console\Command\SignalableCommandInterface;
@@ -32,7 +33,7 @@ class UserTaskSyncCommand extends Command implements SignalableCommandInterface
 
         $this->authenticate($client->getAuth());
 
-        $logger = $app->make('log');
+        $logger = new LoopLogger($app->make('log'), $this->getOutput(), $client->getConfiguration()->isDebug());
 
         $taskCh = $client->getUserTaskChannel();
         $handler = new UserTaskSync($taskCh, $logger, $syncs);
