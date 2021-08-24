@@ -6,8 +6,6 @@ use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\TransferException;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerInterface;
@@ -24,7 +22,6 @@ class ClientFactory
 
     public function create(int $timeout = 5, int $retries = 5): ClientInterface
     {
-
         return new Client(
             [
                 'timeout' => $timeout,

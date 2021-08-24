@@ -3,7 +3,6 @@
 namespace Stackflows\StackflowsPlugin\Actions;
 
 use Stackflows\GatewayApi\Model\Variable;
-use Stackflows\StackflowsPlugin\Auth\BackofficeAuth;
 use Stackflows\StackflowsPlugin\Exceptions\InvalidCredentials;
 use Stackflows\StackflowsPlugin\Stackflows;
 
