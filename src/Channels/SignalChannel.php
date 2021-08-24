@@ -5,14 +5,14 @@ namespace Stackflows\StackflowsPlugin\Channels;
 use Stackflows\GatewayApi\Api\SignalApi;
 use Stackflows\GatewayApi\Model\ThrowSignalRequest;
 use Stackflows\GatewayApi\Model\Variable;
-use Stackflows\StackflowsPlugin\Configuration;
+use Stackflows\StackflowsPlugin\StackflowsConfiguration;
 
 class SignalChannel
 {
     private SignalApi $api;
-    private Configuration $conf;
+    private StackflowsConfiguration $conf;
 
-    public function __construct(SignalApi $api, Configuration $conf)
+    public function __construct(SignalApi $api, StackflowsConfiguration $conf)
     {
         $this->api = $api;
         $this->conf = $conf;

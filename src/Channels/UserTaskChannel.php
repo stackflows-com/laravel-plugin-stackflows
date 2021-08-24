@@ -7,14 +7,14 @@ use Stackflows\GatewayApi\Api\UserTaskApi;
 use Stackflows\GatewayApi\ApiException;
 use Stackflows\GatewayApi\Model\CompleteUserTaskRequest;
 use Stackflows\GatewayApi\Model\UserTask;
-use Stackflows\StackflowsPlugin\Configuration;
+use Stackflows\StackflowsPlugin\StackflowsConfiguration;
 
 class UserTaskChannel
 {
     private UserTaskApi $api;
-    private Configuration $conf;
+    private StackflowsConfiguration $conf;
 
-    public function __construct(UserTaskApi $api, Configuration $conf)
+    public function __construct(UserTaskApi $api, StackflowsConfiguration $conf)
     {
         $this->api = $api;
         $this->conf = $conf;

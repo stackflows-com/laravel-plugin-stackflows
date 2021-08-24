@@ -30,11 +30,11 @@ class StackflowsServiceProvider extends PackageServiceProvider
     public function packageRegistered()
     {
         $this->app->singleton(
-            Configuration::class,
+            StackflowsConfiguration::class,
             function () {
                 $this->guardAgainstInvalidConfiguration(config('stackflows'));
 
-                return new Configuration(
+                return new StackflowsConfiguration(
                     config('stackflows.host'),
                     config('stackflows.instance'),
                     config('stackflows.backofficeHost'),

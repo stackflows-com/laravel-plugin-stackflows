@@ -7,14 +7,14 @@ use Stackflows\GatewayApi\Api\ProcessApi;
 use Stackflows\GatewayApi\Model\Process;
 use Stackflows\GatewayApi\Model\StartProcessRequest;
 use Stackflows\GatewayApi\Model\Variable;
-use Stackflows\StackflowsPlugin\Configuration;
+use Stackflows\StackflowsPlugin\StackflowsConfiguration;
 
 class ProcessChannel
 {
     private ProcessApi $api;
-    private Configuration $conf;
+    private StackflowsConfiguration $conf;
 
-    public function __construct(ProcessApi $api, Configuration $conf)
+    public function __construct(ProcessApi $api, StackflowsConfiguration $conf)
     {
         $this->api = $api;
         $this->conf = $conf;

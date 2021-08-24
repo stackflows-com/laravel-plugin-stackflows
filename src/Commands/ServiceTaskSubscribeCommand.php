@@ -5,10 +5,7 @@ namespace Stackflows\StackflowsPlugin\Commands;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Application;
-use Stackflows\StackflowsPlugin\Auth\BackofficeAuth;
 use Stackflows\StackflowsPlugin\Exceptions\TooManyErrors;
-use Stackflows\StackflowsPlugin\Services\Loop\Loop;
-use Stackflows\StackflowsPlugin\Services\Loop\LoopLogger;
 use Stackflows\StackflowsPlugin\Services\ServiceTask\ServiceTaskSubscriber;
 use Stackflows\StackflowsPlugin\Stackflows;
 use Symfony\Component\Console\Command\SignalableCommandInterface;
@@ -31,10 +28,6 @@ class ServiceTaskSubscribeCommand extends Command implements SignalableCommandIn
 
             return;
         }
-
-        $this->authenticate($client->getAuth());
-
-        $logger = new LoopLogger($app->make('log'), $this->getOutput(), $client->getConfiguration()->isDebug());
         $taskCh = $client->getServiceTaskChannel();
         $handler = new ServiceTaskSubscriber($taskCh, $logger, $executors);
         $this->subscriber = new Loop($handler);
@@ -70,22 +63,5 @@ class ServiceTaskSubscribeCommand extends Command implements SignalableCommandIn
             $this->info('Stopping service task subscriber...');
             $this->subscriber->stop();
         }
-    }
-
-    private function authenticate(BackofficeAuth $auth)
-    {
-        if ($auth->check()) {
-            return;
-        }
-
-        $this->info('Attempt to authenticate in the Backoffice...');
-        if ($auth->attempt(config('stackflows.email'), config('stackflows.password'))) {
-            $this->info("Successful authentication.");
-
-            return;
-        }
-
-        $this->error('The authentication is failed. Please check credentials.');
-        exit(1);
     }
 }

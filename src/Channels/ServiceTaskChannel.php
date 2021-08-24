@@ -7,17 +7,17 @@ use Stackflows\GatewayApi\Model\CompleteServiceTaskRequest;
 use Stackflows\GatewayApi\Model\GetPendingServiceTaskRequest;
 use Stackflows\GatewayApi\Model\ServiceTask;
 use Stackflows\GatewayApi\Model\Variable;
-use Stackflows\StackflowsPlugin\Configuration;
+use Stackflows\StackflowsPlugin\StackflowsConfiguration;
 
 class ServiceTaskChannel
 {
     private ServiceTaskApi $api;
-    private Configuration $conf;
+    private StackflowsConfiguration $conf;
 
     /** @var int Maximum number of tasks at a time. */
     private int $limit = 10;
 
-    public function __construct(ServiceTaskApi $api, Configuration $conf)
+    public function __construct(ServiceTaskApi $api, StackflowsConfiguration $conf)
     {
         $this->api = $api;
         $this->conf = $conf;

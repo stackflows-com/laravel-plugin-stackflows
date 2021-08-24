@@ -2,24 +2,13 @@
 
 namespace Stackflows\StackflowsPlugin;
 
-use Stackflows\GatewayApi\Api\ProcessApi;
-use Stackflows\GatewayApi\Api\ServiceTaskApi;
-use Stackflows\GatewayApi\Api\SignalApi;
-use Stackflows\GatewayApi\Api\UserTaskApi;
-use Stackflows\StackflowsPlugin\Auth\BackofficeAuth;
-use Stackflows\StackflowsPlugin\Channels\ProcessChannel;
-use Stackflows\StackflowsPlugin\Channels\ServiceTaskChannel;
-use Stackflows\StackflowsPlugin\Channels\SignalChannel;
-use Stackflows\StackflowsPlugin\Channels\UserTaskChannel;
-use Stackflows\StackflowsPlugin\Http\Client\ClientFactory;
-
 class Stackflows
 {
-    private Configuration $conf;
+    private StackflowsConfiguration $conf;
     private ClientFactory $clientFactory;
     private BackofficeAuth $auth;
 
-    public function __construct(Configuration $conf, ClientFactory $clientFactory, BackofficeAuth $auth)
+    public function __construct(StackflowsConfiguration $conf, ClientFactory $clientFactory, BackofficeAuth $auth)
     {
         $this->conf = $conf;
         $this->clientFactory = $clientFactory;
@@ -63,7 +52,7 @@ class Stackflows
         return $this->auth;
     }
 
-    public function getConfiguration(): Configuration
+    public function getConfiguration(): StackflowsConfiguration
     {
         return $this->conf;
     }

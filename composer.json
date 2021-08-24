@@ -17,11 +17,11 @@
     ],
     "require": {
         "php": "^7.4|^8.0",
-        "spatie/laravel-package-tools": "^1.4.3",
-        "illuminate/contracts": "^8.37",
-        "ext-pcntl": "*",
         "ext-json": "*",
-        "endpot/camunda-rest-client": "^1.1.5"
+        "ext-pcntl": "*",
+        "endpot/camunda-rest-client": "^1.1.5",
+        "illuminate/contracts": "^8.56",
+        "spatie/laravel-package-tools": "^1.4.3"
     },
     "require-dev": {
         "brianium/paratest": "^6.2",
@@ -34,8 +34,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Stackflows\\StackflowsPlugin\\": "src",
-            "Stackflows\\StackflowsPlugin\\Database\\Factories\\": "database/factories"
+            "Stackflows\\StackflowsPlugin\\": "src"
         }
     },
     "autoload-dev": {

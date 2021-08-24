@@ -1,10 +1,8 @@
 <?php
 
-namespace Stackflows\StackflowsPlugin;
+namespace StackflowsPlugin;
 
-use Stackflows\GatewayApi\Configuration as ApiConfiguration;
-
-class Configuration
+class StackflowsConfiguration
 {
     /** @var string Address of the StackFlows Gateway API */
     private string $host;
@@ -17,7 +15,7 @@ class Configuration
 
     private bool $debug;
 
-    private ApiConfiguration $apiConf;
+    private Configuration $apiConf;
 
     public function __construct(string $host, string $engine, string $backoffice, bool $debug)
     {
