@@ -25,26 +25,7 @@ class StartProcessAction
      */
     public function execute(string $name, array $variables = null): void
     {
-        $this->authenticate($this->stackflows->getAuth());
-
         $processApi = $this->stackflows->getProcessChannel();
         $processApi->start($name, $variables);
-    }
-
-    /**
-     * @throws InvalidCredentials
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    private function authenticate(BackofficeAuth $auth)
-    {
-        if ($auth->check()) {
-            return;
-        }
-
-        if ($auth->attempt(config('stackflows.email'), config('stackflows.password'))) {
-            return;
-        }
-
-        throw InvalidCredentials::emailOrPassword();
     }
 }

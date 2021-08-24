@@ -21,8 +21,6 @@ class SignalThrowCommand extends Command
         $vars = $this->option('var');
         $signal = $client->getSignalChannel();
 
-        $this->authenticate($client->getAuth());
-
         try {
             $variables = $this->convertVariables($vars);
         } catch (\InvalidArgumentException $e) {

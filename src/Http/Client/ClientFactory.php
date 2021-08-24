@@ -24,10 +24,6 @@ class ClientFactory
 
     public function create(int $timeout = 5, int $retries = 5): ClientInterface
     {
-        $middleware = Middleware::retry($this->createRetryHandler($retries));
-
-        $stack = HandlerStack::create();
-        $stack->push($middleware);
 
         return new Client(
             [
