@@ -19,7 +19,6 @@
         "php": "^7.4|^8.0",
         "ext-json": "*",
         "ext-pcntl": "*",
-        "endpot/camunda-rest-client": "^1.1.5",
         "illuminate/contracts": "^8.56",
         "spatie/laravel-package-tools": "^1.4.3"
     },
