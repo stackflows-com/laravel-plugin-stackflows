@@ -2,7 +2,6 @@
 
 namespace Stackflows\StackflowsPlugin;
 
-use GuzzleHttp\Client;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Stackflows\StackflowsPlugin\Commands\ServiceTaskSubscribeCommand;

@@ -2,7 +2,6 @@
 
 namespace Stackflows\StackflowsPlugin\Services\ServiceTask;
 
-use Stackflows\StackflowsPlugin\Channels\ServiceTaskChannel;
 use Stackflows\StackflowsPlugin\Exceptions\TooManyErrors;
 use Stackflows\StackflowsPlugin\Http\Client\GatewayClient;
 

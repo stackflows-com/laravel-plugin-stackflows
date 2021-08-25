@@ -26,6 +26,7 @@ class StackflowsConfiguration
     public function setGatewayHost(string $gatewayHost): self
     {
         $this->gatewayHost = $gatewayHost;
+
         return $this;
     }
 
@@ -37,6 +38,7 @@ class StackflowsConfiguration
     public function setAuthToken(string $authToken): self
     {
         $this->authToken = $authToken;
+
         return $this;
     }
 
@@ -48,6 +50,7 @@ class StackflowsConfiguration
     public function setDebug(bool $debug): self
     {
         $this->debug = $debug;
+
         return $this;
     }
 }
