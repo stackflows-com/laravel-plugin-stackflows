@@ -2,23 +2,10 @@
 
 return [
     // Address of the Stack Flow Gateway API.
-    'host' => env('STACKFLOWS_HOST'),
+    'gatewayHost' => env('STACKFLOWS_GATEWAY_HOST'),
 
-    // Address of the Stack Flow Gateway API.
-    'backofficeHost' => env('STACKFLOWS_BACKOFFICE_HOST'),
-
-    // Stackflows instance UUID.
-    'instance' => env('STACKFLOWS_INSTANCE'),
-
-    // Stackflows credentials.
-    'email' => env('STACKFLOWS_EMAIL'),
-    'password' => env('STACKFLOWS_PASSWORD'),
-
-    /*
-     * The Token Provider manages of the token string.
-     * Must implements interface \Stackflows\StackflowsPlugin\Auth\TokenProviderInterface
-     */
-    'token_provider' => \Stackflows\StackflowsPlugin\Auth\InMemoryTokenProvider::class,
+    // Gateway Auth token
+    'authToken' => env('STACKFLOWS_AUTH_TOKEN'),
 
     /*
      * Service task executors are classes that handle Stackflows service tasks.

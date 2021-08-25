@@ -5,12 +5,10 @@ namespace Stackflows\StackflowsPlugin;
 use GuzzleHttp\Client;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Stackflows\StackflowsPlugin\Auth\BackofficeClient;
-use Stackflows\StackflowsPlugin\Auth\TokenProviderInterface;
 use Stackflows\StackflowsPlugin\Commands\ServiceTaskSubscribeCommand;
-use Stackflows\StackflowsPlugin\Commands\SignalThrowCommand;
-use Stackflows\StackflowsPlugin\Commands\UserTaskSyncCommand;
 use Stackflows\StackflowsPlugin\Exceptions\InvalidConfiguration;
+use Stackflows\StackflowsPlugin\Http\Client\GatewayClient;
+use StackflowsPlugin\StackflowsConfiguration;
 
 class StackflowsServiceProvider extends PackageServiceProvider
 {
@@ -35,36 +33,25 @@ class StackflowsServiceProvider extends PackageServiceProvider
                 $this->guardAgainstInvalidConfiguration(config('stackflows'));
 
                 return new StackflowsConfiguration(
-                    config('stackflows.host'),
-                    config('stackflows.instance'),
-                    config('stackflows.backofficeHost'),
+                    config('stackflows.gatewayHost'),
+                    config('stackflows.authToken'),
                     config('app.debug')
                 );
             }
         );
 
         $this->app->bind(
-            BackofficeClient::class,
+            GatewayClient::class,
             function () {
                 $this->guardAgainstInvalidConfiguration(config('stackflows'));
 
-                return new BackofficeClient(new Client(['base_uri' => config('stackflows.backofficeHost')]));
+                return new GatewayClient(config('stackflows.camundaHost'));
             }
         );
 
-        $this->app->bind(TokenProviderInterface::class, function ($app) {
-            $providerClass = config('stackflows.token_provider');
-            $provider = $app->make($providerClass);
-
-            if (! $provider instanceof TokenProviderInterface) {
-                throw InvalidConfiguration::invalidTokenProvider($providerClass);
-            }
-
-            return $provider;
-        });
 
         $this->app->tag(config('stackflows.service_task_executors'), 'stackflows-service-task');
-        $this->app->tag(config('stackflows.user_task_sync'), 'stackflows-user-task');
+//        $this->app->tag(config('stackflows.user_task_sync'), 'stackflows-user-task');
     }
 
     /**

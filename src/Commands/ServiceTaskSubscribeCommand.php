@@ -21,6 +21,7 @@ class ServiceTaskSubscribeCommand extends Command implements SignalableCommandIn
     public function handle(Application $app, Stackflows $client)
     {
         $executors = $app->tagged('stackflows-service-task');
+
         if (empty($executors)) {
             $this->error(
                 'Stackflows service task executors are not registered. Check the configuration file stackflows.php'
@@ -28,8 +29,9 @@ class ServiceTaskSubscribeCommand extends Command implements SignalableCommandIn
 
             return;
         }
+
         $taskCh = $client->getServiceTaskChannel();
-        $handler = new ServiceTaskSubscriber($taskCh, $logger, $executors);
+        $handler = new ServiceTaskSubscriber($taskCh, $executors);
         $this->subscriber = new Loop($handler);
 
         try {

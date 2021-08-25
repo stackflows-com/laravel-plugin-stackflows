@@ -5,62 +5,49 @@ namespace StackflowsPlugin;
 class StackflowsConfiguration
 {
     /** @var string Address of the StackFlows Gateway API */
-    private string $host;
+    private string $gatewayHost;
 
-    /** @var string Address of the StackFlows Backoffice */
-    private string $backofficeHost;
-
-    /** @var string Stackflows engine uuid. */
-    private string $engine;
+    private string $authToken;
 
     private bool $debug;
 
-    private Configuration $apiConf;
-
-    public function __construct(string $host, string $engine, string $backoffice, bool $debug)
+    public function __construct(string $gatewayHost, string $authToken, bool $debug)
     {
-        $this->host = $host;
-        $this->engine = $engine;
-        $this->backofficeHost = $backoffice;
+        $this->gatewayHost = $gatewayHost;
+        $this->authToken = $authToken;
         $this->debug = $debug;
-
-        $conf = new ApiConfiguration();
-        $conf->setHost($host);
-        $this->apiConf = $conf;
     }
 
-    public function getHost(): string
+    public function getGatewayHost(): string
     {
-        return $this->host;
+        return $this->gatewayHost;
     }
 
-    public function getEngine(): string
+    public function setGatewayHost(string $gatewayHost): self
     {
-        return $this->engine;
+        $this->gatewayHost = $gatewayHost;
+        return $this;
     }
 
-    public function getApiConfiguration(): ApiConfiguration
+    public function getAuthToken(): string
     {
-        return $this->apiConf;
+        return $this->authToken;
     }
 
-    public function setToken(string $token)
+    public function setAuthToken(string $authToken): self
     {
-        $this->apiConf->setAccessToken($token);
-    }
-
-    public function getToken()
-    {
-        return $this->apiConf->getAccessToken();
-    }
-
-    public function getBackofficeHost(): string
-    {
-        return $this->backofficeHost;
+        $this->authToken = $authToken;
+        return $this;
     }
 
     public function isDebug(): bool
     {
         return $this->debug;
+    }
+
+    public function setDebug(bool $debug): self
+    {
+        $this->debug = $debug;
+        return $this;
     }
 }

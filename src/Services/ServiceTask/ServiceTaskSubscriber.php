@@ -4,22 +4,21 @@ namespace Stackflows\StackflowsPlugin\Services\ServiceTask;
 
 use Stackflows\StackflowsPlugin\Channels\ServiceTaskChannel;
 use Stackflows\StackflowsPlugin\Exceptions\TooManyErrors;
+use Stackflows\StackflowsPlugin\Http\Client\GatewayClient;
 
-final class ServiceTaskSubscriber implements LoopHandlerInterface
+final class ServiceTaskSubscriber
 {
-    private ServiceTaskChannel $api;
-    private LoopLogger $logger;
-
     /** ServiceTaskExecutorInterface[] */
     private iterable $executors;
 
     /** @var array<string, int> */
     private array $errors;
 
-    public function __construct(ServiceTaskChannel $api, LoopLogger $logger, iterable $executors)
+    private GatewayClient $client;
+
+    public function __construct(GatewayClient $client, iterable $executors)
     {
-        $this->api = $api;
-        $this->logger = $logger;
+        $this->client = $client;
         $this->executors = $executors;
         $this->errors = $this->getErrorMap($executors);
     }
