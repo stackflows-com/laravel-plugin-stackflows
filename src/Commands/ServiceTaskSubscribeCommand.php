@@ -2,7 +2,6 @@
 
 namespace Stackflows\StackflowsPlugin\Commands;
 
-use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Application;
 use Stackflows\StackflowsPlugin\Stackflows;
