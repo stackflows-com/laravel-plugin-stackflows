@@ -2,7 +2,6 @@
 
 namespace Stackflows\StackflowsPlugin\Services\ServiceTask;
 
-use Stackflows\StackflowsPlugin\Exceptions\TooManyErrors;
 use Stackflows\StackflowsPlugin\Http\Client\GatewayClient;
 
 final class ServiceTaskSubscriber
