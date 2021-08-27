@@ -22,9 +22,6 @@ final class ServiceTaskSubscriber
         $this->errors = $this->getErrorMap($executors);
     }
 
-    /**
-     * @throws TooManyErrors|ApiException
-     */
     public function handle(): void
     {
         foreach ($this->executors as $executor) {
@@ -35,17 +32,14 @@ final class ServiceTaskSubscriber
 
     /**
      * @param ServiceTaskExecutorInterface $executor
-     * @return ServiceTask[]
-     * @throws TooManyErrors|ApiException
+     * @return mixed[]
      */
     private function fetch(ServiceTaskExecutorInterface $executor): array
     {
-        return $this->api->getPending($executor->getReference(), $executor->getLockDuration());
+//        return $this->api->getPending($executor->getReference(), $executor->getLockDuration());
+        return [];
     }
 
-    /**
-     * @throws TooManyErrors
-     */
     private function execute(ServiceTaskExecutorInterface $executor, array $tasks): void
     {
         foreach ($tasks as $task) {
@@ -54,22 +48,15 @@ final class ServiceTaskSubscriber
                 $this->complete($executedTask);
                 $this->errors[get_class($executor)] = 0;
             } catch (\Exception $e) {
-                $this->logger->error(sprintf("%s %s(%s)", $e->getMessage(), $e->getFile(), $e->getLine()));
-                $this->errors[get_class($executor)] += 1;
+//                $this->logger->error(sprintf("%s %s(%s)", $e->getMessage(), $e->getFile(), $e->getLine()));
+//                $this->errors[get_class($executor)] += 1;
             }
-        }
-
-        if ($this->errors[get_class($executor)] >= 7) {
-            throw TooManyErrors::executorHasTooManyErrors(get_class($executor));
         }
     }
 
-    /**
-     * @throws ApiException
-     */
-    private function complete(ServiceTask $task)
+    private function complete($task)
     {
-        $this->api->complete($task->getId(), $task->getVariables());
+//        $this->api->complete($task->getId(), $task->getVariables());
     }
 
     /**
