@@ -15,7 +15,7 @@ class ServiceTaskSubscribeCommand extends Command
 
     public function handle(Application $app, Stackflows $client): void
     {
-        $executors = $app->tagged('stackflows-servicess-task');
+        $executors = $app->tagged('stackflows-service-task');
 
         if (empty($executors)) {
             $this->error(
