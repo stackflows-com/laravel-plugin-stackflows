@@ -21,7 +21,7 @@ class StackflowsServiceProvider extends PackageServiceProvider
         $package
             ->name('stackflows')
             ->hasConfigFile('stackflows')
-            ->hasCommands([SignalThrowCommand::class, ServiceTaskSubscribeCommand::class, UserTaskSyncCommand::class]);
+            ->hasCommands([ServiceTaskSubscribeCommand::class]);
     }
 
     public function packageRegistered()
@@ -44,7 +44,7 @@ class StackflowsServiceProvider extends PackageServiceProvider
             function () {
                 $this->guardAgainstInvalidConfiguration(config('stackflows'));
 
-                return new GatewayClient(config('stackflows.camundaHost'));
+                return new GatewayClient(config('stackflows.authToken'), config('stackflows.gatewayHost'));
             }
         );
 
