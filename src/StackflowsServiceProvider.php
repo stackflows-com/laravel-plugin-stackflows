@@ -7,7 +7,6 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Stackflows\StackflowsPlugin\Commands\ServiceTaskSubscribeCommand;
 use Stackflows\StackflowsPlugin\Exceptions\InvalidConfiguration;
 use Stackflows\StackflowsPlugin\Http\Client\GatewayClient;
-use StackflowsPlugin\StackflowsConfiguration;
 
 class StackflowsServiceProvider extends PackageServiceProvider
 {
@@ -26,19 +25,6 @@ class StackflowsServiceProvider extends PackageServiceProvider
 
     public function packageRegistered()
     {
-        $this->app->singleton(
-            StackflowsConfiguration::class,
-            function () {
-                $this->guardAgainstInvalidConfiguration(config('stackflows'));
-
-                return new StackflowsConfiguration(
-                    config('stackflows.gatewayHost'),
-                    config('stackflows.authToken'),
-                    config('app.debug')
-                );
-            }
-        );
-
         $this->app->bind(
             GatewayClient::class,
             function () {
