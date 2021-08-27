@@ -2,7 +2,6 @@
 
 namespace Stackflows\StackflowsPlugin\Actions;
 
-use Stackflows\GatewayApi\Model\Variable;
 use Stackflows\StackflowsPlugin\Exceptions\InvalidCredentials;
 use Stackflows\StackflowsPlugin\Stackflows;
 
@@ -24,7 +23,7 @@ class StartProcessAction
      */
     public function execute(string $name, array $variables = null): void
     {
-        $processApi = $this->stackflows->getProcessChannel();
-        $processApi->start($name, $variables);
+//        $processApi = $this->stackflows->getProcessChannel();
+//        $processApi->start($name, $variables);
     }
 }
