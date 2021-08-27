@@ -43,7 +43,8 @@ final class ServiceTaskSubscriber
     {
         foreach ($tasks as $task) {
             try {
-                $executedTask = $executor->execute($task);
+//                $executedTask = $executor->execute($task);
+                $executedTask = $executor->execute();
                 $this->complete($executedTask);
                 $this->errors[get_class($executor)] = 0;
             } catch (\Exception $e) {
