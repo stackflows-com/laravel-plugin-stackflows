@@ -10,12 +10,12 @@ class InvalidCredentials extends Exception
     #[Pure]
     public static function emailOrPassword(): self
     {
-        return new static('Invalid email or password.');
+        return new self('Invalid email or password.');
     }
 
     #[Pure]
     public static function token(): self
     {
-        return new static('The authentication token is invalid.');
+        return new self('The authentication token is invalid.');
     }
 }

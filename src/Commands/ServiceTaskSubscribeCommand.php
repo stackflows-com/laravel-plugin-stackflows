@@ -13,9 +13,9 @@ class ServiceTaskSubscribeCommand extends Command
 
     public $description = 'Subscribe to service tasks';
 
-    public function handle(Application $app, Stackflows $client)
+    public function handle(Application $app, Stackflows $client): void
     {
-        $executors = $app->tagged('stackflows-service-task');
+        $executors = $app->tagged('stackflows-servicess-task');
 
         if (empty($executors)) {
             $this->error(
@@ -28,6 +28,7 @@ class ServiceTaskSubscribeCommand extends Command
         /** @var TaskExecutorInterface $executor */
         foreach ($executors as $executor) {
             $result = $executor->execute();
+            print_r($result);
         }
     }
 }
