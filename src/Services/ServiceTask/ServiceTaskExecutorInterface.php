@@ -5,9 +5,9 @@ namespace Stackflows\StackflowsPlugin\Services\ServiceTask;
 interface ServiceTaskExecutorInterface
 {
     /**
-     * @return string[]
+     * @return string
      */
-    public function getReference(): array;
+    public function getTopic(): string;
 
     /**
      * Get the duration of blocking service tasks in milliseconds.
