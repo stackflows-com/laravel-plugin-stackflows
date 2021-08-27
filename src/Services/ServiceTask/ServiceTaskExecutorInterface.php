@@ -2,8 +2,6 @@
 
 namespace Stackflows\StackflowsPlugin\Services\ServiceTask;
 
-use Stackflows\GatewayApi\Model\ServiceTask;
-
 interface ServiceTaskExecutorInterface
 {
     /**
@@ -21,10 +19,9 @@ interface ServiceTaskExecutorInterface
     /**
      * Execute the service task.
      *
-     * @param ServiceTask $task
-     * @return ServiceTask
+     * @return array|null
      *
      * @throws \Exception
      */
-    public function execute(ServiceTask $task): ServiceTask;
+    public function execute(): ?array;
 }

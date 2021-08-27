@@ -14,16 +14,16 @@ class StartProcessAction
         $this->stackflows = $stackflows;
     }
 
-    /**
-     * @param string $name
-     * @param Variable[]|null $variables
-     * @throws InvalidCredentials
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Stackflows\GatewayApi\ApiException
-     */
-    public function execute(string $name, array $variables = null): void
-    {
-//        $processApi = $this->stackflows->getProcessChannel();
-//        $processApi->start($name, $variables);
-    }
+//    /**
+//     * @param string $name
+//     * @param array $variables
+//     * @throws InvalidCredentials
+//     * @throws \GuzzleHttp\Exception\GuzzleException
+//     * @throws \Stackflows\GatewayApi\ApiException
+//     */
+//    public function execute(string $name, array $variables = null): void
+//    {
+////        $processApi = $this->stackflows->getProcessChannel();
+////        $processApi->start($name, $variables);
+//    }
 }
