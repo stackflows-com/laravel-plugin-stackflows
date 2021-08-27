@@ -58,16 +58,12 @@ class StackflowsServiceProvider extends PackageServiceProvider
      */
     protected function guardAgainstInvalidConfiguration(array $config = null)
     {
-        if (empty($config['host'])) {
-            throw InvalidConfiguration::hostNotSpecified();
+        if (empty($config['gatewayHost'])) {
+            throw InvalidConfiguration::gatewayHostNotSpecified();
         }
 
-        if (empty($config['backofficeHost'])) {
-            throw InvalidConfiguration::backofficeHostNotSpecified();
-        }
-
-        if (empty($config['instance'])) {
-            throw InvalidConfiguration::instanceNotSpecified();
+        if (empty($config['authToken'])) {
+            throw InvalidConfiguration::authTokenNotSpecified();
         }
     }
 }
