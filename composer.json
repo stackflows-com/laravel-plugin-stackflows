@@ -19,8 +19,9 @@
         "php": "^7.4|^8.0",
         "ext-json": "*",
         "ext-pcntl": "*",
-        "illuminate/contracts": "^8.56",
         "guzzlehttp/guzzle": "^7.3",
+        "illuminate/contracts": "^8.56",
+        "league/fractal": "^0.19",
         "spatie/laravel-package-tools": "^1.4.3"
     },
     "require-dev": {
