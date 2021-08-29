@@ -2,7 +2,7 @@
 
 namespace Stackflows\StackflowsPlugin\Bpmn\Requests;
 
-class AbstractExternalTaskRequest implements ExternalTaskRequestInterface
+abstract class AbstractExternalTaskRequest implements ExternalTaskRequestInterface
 {
     private string $activityId;
     private string $activityInstanceId;
