@@ -23,13 +23,35 @@ class GatewayClient
         ]);
     }
 
-    public function getExternalTasks(string $tenantId, array $topics)
+    public function getExternalTasks(string $tenantId, string $topic)
     {
-        $tasks = $this->client->get('tasks', [
+        $response = $this->client->get('tasks', [
             'json' => [
-
+                'topic' => $topic,
+                'tenantId' => $tenantId,
             ]
         ]);
-        return [];
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
+    public function fetchAndLock(string $tenantId, string $topic, $duration)
+    {
+        $response = $this->client->post('fetchAndLock', [
+            'json' => [
+                'topic'         => $topic,
+                'tenantId'      => $tenantId,
+                'lockDuration'  => $duration,
+            ]
+        ]);
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
+    public function unlock(string $taskId)
+    {
+        $response = $this->client->post('unlock', ['query' => $taskId]);
+
+        return json_decode($response->getBody()->getContents(), true);
     }
 }

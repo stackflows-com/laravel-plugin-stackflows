@@ -4,6 +4,7 @@ namespace Stackflows\StackflowsPlugin\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Application;
+use Stackflows\StackflowsPlugin\Bpmn\Requests\ExternalTaskRequestInterface;
 use Stackflows\StackflowsPlugin\Http\Client\GatewayClient;
 use Stackflows\StackflowsPlugin\Tasks\TaskExecutorInterface;
 
@@ -31,12 +32,20 @@ class ServiceTaskSubscribeCommand extends Command
 
         /** @var TaskExecutorInterface $executor */
         foreach ($executors as $executor) {
-            $tasks = $client->getExternalTasks($tenantId, $executor->getTopic());
+            $tasks = $client->fetchAndLock($tenantId, $executor->getTopic());
             foreach ($tasks as $task) {
-                $result = $executor->execute($task);
-
-                print_r($result);
+                try {
+                    $result = $executor->execute($task);
+                    print_r($result);
+                } catch (\Exception $e) {
+                    $client->unlock($task);
+                }
             }
         }
+    }
+
+    public function castTaskToObject($task): ExternalTaskRequestInterface
+    {
+
     }
 }
