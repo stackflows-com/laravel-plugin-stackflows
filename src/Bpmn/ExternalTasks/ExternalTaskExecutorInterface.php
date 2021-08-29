@@ -1,8 +1,8 @@
 <?php
 
-namespace Stackflows\StackflowsPlugin\Services\ServiceTask;
+namespace Stackflows\StackflowsPlugin\Bpmn\ExternalTasks;
 
-interface ServiceTaskExecutorInterface
+interface ExternalTaskExecutorInterface
 {
     /**
      * @return string

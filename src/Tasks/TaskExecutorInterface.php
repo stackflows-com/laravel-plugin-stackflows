@@ -2,11 +2,8 @@
 
 namespace Stackflows\StackflowsPlugin\Tasks;
 
-interface TaskExecutorInterface
+use Stackflows\StackflowsPlugin\Bpmn\ExternalTasks\ExternalTaskExecutorInterface;
+
+interface TaskExecutorInterface extends ExternalTaskExecutorInterface
 {
-    public static function getTopic(): string;
-
-    public static function getLockDuration(): int;
-
-    public function execute(): ?array;
 }

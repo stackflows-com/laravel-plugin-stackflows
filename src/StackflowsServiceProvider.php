@@ -12,11 +12,6 @@ class StackflowsServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
-        /*
-         * This class is a Package Service Provider
-         *
-         * More info: https://github.com/spatie/laravel-package-tools
-         */
         $package
             ->name('stackflows')
             ->hasConfigFile('stackflows')
@@ -35,7 +30,7 @@ class StackflowsServiceProvider extends PackageServiceProvider
         );
 
 
-        $this->app->tag(config('stackflows.service_task_executors'), 'stackflows-service-task');
+        $this->app->tag(config('stackflows.external_task_executors'), 'stackflows-external-task');
 //        $this->app->tag(config('stackflows.user_task_sync'), 'stackflows-user-task');
     }
 

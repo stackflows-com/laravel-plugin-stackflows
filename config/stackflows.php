@@ -8,14 +8,11 @@ return [
     'authToken' => env('STACKFLOWS_AUTH_TOKEN'),
 
     /*
-     * Service task executors are classes that handle Stackflows service tasks.
-     * Must implements interface \Stackflows\StackflowsPlugin\Services\ServiceTask\ServiceTaskExecutorInterface
+     * External task executors are classes that handle Stackflows external tasks.
+     * Must implements interface Stackflows\StackflowsPlugin\Bpmn\ExternalTasks\ExternalTaskExecutorInterface
      */
-    'service_task_executors' => [],
+    'external_task_executors' => [],
 
-    /*
-     * User task synchronizers are classes that handle Stackflows service tasks.
-     * Must implements interface \Stackflows\StackflowsPlugin\Services\UserTask\UserTaskSyncInterface
-     */
+    // Implementation is in the development
     'user_task_sync' => [],
 ];

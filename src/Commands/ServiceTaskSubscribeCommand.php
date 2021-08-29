@@ -4,7 +4,7 @@ namespace Stackflows\StackflowsPlugin\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Application;
-use Stackflows\StackflowsPlugin\Stackflows;
+use Stackflows\StackflowsPlugin\Http\Client\GatewayClient;
 use Stackflows\StackflowsPlugin\Tasks\TaskExecutorInterface;
 
 class ServiceTaskSubscribeCommand extends Command
@@ -13,9 +13,9 @@ class ServiceTaskSubscribeCommand extends Command
 
     public $description = 'Subscribe to service tasks';
 
-    public function handle(Application $app, Stackflows $client): void
+    public function handle(Application $app, GatewayClient $client): void
     {
-        $executors = $app->tagged('stackflows-service-task');
+        $executors = $app->tagged('stackflows-external-task');
 
         if (empty($executors)) {
             $this->error(
@@ -25,10 +25,18 @@ class ServiceTaskSubscribeCommand extends Command
             return;
         }
 
+        // TODO Auth
+        // Here should be a request to the gateway by the configured auth token, and get tenant id for camunda
+        $tenantId = 'bt'; //temporary set for everything bt tenant id
+
         /** @var TaskExecutorInterface $executor */
         foreach ($executors as $executor) {
-            $result = $executor->execute();
-            print_r($result);
+            $tasks = $client->getExternalTasks($tenantId, $executor->getTopic());
+            foreach ($tasks as $task) {
+                $result = $executor->execute($task);
+
+                print_r($result);
+            }
         }
     }
 }
