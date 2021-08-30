@@ -32,7 +32,7 @@ class ServiceTaskSubscribeCommand extends Command
 
         /** @var TaskExecutorInterface $executor */
         foreach ($executors as $executor) {
-            $tasks = $client->fetchAndLock($tenantId, $executor->getTopic());
+            $tasks = $client->fetchAndLock($tenantId, $executor->getTopic(), $executor->getLockDuration());
             foreach ($tasks as $task) {
                 try {
                     $result = $executor->execute($task);
