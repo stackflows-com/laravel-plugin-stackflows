@@ -13,7 +13,7 @@ class TaskService
         $externalTask->setActivityInstanceId($taskArray['activityInstanceId'] ?? null);
         $externalTask->setErrorMessage($taskArray['errorMessage'] ?? null);
         $externalTask->setExecutionId($taskArray['executionId'] ?? null);
-        $externalTask->setLockExpirationTime($taskArray['lockExpirationTime'] ?? null);
+        $externalTask->setLockExpirationTime(new \DateTime($taskArray['lockExpirationTime']?? null));
         $externalTask->setPriority($taskArray['priority'] ?? null);
         $externalTask->setProcessDefinitionId($taskArray['processDefinitionId'] ?? null);
         $externalTask->setProcessDefinitionKey($taskArray['processDefinitionKey'] ?? null);
