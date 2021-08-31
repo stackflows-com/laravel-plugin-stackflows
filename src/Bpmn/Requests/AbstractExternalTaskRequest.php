@@ -17,6 +17,7 @@ abstract class AbstractExternalTaskRequest implements ExternalTaskRequestInterfa
     private string $topicName;
     private string $tenantId;
     private string $priority;
+    private string $errorMessage;
 
     public function getActivityId(): string
     {
@@ -158,6 +159,24 @@ abstract class AbstractExternalTaskRequest implements ExternalTaskRequestInterfa
     public function setPriority(string $priority): self
     {
         $this->priority = $priority;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getErrorMessage(): string
+    {
+        return $this->errorMessage;
+    }
+
+    /**
+     * @param string $errorMessage
+     * @return AbstractExternalTaskRequest
+     */
+    public function setErrorMessage(string $errorMessage): AbstractExternalTaskRequest
+    {
+        $this->errorMessage = $errorMessage;
         return $this;
     }
 }

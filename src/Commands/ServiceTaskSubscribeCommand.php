@@ -7,6 +7,7 @@ use Illuminate\Foundation\Application;
 use Stackflows\StackflowsPlugin\Bpmn\Requests\ExternalTaskRequestInterface;
 use Stackflows\StackflowsPlugin\Http\Client\GatewayClient;
 use Stackflows\StackflowsPlugin\Tasks\TaskExecutorInterface;
+use Stackflows\StackflowsPlugin\Tasks\TaskService;
 
 class ServiceTaskSubscribeCommand extends Command
 {
@@ -14,7 +15,7 @@ class ServiceTaskSubscribeCommand extends Command
 
     public $description = 'Subscribe to service tasks';
 
-    public function handle(Application $app, GatewayClient $client): void
+    public function handle(Application $app, GatewayClient $client, TaskService $taskService): void
     {
         $executors = $app->tagged('stackflows-external-task');
 
@@ -35,6 +36,7 @@ class ServiceTaskSubscribeCommand extends Command
             $tasks = $client->fetchAndLock($tenantId, $executor->getTopic(), $executor->getLockDuration());
             foreach ($tasks as $task) {
                 try {
+                    $requestObject = $taskService->convertToExternalTaskRequest(new $executor->getRequestObjectClass(), $task);
                     $result = $executor->execute($task);
                     print_r($result);
                 } catch (\Exception $e) {
