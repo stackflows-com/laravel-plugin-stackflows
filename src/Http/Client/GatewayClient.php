@@ -48,6 +48,19 @@ class GatewayClient
         return json_decode($response->getBody()->getContents(), true);
     }
 
+    public function complete(string $tenantId, string $topic, $duration)
+    {
+        $response = $this->client->post('external-task/fetchAndLock', [
+            'json' => [
+                'topic'         => $topic,
+                'tenantId'      => $tenantId,
+                'lockDuration'  => $duration,
+            ]
+        ]);
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
     public function unlock(string $taskId)
     {
         $response = $this->client->post('external-task/unlock', ['query' => $taskId]);

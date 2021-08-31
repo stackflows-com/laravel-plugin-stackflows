@@ -4,6 +4,7 @@ namespace Stackflows\StackflowsPlugin\Tasks;
 
 use Stackflows\StackflowsPlugin\Bpmn\Requests\AbstractExternalTaskRequest;
 use Stackflows\StackflowsPlugin\Bpmn\Requests\ExternalTaskRequestInterface;
+use Stackflows\StackflowsPlugin\Bpmn\Responses\ExternalTaskResponseInterface;
 
 class TaskService
 {
@@ -25,5 +26,10 @@ class TaskService
         $externalTask->setWorkerId($taskArray['workerId'] ?? null);
 
         return $externalTask;
+    }
+
+    public function castExternalTaskResponse(ExternalTaskResponseInterface $response): array
+    {
+        return [];
     }
 }
