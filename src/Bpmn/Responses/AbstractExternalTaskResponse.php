@@ -2,7 +2,6 @@
 
 namespace Stackflows\StackflowsPlugin\Bpmn\Responses;
 
-
 abstract class AbstractExternalTaskResponse implements ExternalTaskResponseInterface
 {
     private array $variables;
@@ -30,6 +29,7 @@ abstract class AbstractExternalTaskResponse implements ExternalTaskResponseInter
     public function setVariables(array $variables): self
     {
         $this->variables = $variables;
+
         return $this;
     }
 }

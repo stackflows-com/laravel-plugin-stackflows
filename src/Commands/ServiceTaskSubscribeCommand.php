@@ -41,7 +41,6 @@ class ServiceTaskSubscribeCommand extends Command
                     $externalTaskResponse = $executor->execute($requestObject);
 
                     $client->complete($externalTaskResponse);
-
                 } catch (\Exception $e) {
                     $client->unlock($task['id']);
                 }
@@ -51,6 +50,5 @@ class ServiceTaskSubscribeCommand extends Command
 
     public function castTaskToObject($task): ExternalTaskRequestInterface
     {
-
     }
 }

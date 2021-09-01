@@ -27,6 +27,7 @@ abstract class AbstractExternalTaskRequest implements ExternalTaskRequestInterfa
     public function setActivityId(?string $activityId): self
     {
         $this->activityId = $activityId;
+
         return $this;
     }
 
@@ -38,6 +39,7 @@ abstract class AbstractExternalTaskRequest implements ExternalTaskRequestInterfa
     public function setActivityInstanceId(?string $activityInstanceId): self
     {
         $this->activityInstanceId = $activityInstanceId;
+
         return $this;
     }
 
@@ -49,6 +51,7 @@ abstract class AbstractExternalTaskRequest implements ExternalTaskRequestInterfa
     public function setExecutionId(?string $executionId): self
     {
         $this->executionId = $executionId;
+
         return $this;
     }
 
@@ -60,6 +63,7 @@ abstract class AbstractExternalTaskRequest implements ExternalTaskRequestInterfa
     public function setLockExpirationTime(\DateTime $lockExpirationTime): self
     {
         $this->lockExpirationTime = $lockExpirationTime;
+
         return $this;
     }
 
@@ -71,6 +75,7 @@ abstract class AbstractExternalTaskRequest implements ExternalTaskRequestInterfa
     public function setProcessDefinitionId(?string $processDefinitionId): self
     {
         $this->processDefinitionId = $processDefinitionId;
+
         return $this;
     }
 
@@ -82,6 +87,7 @@ abstract class AbstractExternalTaskRequest implements ExternalTaskRequestInterfa
     public function setProcessDefinitionKey(?string $processDefinitionKey): self
     {
         $this->processDefinitionKey = $processDefinitionKey;
+
         return $this;
     }
 
@@ -93,6 +99,7 @@ abstract class AbstractExternalTaskRequest implements ExternalTaskRequestInterfa
     public function setProcessDefinitionVersionTag(?string $processDefinitionVersionTag): self
     {
         $this->processDefinitionVersionTag = $processDefinitionVersionTag;
+
         return $this;
     }
 
@@ -104,6 +111,7 @@ abstract class AbstractExternalTaskRequest implements ExternalTaskRequestInterfa
     public function setProcessInstanceId(?string $processInstanceId): self
     {
         $this->processInstanceId = $processInstanceId;
+
         return $this;
     }
 
@@ -115,6 +123,7 @@ abstract class AbstractExternalTaskRequest implements ExternalTaskRequestInterfa
     public function setRetries(?string $retries): self
     {
         $this->retries = $retries;
+
         return $this;
     }
 
@@ -126,6 +135,7 @@ abstract class AbstractExternalTaskRequest implements ExternalTaskRequestInterfa
     public function setWorkerId(?string $workerId): self
     {
         $this->workerId = $workerId;
+
         return $this;
     }
 
@@ -137,6 +147,7 @@ abstract class AbstractExternalTaskRequest implements ExternalTaskRequestInterfa
     public function setTopicName(?string $topicName): self
     {
         $this->topicName = $topicName;
+
         return $this;
     }
 
@@ -148,6 +159,7 @@ abstract class AbstractExternalTaskRequest implements ExternalTaskRequestInterfa
     public function setTenantId(?string $tenantId): self
     {
         $this->tenantId = $tenantId;
+
         return $this;
     }
 
@@ -159,6 +171,7 @@ abstract class AbstractExternalTaskRequest implements ExternalTaskRequestInterfa
     public function setPriority(?string $priority): self
     {
         $this->priority = $priority;
+
         return $this;
     }
 
@@ -177,6 +190,7 @@ abstract class AbstractExternalTaskRequest implements ExternalTaskRequestInterfa
     public function setErrorMessage(?string $errorMessage): AbstractExternalTaskRequest
     {
         $this->errorMessage = $errorMessage;
+
         return $this;
     }
 }

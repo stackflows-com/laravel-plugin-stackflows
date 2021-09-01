@@ -19,7 +19,7 @@ class GatewayClient
 
         $this->client = new Client([
             'base_uri' => $this->gatewayEndpoint,
-            'timeout'  => 2.0,
+            'timeout' => 2.0,
         ]);
     }
 
@@ -29,7 +29,7 @@ class GatewayClient
             'json' => [
                 'topic' => $topic,
                 'tenantId' => $tenantId,
-            ]
+            ],
         ]);
 
         return json_decode($response->getBody()->getContents(), true);
@@ -39,10 +39,10 @@ class GatewayClient
     {
         $response = $this->client->post('external-task/fetchAndLock', [
             'json' => [
-                'topic'         => $topic,
-                'tenantId'      => $tenantId,
-                'lockDuration'  => $duration,
-            ]
+                'topic' => $topic,
+                'tenantId' => $tenantId,
+                'lockDuration' => $duration,
+            ],
         ]);
 
         return json_decode($response->getBody()->getContents(), true);
@@ -52,10 +52,10 @@ class GatewayClient
     {
         $response = $this->client->post('external-task/fetchAndLock', [
             'json' => [
-                'topic'         => $topic,
-                'tenantId'      => $tenantId,
-                'lockDuration'  => $duration,
-            ]
+                'topic' => $topic,
+                'tenantId' => $tenantId,
+                'lockDuration' => $duration,
+            ],
         ]);
 
         return json_decode($response->getBody()->getContents(), true);

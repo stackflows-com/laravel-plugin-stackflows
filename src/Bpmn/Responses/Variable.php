@@ -32,6 +32,7 @@ class Variable
     public function setName(string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -50,6 +51,7 @@ class Variable
     public function setValue($value)
     {
         $this->value = $value;
+
         return $this;
     }
 
@@ -68,6 +70,7 @@ class Variable
     public function setType(string $type): self
     {
         $this->type = $type;
+
         return $this;
     }
 
@@ -86,6 +89,7 @@ class Variable
     public function setObjectTypeName(string $objectTypeName): self
     {
         $this->objectTypeName = $objectTypeName;
+
         return $this;
     }
 
@@ -104,6 +108,7 @@ class Variable
     public function setSerializationDataFormat(string $serializationDataFormat): self
     {
         $this->serializationDataFormat = $serializationDataFormat;
+
         return $this;
     }
 
@@ -122,6 +127,7 @@ class Variable
     public function setFilename(string $filename): self
     {
         $this->filename = $filename;
+
         return $this;
     }
 
@@ -140,6 +146,7 @@ class Variable
     public function setMimetype(string $mimetype): self
     {
         $this->mimetype = $mimetype;
+
         return $this;
     }
 
@@ -158,6 +165,7 @@ class Variable
     public function setEncoding(string $encoding): self
     {
         $this->encoding = $encoding;
+
         return $this;
     }
 
@@ -176,7 +184,7 @@ class Variable
     public function setTransient(string $transient): self
     {
         $this->transient = $transient;
+
         return $this;
     }
-
 }
