@@ -1,6 +1,6 @@
 <?php
 
-namespace Stackflows\StackflowsPlugin\Bpmn\Requests;
+namespace Stackflows\StackflowsPlugin\Bpmn\Inputs;
 
 abstract class AbstractExternalTaskRequest implements ExternalTaskRequestInterface
 {

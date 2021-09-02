@@ -4,7 +4,7 @@ namespace Stackflows\StackflowsPlugin\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Application;
-use Stackflows\StackflowsPlugin\Bpmn\Requests\ExternalTaskRequestInterface;
+use Stackflows\StackflowsPlugin\Bpmn\Inputs\ExternalTaskRequestInterface;
 use Stackflows\StackflowsPlugin\Http\Client\GatewayClient;
 use Stackflows\StackflowsPlugin\Tasks\TaskExecutorInterface;
 use Stackflows\StackflowsPlugin\Tasks\TaskService;

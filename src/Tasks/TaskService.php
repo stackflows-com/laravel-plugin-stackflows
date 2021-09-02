@@ -2,9 +2,9 @@
 
 namespace Stackflows\StackflowsPlugin\Tasks;
 
-use Stackflows\StackflowsPlugin\Bpmn\Requests\AbstractExternalTaskRequest;
-use Stackflows\StackflowsPlugin\Bpmn\Requests\ExternalTaskRequestInterface;
-use Stackflows\StackflowsPlugin\Bpmn\Responses\ExternalTaskResponseInterface;
+use Stackflows\StackflowsPlugin\Bpmn\Inputs\AbstractExternalTaskRequest;
+use Stackflows\StackflowsPlugin\Bpmn\Inputs\ExternalTaskRequestInterface;
+use Stackflows\StackflowsPlugin\Bpmn\Outputs\ExternalTaskResponseInterface;
 
 class TaskService
 {
