@@ -2,6 +2,6 @@
 
 namespace Stackflows\StackflowsPlugin\Bpmn\Inputs;
 
-interface ExternalTaskRequestInterface
+interface ExternalTaskInputInterface
 {
 }

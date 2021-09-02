@@ -3,7 +3,7 @@
 namespace Stackflows\StackflowsPlugin\Bpmn\ExternalTasks;
 
 use Stackflows\StackflowsPlugin\Bpmn\Inputs\ExternalTaskRequestInterface;
-use Stackflows\StackflowsPlugin\Bpmn\Outputs\ExternalTaskResponseInterface;
+use Stackflows\StackflowsPlugin\Bpmn\Outputs\ExternalTaskOutputInterface;
 
 interface ExternalTaskExecutorInterface
 {
@@ -21,9 +21,9 @@ interface ExternalTaskExecutorInterface
 
     /**
      * @param ExternalTaskRequestInterface $task
-     * @return ExternalTaskResponseInterface
+     * @return ExternalTaskOutputInterface
      */
-    public function execute(ExternalTaskRequestInterface $task): ExternalTaskResponseInterface;
+    public function execute(ExternalTaskRequestInterface $task): ExternalTaskOutputInterface;
 
     /**
      * Defines camunda external task request object class that has

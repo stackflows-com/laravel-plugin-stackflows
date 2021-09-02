@@ -4,7 +4,7 @@ namespace Stackflows\StackflowsPlugin\Tasks;
 
 use Stackflows\StackflowsPlugin\Bpmn\Inputs\AbstractExternalTaskRequest;
 use Stackflows\StackflowsPlugin\Bpmn\Inputs\ExternalTaskRequestInterface;
-use Stackflows\StackflowsPlugin\Bpmn\Outputs\ExternalTaskResponseInterface;
+use Stackflows\StackflowsPlugin\Bpmn\Outputs\ExternalTaskOutputInterface;
 
 class TaskService
 {
@@ -28,7 +28,7 @@ class TaskService
         return $externalTask;
     }
 
-    public function castExternalTaskResponse(ExternalTaskResponseInterface $response): array
+    public function castExternalTaskResponse(ExternalTaskOutputInterface $response): array
     {
         return [];
     }

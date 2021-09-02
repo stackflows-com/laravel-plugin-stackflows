@@ -2,7 +2,7 @@
 
 namespace Stackflows\StackflowsPlugin\Bpmn\Outputs;
 
-abstract class AbstractExternalTaskResponse implements ExternalTaskResponseInterface
+abstract class AbstractExternalTaskOutput implements ExternalTaskOutputInterface
 {
     private array $variables;
 

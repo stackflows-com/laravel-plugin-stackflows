@@ -2,7 +2,7 @@
 
 namespace Stackflows\StackflowsPlugin\Bpmn\Inputs;
 
-abstract class AbstractExternalTaskRequest implements ExternalTaskRequestInterface
+abstract class AbstractExternalTaskInput implements ExternalTaskInputInterface
 {
     private ?string $activityId;
     private ?string $activityInstanceId;

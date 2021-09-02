@@ -2,7 +2,7 @@
 
 namespace Stackflows\StackflowsPlugin\Bpmn\Outputs;
 
-interface ExternalTaskResponseInterface
+interface ExternalTaskOutputInterface
 {
     /**
      * It is necessary to provide the conversion from the object to the array output to pass to the model.
