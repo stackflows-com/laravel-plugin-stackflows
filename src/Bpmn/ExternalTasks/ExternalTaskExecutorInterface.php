@@ -2,7 +2,7 @@
 
 namespace Stackflows\StackflowsPlugin\Bpmn\ExternalTasks;
 
-use Stackflows\StackflowsPlugin\Bpmn\Inputs\ExternalTaskRequestInterface;
+use Stackflows\StackflowsPlugin\Bpmn\Inputs\ExternalTaskInputInterface;
 use Stackflows\StackflowsPlugin\Bpmn\Outputs\ExternalTaskOutputInterface;
 
 interface ExternalTaskExecutorInterface
@@ -20,10 +20,10 @@ interface ExternalTaskExecutorInterface
     public function getLockDuration(): int;
 
     /**
-     * @param ExternalTaskRequestInterface $task
+     * @param ExternalTaskInputInterface $task
      * @return ExternalTaskOutputInterface
      */
-    public function execute(ExternalTaskRequestInterface $task): ExternalTaskOutputInterface;
+    public function execute(ExternalTaskInputInterface $task): ExternalTaskOutputInterface;
 
     /**
      * Defines camunda external task request object class that has
