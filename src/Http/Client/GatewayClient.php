@@ -3,6 +3,7 @@
 namespace Stackflows\StackflowsPlugin\Http\Client;
 
 use GuzzleHttp\Client;
+use Stackflows\StackflowsPlugin\Bpmn\Outputs\ExternalTaskOutputInterface;
 
 class GatewayClient
 {
@@ -48,13 +49,11 @@ class GatewayClient
         return json_decode($response->getBody()->getContents(), true);
     }
 
-    public function complete(string $tenantId, string $topic, $duration)
+    public function complete(ExternalTaskOutputInterface $task)
     {
         $response = $this->client->post('external-task/fetchAndLock', [
             'json' => [
-                'topic' => $topic,
-                'tenantId' => $tenantId,
-                'lockDuration' => $duration,
+
             ],
         ]);
 
