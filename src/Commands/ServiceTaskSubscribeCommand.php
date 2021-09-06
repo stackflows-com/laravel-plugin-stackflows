@@ -47,8 +47,4 @@ class ServiceTaskSubscribeCommand extends Command
             }
         }
     }
-
-    public function castTaskToObject($task): ExternalTaskRequestInterface
-    {
-    }
 }
