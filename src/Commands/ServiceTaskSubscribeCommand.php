@@ -27,7 +27,7 @@ class ServiceTaskSubscribeCommand extends Command
         }
 
         $response = $client->authenticateToken(config('stackflows.authToken'));
-        if (!isset($response['tenantId'])) {
+        if (! isset($response['tenantId'])) {
             $this->error(
                 'Stackflows auth token invalid or not set. Check the configuration file stackflows.php'
             );

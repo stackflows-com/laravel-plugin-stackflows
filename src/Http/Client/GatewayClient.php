@@ -71,8 +71,8 @@ class GatewayClient
     {
         $response = $this->client->post('token/authenticate', [
             'json' => [
-                'token' => $token
-            ]
+                'token' => $token,
+            ],
         ]);
 
         return json_decode($response->getBody()->getContents(), true);
