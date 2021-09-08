@@ -26,9 +26,15 @@ class ServiceTaskSubscribeCommand extends Command
             return;
         }
 
-        // TODO Auth
-        // Here should be a request to the gateway by the configured auth token, and get tenant id for camunda
-        $tenantId = 'bt'; //temporary set for everything bt tenant id
+        $response = $client->authenticateToken(config('stackflows.authToken'));
+        if (!isset($response['tenantId'])) {
+            $this->error(
+                'Stackflows auth token invalid or not set. Check the configuration file stackflows.php'
+            );
+
+            return;
+        }
+        $tenantId = $response['tenantId'];
 
         /** @var TaskExecutorInterface $executor */
         foreach ($executors as $executor) {

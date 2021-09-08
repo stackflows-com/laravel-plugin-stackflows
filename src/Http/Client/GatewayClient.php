@@ -66,4 +66,15 @@ class GatewayClient
 
         return json_decode($response->getBody()->getContents(), true);
     }
+
+    public function authenticateToken(string $token)
+    {
+        $response = $this->client->post('token/authenticate', [
+            'json' => [
+                'token' => $token
+            ]
+        ]);
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
 }
