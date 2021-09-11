@@ -27,16 +27,16 @@ class ServiceTaskSubscribeCommand extends Command
             return;
         }
 
-//        $response = $client->authenticateToken(config('stackflows.authToken'));
-//        if (! isset($response['tenantId'])) {
-//            $this->error(
-//                'Stackflows auth token invalid or not set. Check the configuration file stackflows.php'
-//            );
-//
-//            return;
-//        }
-//        $tenantId = $response['tenantId'];
-        $tenantId = '55872e5012f211ecbca6dd0edb27601e';
+        $response = $client->authenticateToken(config('stackflows.authToken'));
+        if (! isset($response['tenantId'])) {
+            $this->error(
+                'Stackflows auth token invalid or not set. Check the configuration file stackflows.php'
+            );
+
+            return;
+        }
+        $tenantId = $response['tenantId'];
+//        $tenantId = '55872e5012f211ecbca6dd0edb27601e';
 
         /** @var TaskExecutorInterface $executor */
         foreach ($executors as $executor) {
