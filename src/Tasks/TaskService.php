@@ -2,13 +2,12 @@
 
 namespace Stackflows\StackflowsPlugin\Tasks;
 
-use Stackflows\StackflowsPlugin\Bpmn\Inputs\AbstractExternalTaskRequest;
-use Stackflows\StackflowsPlugin\Bpmn\Inputs\ExternalTaskRequestInterface;
-use Stackflows\StackflowsPlugin\Bpmn\Outputs\ExternalTaskOutputInterface;
+use Stackflows\StackflowsPlugin\Bpmn\Inputs\AbstractExternalTaskInput;
+use Stackflows\StackflowsPlugin\Bpmn\Inputs\ExternalTaskInputInterface;
 
 class TaskService
 {
-    public function convertToExternalTaskRequest(AbstractExternalTaskRequest $externalTask, array $taskArray): ExternalTaskRequestInterface
+    public function convertToExternalTaskRequest(AbstractExternalTaskInput $externalTask, array $taskArray): ExternalTaskInputInterface
     {
         $externalTask->setActivityId($taskArray['activityId'] ?? null);
         $externalTask->setActivityInstanceId($taskArray['activityInstanceId'] ?? null);
@@ -28,8 +27,8 @@ class TaskService
         return $externalTask;
     }
 
-    public function castExternalTaskResponse(ExternalTaskOutputInterface $response): array
-    {
-        return [];
-    }
+//    public function castExternalTaskResponse(ExternalTaskOutputInterface $response): array
+//    {
+//        return [];
+//    }
 }
