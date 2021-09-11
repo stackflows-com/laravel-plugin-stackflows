@@ -24,6 +24,13 @@ class TaskService
         $externalTask->setTopicName($taskArray['topicName'] ?? null);
         $externalTask->setWorkerId($taskArray['workerId'] ?? null);
 
+        foreach ($taskArray['variables'] as $variableName => $variableOptions) {
+            $method = 'set'.ucfirst($variableName);
+            if (method_exists($externalTask, $method)) {
+                $externalTask->$method($variableOptions['value']);
+            }
+        }
+
         return $externalTask;
     }
 

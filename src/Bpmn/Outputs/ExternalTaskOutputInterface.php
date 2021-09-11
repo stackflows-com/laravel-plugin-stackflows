@@ -11,5 +11,5 @@ interface ExternalTaskOutputInterface
      *
      * @return mixed
      */
-    public function toArray(): array;
+    public function getVariables(): array;
 }

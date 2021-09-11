@@ -187,7 +187,7 @@ abstract class AbstractExternalTaskInput implements ExternalTaskInputInterface
      * @param ?string $errorMessage
      * @return AbstractExternalTaskRequest
      */
-    public function setErrorMessage(?string $errorMessage): AbstractExternalTaskRequest
+    public function setErrorMessage(?string $errorMessage): self
     {
         $this->errorMessage = $errorMessage;
 

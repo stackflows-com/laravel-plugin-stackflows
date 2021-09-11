@@ -26,7 +26,7 @@ class GatewayClient
 
     public function getExternalTasks(string $tenantId, string $topic)
     {
-        $response = $this->client->get('external-task/tasks', [
+        $response = $this->client->get('external-task', [
             'json' => [
                 'topic' => $topic,
                 'tenantId' => $tenantId,
@@ -36,24 +36,41 @@ class GatewayClient
         return json_decode($response->getBody()->getContents(), true);
     }
 
-    public function fetchAndLock(string $tenantId, string $topic, $duration)
+    public function fetchAndLock(string $tenantId, string $topic, $duration, $workerId)
     {
         $response = $this->client->post('external-task/fetchAndLock', [
             'json' => [
                 'topic' => $topic,
                 'tenantId' => $tenantId,
                 'lockDuration' => $duration,
+                'workerId' => $workerId,
             ],
         ]);
 
         return json_decode($response->getBody()->getContents(), true);
     }
 
-    public function complete(ExternalTaskOutputInterface $task)
+    public function complete($taskId, $workerId, ExternalTaskOutputInterface $task)
     {
-        $response = $this->client->post('external-task/fetchAndLock', [
-            'json' => [
+        $variables = [];
 
+        foreach ($task->getVariables() as $variableName => $variableContent) {
+            $variables[$variableName] = ['value' => $variableContent];
+        }
+
+        print_r([
+            'json' => [
+                'taskId' => $taskId,
+                'workerId' =>  $workerId,
+                'variables' => $variables,
+            ],
+        ]);
+
+        $response = $this->client->post('external-task/complete', [
+            'json' => [
+                'taskId' => $taskId,
+                'workerId' =>  $workerId,
+                'variables' => $variables,
             ],
         ]);
 
@@ -62,7 +79,7 @@ class GatewayClient
 
     public function unlock(string $taskId)
     {
-        $response = $this->client->post('external-task/unlock', ['query' => $taskId]);
+        $response = $this->client->post('external-task/unlock/'.$taskId);
 
         return json_decode($response->getBody()->getContents(), true);
     }
