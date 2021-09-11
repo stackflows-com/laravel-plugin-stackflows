@@ -61,7 +61,7 @@ class GatewayClient
         print_r([
             'json' => [
                 'taskId' => $taskId,
-                'workerId' =>  $workerId,
+                'workerId' => $workerId,
                 'variables' => $variables,
             ],
         ]);
@@ -69,7 +69,7 @@ class GatewayClient
         $response = $this->client->post('external-task/complete', [
             'json' => [
                 'taskId' => $taskId,
-                'workerId' =>  $workerId,
+                'workerId' => $workerId,
                 'variables' => $variables,
             ],
         ]);
