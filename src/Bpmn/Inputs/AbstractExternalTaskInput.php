@@ -4,6 +4,7 @@ namespace Stackflows\StackflowsPlugin\Bpmn\Inputs;
 
 abstract class AbstractExternalTaskInput implements ExternalTaskInputInterface
 {
+    private ?string $id;
     private ?string $activityId;
     private ?string $activityInstanceId;
     private ?string $executionId;
@@ -18,6 +19,17 @@ abstract class AbstractExternalTaskInput implements ExternalTaskInputInterface
     private ?string $tenantId;
     private ?string $priority;
     private ?string $errorMessage;
+
+    public function getId(): ?string
+    {
+        return $this->id;
+    }
+
+    public function setId(?string $id): self
+    {
+        $this->id = $id;
+        return $this;
+    }
 
     public function getActivityId(): ?string
     {

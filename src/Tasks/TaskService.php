@@ -9,6 +9,7 @@ class TaskService
 {
     public function convertToExternalTaskRequest(AbstractExternalTaskInput $externalTask, array $taskArray): ExternalTaskInputInterface
     {
+        $externalTask->setId($taskArray['id'] ?? null);
         $externalTask->setActivityId($taskArray['activityId'] ?? null);
         $externalTask->setActivityInstanceId($taskArray['activityInstanceId'] ?? null);
         $externalTask->setErrorMessage($taskArray['errorMessage'] ?? null);
