@@ -61,6 +61,15 @@ class GatewayClient
                 [
                     'value' => $variable->getValue(),
                     'type' => $variable->getType(),
+                    'valueInfo' => array_filter(
+                        [
+                            'objectTypeName' => $variable->getObjectTypeName(),
+                            'serializationDataFormat' => $variable->getSerializationDataFormat(),
+                            'filename' => $variable->getFilename(),
+                            'mimetype' => $variable->getMimetype(),
+                            'encoding' => $variable->getMimetype(),
+                        ]
+                    )
                 ]
             );
         }
