@@ -48,7 +48,7 @@ class ServiceTaskSubscribeCommand extends Command
                     $requestObject = $taskService->convertToExternalTaskRequest(new $requestObjectClass(), $task);
                     $externalTaskResponse = $executor->execute($requestObject);
                     print_r($externalTaskResponse->getVariables());
-                    $response = $client->complete($requestObject->getExecutionId(), $requestObject->getWorkerId(), $externalTaskResponse);
+                    $response = $client->complete($requestObject->getActivityInstanceId(), $requestObject->getWorkerId(), $externalTaskResponse);
                     print_r($response);
                 } catch (\Exception $e) {
                     print_r($e->getMessage());
