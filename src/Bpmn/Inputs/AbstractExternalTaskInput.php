@@ -28,6 +28,7 @@ abstract class AbstractExternalTaskInput implements ExternalTaskInputInterface
     public function setId(?string $id): self
     {
         $this->id = $id;
+
         return $this;
     }
 
