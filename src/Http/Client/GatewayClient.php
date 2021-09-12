@@ -73,14 +73,6 @@ class GatewayClient
                 ]
             );
         }
-//        foreach ($task->getVariables() as $variableName => $variableContent) {
-//            $variables[$variableName] = array_filter(
-//                [
-//                    'value' => $variableContent,
-//                    'type' => is_array($variableContent) ? 'Array' : null
-//                ]
-//            );
-//        }
 
         print_r([
             'json' => [

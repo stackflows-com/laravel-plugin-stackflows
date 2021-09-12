@@ -20,7 +20,7 @@ class Variable
     /**
      * @return string
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -58,7 +58,7 @@ class Variable
     /**
      * @return string
      */
-    public function getType(): string
+    public function getType(): ?string
     {
         return $this->type;
     }
@@ -77,7 +77,7 @@ class Variable
     /**
      * @return string
      */
-    public function getObjectTypeName(): string
+    public function getObjectTypeName(): ?string
     {
         return $this->objectTypeName;
     }
@@ -96,7 +96,7 @@ class Variable
     /**
      * @return string
      */
-    public function getSerializationDataFormat(): string
+    public function getSerializationDataFormat(): ?string
     {
         return $this->serializationDataFormat;
     }
@@ -115,7 +115,7 @@ class Variable
     /**
      * @return string
      */
-    public function getFilename(): string
+    public function getFilename(): ?string
     {
         return $this->filename;
     }
@@ -134,7 +134,7 @@ class Variable
     /**
      * @return string
      */
-    public function getMimetype(): string
+    public function getMimetype(): ?string
     {
         return $this->mimetype;
     }
@@ -153,7 +153,7 @@ class Variable
     /**
      * @return string
      */
-    public function getEncoding(): string
+    public function getEncoding(): ?string
     {
         return $this->encoding;
     }
@@ -172,7 +172,7 @@ class Variable
     /**
      * @return string
      */
-    public function getTransient(): string
+    public function getTransient(): ?string
     {
         return $this->transient;
     }
