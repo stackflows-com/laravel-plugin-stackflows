@@ -5,17 +5,16 @@ namespace Stackflows\StackflowsPlugin\Bpmn\Outputs;
 class Variable
 {
     private string $name;
-
     /** @var mixed */
-    private $value;
+    private $value = null;
 
-    private string $type;
-    private string $objectTypeName;
-    private string $serializationDataFormat;
-    private string $filename;
-    private string $mimetype;
-    private string $encoding;
-    private string $transient;
+    private ?string $type = null;
+    private ?string $objectTypeName = null;
+    private ?string $serializationDataFormat = null;
+    private ?string $filename = null;
+    private ?string $mimetype = null;
+    private ?string $encoding = null;
+    private ?string $transient = null;
 
     /**
      * @return string
