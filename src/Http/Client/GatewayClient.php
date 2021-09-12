@@ -4,6 +4,7 @@ namespace Stackflows\StackflowsPlugin\Http\Client;
 
 use GuzzleHttp\Client;
 use Stackflows\StackflowsPlugin\Bpmn\Outputs\ExternalTaskOutputInterface;
+use Stackflows\StackflowsPlugin\Bpmn\Outputs\Variable;
 
 class GatewayClient
 {
@@ -54,9 +55,23 @@ class GatewayClient
     {
         $variables = [];
 
-        foreach ($task->getVariables() as $variableName => $variableContent) {
-            $variables[$variableName] = ['value' => $variableContent];
+        /** @var Variable $variable */
+        foreach ($task->getVariables() as $variable) {
+            $variables[$variable->getName()] = array_filter(
+                [
+                    'value' => $variable->getValue(),
+                    'type' => $variable->getType(),
+                ]
+            );
         }
+//        foreach ($task->getVariables() as $variableName => $variableContent) {
+//            $variables[$variableName] = array_filter(
+//                [
+//                    'value' => $variableContent,
+//                    'type' => is_array($variableContent) ? 'Array' : null
+//                ]
+//            );
+//        }
 
         print_r([
             'json' => [
