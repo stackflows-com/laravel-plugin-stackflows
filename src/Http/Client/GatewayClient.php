@@ -59,7 +59,7 @@ class GatewayClient
         foreach ($task->getVariables() as $variable) {
             $variables[$variable->getName()] = array_filter(
                 [
-                    'value' => serialize($variable->getValue()),
+                    'value' => json_encode($variable->getValue()),
                     'type' => $variable->getType(),
                     'valueInfo' => array_filter(
                         [
