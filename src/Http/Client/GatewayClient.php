@@ -69,7 +69,7 @@ class GatewayClient
                             'mimetype' => $variable->getMimetype(),
                             'encoding' => $variable->getMimetype(),
                         ]
-                    )
+                    ),
                 ]
             );
         }
