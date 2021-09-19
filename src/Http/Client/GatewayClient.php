@@ -59,28 +59,10 @@ class GatewayClient
         foreach ($task->getVariables() as $variable) {
             $variables[$variable->getName()] = array_filter(
                 [
-                    'value' => json_encode($variable->getValue()),
-                    'type' => $variable->getType(),
-                    'valueInfo' => array_filter(
-                        [
-                            'objectTypeName' => $variable->getObjectTypeName(),
-                            'serializationDataFormat' => $variable->getSerializationDataFormat(),
-                            'filename' => $variable->getFilename(),
-                            'mimetype' => $variable->getMimetype(),
-                            'encoding' => $variable->getMimetype(),
-                        ]
-                    ),
+                    'value' => $variable->getValue()
                 ]
             );
         }
-
-        print_r([
-            'json' => [
-                'taskId' => $taskId,
-                'workerId' => $workerId,
-                'variables' => $variables,
-            ],
-        ]);
 
         $response = $this->client->post('external-task/complete', [
             'json' => [
