@@ -10,9 +10,8 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Sergey A.",
-            "email": "support@stackflows.com",
-            "role": "Developer"
+            "name": "UAB Tillforty",
+            "email": "support@stackflows.com"
         }
     ],
     "require": {
@@ -38,16 +37,6 @@
         "psr-4": {
             "Stackflows\\StackflowsPlugin\\": "src"
         }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Stackflows\\StackflowsPlugin\\Tests\\": "tests"
-        }
-    },
-    "scripts": {
-        "psalm": "vendor/bin/psalm",
-        "test": "./vendor/bin/testbench package:test --parallel --no-coverage",
-        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
     },
     "config": {
         "sort-packages": true
