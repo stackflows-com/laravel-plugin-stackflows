@@ -26,6 +26,7 @@ class Variable
     public function setName(string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -37,6 +38,7 @@ class Variable
     public function setValue($value): self
     {
         $this->value = $value;
+
         return $this;
     }
 }
