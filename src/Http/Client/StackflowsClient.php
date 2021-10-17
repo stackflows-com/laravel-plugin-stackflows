@@ -81,7 +81,8 @@ class StackflowsClient
 
     public function unlock(string $taskId)
     {
-        $response = $this->client->post('external-task/unlock/'.$taskId,
+        $response = $this->client->post(
+            'external-task/unlock/'.$taskId,
             [
                 'headers' => [
                     'Authorization' => $this->authToken,
