@@ -4,7 +4,6 @@ namespace Stackflows\StackflowsPlugin\Http\Client;
 
 use GuzzleHttp\Client;
 use Stackflows\StackflowsPlugin\Bpmn\Outputs\ExternalTaskOutputInterface;
-use Stackflows\StackflowsPlugin\Bpmn\Outputs\Variable;
 
 class GatewayClient
 {
