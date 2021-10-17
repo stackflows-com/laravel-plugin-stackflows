@@ -11,9 +11,11 @@ abstract class AbstractExternalTaskOutput implements ExternalTaskOutputInterface
         $this->variables = $variables;
     }
 
-    public function addVariable(Variable $variable)
+    public function addVariable(string $key, $value): self
     {
-        $this->variables[] = $variable;
+        $this->variables[$key] = $value;
+
+        return $this;
     }
 
     public function reset()
