@@ -55,11 +55,10 @@ class GatewayClient
     {
         $variables = [];
 
-        /** @var Variable $variable */
-        foreach ($task->getVariables() as $variable) {
-            $variables[$variable->getName()] = array_filter(
+        foreach ($task->getVariables() as $name => $variable) {
+            $variables[$name] = array_filter(
                 [
-                    'value' => $variable->getValue(),
+                    'value' => $variable,
                 ]
             );
         }
