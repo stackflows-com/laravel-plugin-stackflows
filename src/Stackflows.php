@@ -2,19 +2,19 @@
 
 namespace Stackflows\StackflowsPlugin;
 
-use Stackflows\StackflowsPlugin\Http\Client\GatewayClient;
+use Stackflows\StackflowsPlugin\Http\Client\StackflowsClient;
 
 class Stackflows
 {
-    private GatewayClient $gatewayClient;
+    private StackflowsClient $stackFlowsClient;
 
-    public function __construct(GatewayClient $gatewayClient)
+    public function __construct(StackflowsClient $stackFlowsClient)
     {
-        $this->gatewayClient = $gatewayClient;
+        $this->stackFlowsClient = $stackFlowsClient;
     }
 
-    public function getGatewayClient(): GatewayClient
+    public function getStackFlowsClient(): StackflowsClient
     {
-        return $this->gatewayClient;
+        return $this->stackFlowsClient;
     }
 }

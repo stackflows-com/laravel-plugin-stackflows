@@ -2,7 +2,7 @@
 
 return [
     // Address of the Stack Flow Gateway API.
-    'gatewayHost' => env('STACKFLOWS_GATEWAY_HOST'),
+    'apiHost' => env('STACKFLOWS_API_HOST'),
 
     // Gateway Auth token
     'authToken' => env('STACKFLOWS_AUTH_TOKEN'),

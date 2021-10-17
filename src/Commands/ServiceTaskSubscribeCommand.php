@@ -5,7 +5,7 @@ namespace Stackflows\StackflowsPlugin\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Application;
 use Stackflows\StackflowsPlugin\Bpmn\Inputs\AbstractExternalTaskInput;
-use Stackflows\StackflowsPlugin\Http\Client\GatewayClient;
+use Stackflows\StackflowsPlugin\Http\Client\StackflowsClient;
 use Stackflows\StackflowsPlugin\Tasks\TaskExecutorInterface;
 use Stackflows\StackflowsPlugin\Tasks\TaskService;
 
@@ -15,7 +15,7 @@ class ServiceTaskSubscribeCommand extends Command
 
     public $description = 'Subscribe to service tasks';
 
-    public function handle(Application $app, GatewayClient $client, TaskService $taskService): void
+    public function handle(Application $app, StackflowsClient $client, TaskService $taskService): void
     {
         $executors = $app->tagged('stackflows-external-task');
 
@@ -36,7 +36,6 @@ class ServiceTaskSubscribeCommand extends Command
             return;
         }
         $tenantId = $response['tenantId'];
-//        $tenantId = '55872e5012f211ecbca6dd0edb27601e';
 
         /** @var TaskExecutorInterface $executor */
         foreach ($executors as $executor) {

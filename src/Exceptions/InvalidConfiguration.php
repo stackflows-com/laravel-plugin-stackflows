@@ -8,7 +8,7 @@ use JetBrains\PhpStorm\Pure;
 class InvalidConfiguration extends Exception
 {
     #[Pure]
-    public static function gatewayHostNotSpecified(): self
+    public static function apiHostNotSpecified(): self
     {
         return new self(
             'There was no Stackflows Gateway host specified.'

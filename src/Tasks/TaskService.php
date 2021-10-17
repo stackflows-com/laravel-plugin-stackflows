@@ -34,9 +34,4 @@ class TaskService
 
         return $externalTask;
     }
-
-//    public function castExternalTaskResponse(ExternalTaskOutputInterface $response): array
-//    {
-//        return [];
-//    }
 }
