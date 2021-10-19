@@ -42,7 +42,7 @@ class ServiceTaskSubscribeCommand extends Command
             $tasks = $client->fetchAndLock($tenantId, $executor->getTopic(), $executor->getLockDuration(), 'bt-worker');
             foreach ($tasks as $task) {
                 try {
-                    $requestObjectClass = $executor->getRequestObjectClass();
+                    $requestObjectClass = $executor->getInputClass();
                     /** @var AbstractExternalTaskInput $requestObject */
                     $requestObject = $taskService->convertToExternalTaskRequest(new $requestObjectClass(), $task);
                     $externalTaskResponse = $executor->execute($requestObject);

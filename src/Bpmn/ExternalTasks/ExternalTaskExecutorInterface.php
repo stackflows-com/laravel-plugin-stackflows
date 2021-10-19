@@ -31,5 +31,5 @@ interface ExternalTaskExecutorInterface
      *
      * @return string
      */
-    public function getRequestObjectClass(): string;
+    public function getInputClass(): string;
 }
