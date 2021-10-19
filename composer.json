@@ -19,7 +19,7 @@
         "ext-json": "*",
         "ext-pcntl": "*",
         "guzzlehttp/guzzle": "^7.3",
-        "illuminate/contracts": "^8.56",
+        "illuminate/contracts": ">=7.*",
         "fruitcake/laravel-cors": "^2.0",
         "spatie/laravel-package-tools": "^1.4.3"
     },
