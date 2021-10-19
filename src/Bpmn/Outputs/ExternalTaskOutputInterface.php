@@ -11,5 +11,5 @@ interface ExternalTaskOutputInterface
      *
      * @return mixed
      */
-    public function getVariables(): array;
+    public function getNamesForRequiredProperties(): array;
 }
