@@ -1,11 +1,12 @@
 <?php
 
 return [
-    // Address of the Stack Flow Gateway API.
+    // Address of the Stack Flows API.
     'apiHost' => env('STACKFLOWS_API_HOST'),
 
-    // Gateway Auth token
+    // API Auth token
     'authToken' => env('STACKFLOWS_AUTH_TOKEN'),
+    'environmentToken' => env('STACKFLOWS_ENVIRONMENT_TOKEN'),
 
     /*
      * External task executors are classes that handle Stackflows external tasks.
