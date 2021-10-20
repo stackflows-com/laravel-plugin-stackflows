@@ -23,7 +23,7 @@ interface ExternalTaskExecutorInterface
      * @param ExternalTaskInputInterface $task
      * @return ExternalTaskOutputInterface
      */
-    public function execute(ExternalTaskInputInterface $task): ExternalTaskOutputInterface;
+    public function execute(ExternalTaskInputInterface $task): ?ExternalTaskOutputInterface;
 
     /**
      * Defines camunda external task request object class that has
