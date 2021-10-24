@@ -36,10 +36,11 @@ class ServiceTaskSubscribeCommand extends Command
             return;
         }
         $tenantId = $response['tenantId'];
+        $workerId = $response['workerId'];
 
         /** @var TaskExecutorInterface $executor */
         foreach ($executors as $executor) {
-            $tasks = $client->fetchAndLock($tenantId, $executor->getTopic(), $executor->getLockDuration(), 'bt-worker');
+            $tasks = $client->fetchAndLock($tenantId, $executor->getTopic(), $executor->getLockDuration(), $workerId);
             foreach ($tasks as $task) {
                 try {
                     $requestObjectClass = $executor->getInputClass();
