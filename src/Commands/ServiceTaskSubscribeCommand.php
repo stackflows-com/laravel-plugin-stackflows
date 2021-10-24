@@ -47,7 +47,7 @@ class ServiceTaskSubscribeCommand extends Command
                     /** @var AbstractExternalTaskInput $requestObject */
                     $requestObject = $taskService->convertToExternalTaskRequest(new $requestObjectClass(), $task);
                     $externalTaskResponse = $executor->execute($requestObject);
-                    $client->complete($requestObject->getId(), $requestObject->getWorkerId(), $externalTaskResponse);
+                    $client->complete($requestObject->getId(), $requestObject->getWorkerId(), $tenantId, $externalTaskResponse);
                 } catch (\Exception $e) {
                     $client->unlock($task['id']);
                 }

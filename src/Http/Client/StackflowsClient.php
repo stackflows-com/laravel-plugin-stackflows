@@ -53,7 +53,7 @@ class StackflowsClient
         return json_decode($response->getBody()->getContents(), true);
     }
 
-    public function complete($taskId, $workerId, ExternalTaskOutputInterface $task)
+    public function complete($taskId, $workerId, $tenantId, ExternalTaskOutputInterface $task)
     {
         $variables = [];
 
@@ -72,6 +72,7 @@ class StackflowsClient
             'json' => [
                 'taskId' => $taskId,
                 'workerId' => $workerId,
+                'tenantId' => $tenantId,
                 'variables' => $variables,
             ],
         ]);
