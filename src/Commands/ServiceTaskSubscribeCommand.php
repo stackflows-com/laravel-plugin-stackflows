@@ -50,6 +50,7 @@ class ServiceTaskSubscribeCommand extends Command
                     $client->complete($requestObject->getId(), $requestObject->getWorkerId(), $tenantId, $externalTaskResponse);
                 } catch (\Exception $e) {
                     $client->unlock($task['id']);
+
                     throw new \Exception($e);
                 }
             }
