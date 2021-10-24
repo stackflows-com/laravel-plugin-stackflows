@@ -2,6 +2,7 @@
 
 namespace Stackflows\StackflowsPlugin\Http\Client;
 
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Stackflows\StackflowsPlugin\Bpmn\Outputs\ExternalTaskOutputInterface;
 
@@ -53,11 +54,52 @@ class StackflowsClient
         return json_decode($response->getBody()->getContents(), true);
     }
 
-    public function complete($taskId, $workerId, $tenantId, ExternalTaskOutputInterface $task)
+    public function getTasks($tenantId = null)
+    {
+        $response = $this->client->get('task', [
+            'json' => [
+                'tenantId' => $tenantId,
+            ],
+        ]);
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
+    public function completeTask($taskId, $variables = [])
+    {
+        $response = $this->client->get('task/complete', [
+            'json' => [
+                'taskId' => $taskId,
+                'variables' => $variables,
+            ],
+        ]);
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
+    public function escalateTask($taskId, $variables = [])
+    {
+        $response = $this->client->get('task/escalate', [
+            'json' => [
+                'taskId' => $taskId,
+                'variables' => $variables,
+            ],
+        ]);
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
+    public function completeExternalTask($taskId, $workerId, $tenantId, ExternalTaskOutputInterface $task)
     {
         $variables = [];
 
         foreach ($task->getVariables() as $name => $variable) {
+            if ($variable instanceof \JsonSerializable) {
+                $variable = $variable->jsonSerialize();
+            }
+            if ($variable instanceof Carbon) {
+                $variable = $variable->toIso8601String();
+            }
             $variables[$name] = array_filter(
                 [
                     'value' => $variable,
