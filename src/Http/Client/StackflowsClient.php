@@ -96,6 +96,9 @@ class StackflowsClient
     public function authenticateToken(string $token)
     {
         $response = $this->client->post('environment/auth', [
+            'headers' => [
+                'Authorization' => $this->authToken,
+            ],
             'json' => [
                 'token' => $token,
             ],
