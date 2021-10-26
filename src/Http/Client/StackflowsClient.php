@@ -67,9 +67,11 @@ class StackflowsClient
 
     public function completeTask($taskId, $variables = [])
     {
-        $response = $this->client->get('task/complete', [
+        $response = $this->client->post("task/{$taskId}/complete", [
+            'headers' => [
+                'Authorization' => $this->authToken,
+            ],
             'json' => [
-                'taskId' => $taskId,
                 'variables' => $variables,
             ],
         ]);
@@ -77,11 +79,14 @@ class StackflowsClient
         return json_decode($response->getBody()->getContents(), true);
     }
 
-    public function escalateTask($taskId, $variables = [])
+    public function escalateTask(string $taskId, string $escalationCode, $variables = [])
     {
-        $response = $this->client->get('task/escalate', [
+        $response = $this->client->post("task/{$taskId}/escalate", [
+            'headers' => [
+                'Authorization' => $this->authToken,
+            ],
             'json' => [
-                'taskId' => $taskId,
+                'escalationCode' => $escalationCode,
                 'variables' => $variables,
             ],
         ]);
