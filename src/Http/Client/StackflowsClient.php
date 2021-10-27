@@ -154,4 +154,29 @@ class StackflowsClient
 
         return json_decode($response->getBody()->getContents(), true);
     }
+
+    public function getFormVariables(string $definitionId)
+    {
+        $response = $this->client->get("process-definition/{$definitionId}/form-variables", [
+            'headers' => [
+                'Authorization' => $this->authToken,
+            ],
+        ]);
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
+    public function startForm(string $definitionId, array $variables)
+    {
+        $response = $this->client->post("process-definition/{$definitionId}/start", [
+            'headers' => [
+                'Authorization' => $this->authToken,
+            ],
+            'json' => [
+                'variables' => $variables,
+            ],
+        ]);
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
 }
