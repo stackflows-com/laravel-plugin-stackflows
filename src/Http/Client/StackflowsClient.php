@@ -60,7 +60,7 @@ class StackflowsClient
             'headers' => [
                 'Authorization' => $this->authToken,
             ],
-            'query' => $parameters
+            'query' => $parameters,
         ]);
 
         return json_decode($response->getBody()->getContents(), true);
