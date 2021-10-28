@@ -54,12 +54,13 @@ class StackflowsClient
         return json_decode($response->getBody()->getContents(), true);
     }
 
-    public function getTasks($tenantId = null)
+    public function getTasks(array $parameters = [])
     {
         $response = $this->client->get('task', [
-            'json' => [
-                'tenantId' => $tenantId,
+            'headers' => [
+                'Authorization' => $this->authToken,
             ],
+            'query' => $parameters
         ]);
 
         return json_decode($response->getBody()->getContents(), true);
