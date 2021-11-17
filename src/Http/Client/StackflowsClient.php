@@ -66,6 +66,18 @@ class StackflowsClient
         return json_decode($response->getBody()->getContents(), true);
     }
 
+    public function getTaskCount(array $parameters = [])
+    {
+        $response = $this->client->get('task/count', [
+            'headers' => [
+                'Authorization' => $this->authToken,
+            ],
+            'query' => $parameters,
+        ]);
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
     public function completeTask($taskId, $variables = [])
     {
         $response = $this->client->post("task/{$taskId}/complete", [
