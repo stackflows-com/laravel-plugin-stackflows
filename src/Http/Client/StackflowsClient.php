@@ -4,6 +4,9 @@ namespace Stackflows\StackflowsPlugin\Http\Client;
 
 use Carbon\Carbon;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
+use Psr\Http\Message\ResponseInterface;
 use Stackflows\StackflowsPlugin\Bpmn\Outputs\ExternalTaskOutputInterface;
 
 class StackflowsClient
@@ -27,19 +30,17 @@ class StackflowsClient
 
     public function getExternalTasks(string $tenantId, string $topic)
     {
-        $response = $this->client->get('external-task', [
+        return $this->makeGetRequest('external-task', [
             'json' => [
                 'topic' => $topic,
                 'tenantId' => $tenantId,
             ],
         ]);
-
-        return json_decode($response->getBody()->getContents(), true);
     }
 
     public function fetchAndLock(string $tenantId, string $topic, $duration, $workerId)
     {
-        $response = $this->client->post('external-task/fetchAndLock', [
+        return $this->makePostRequest('external-task/fetchAndLock', [
             'headers' => [
                 'Authorization' => $this->authToken,
             ],
@@ -50,37 +51,31 @@ class StackflowsClient
                 'workerId' => $workerId,
             ],
         ]);
-
-        return json_decode($response->getBody()->getContents(), true);
     }
 
     public function getTasks(array $parameters = [])
     {
-        $response = $this->client->get('task', [
+        return $this->makeGetRequest('task', [
             'headers' => [
                 'Authorization' => $this->authToken,
             ],
             'query' => $parameters,
         ]);
-
-        return json_decode($response->getBody()->getContents(), true);
     }
 
     public function getTaskCount(array $parameters = [])
     {
-        $response = $this->client->get('task/count', [
+        return $this->makeGetRequest('task/count', [
             'headers' => [
                 'Authorization' => $this->authToken,
             ],
             'query' => $parameters,
         ]);
-
-        return json_decode($response->getBody()->getContents(), true);
     }
 
     public function completeTask($taskId, $variables = [])
     {
-        $response = $this->client->post("task/{$taskId}/complete", [
+        return $this->makePostRequest("task/{$taskId}/complete", [
             'headers' => [
                 'Authorization' => $this->authToken,
             ],
@@ -88,13 +83,11 @@ class StackflowsClient
                 'variables' => $variables,
             ],
         ]);
-
-        return json_decode($response->getBody()->getContents(), true);
     }
 
     public function escalateTask(string $taskId, string $escalationCode, $variables = [])
     {
-        $response = $this->client->post("task/{$taskId}/escalate", [
+        return $this->makePostRequest("task/{$taskId}/escalate", [
             'headers' => [
                 'Authorization' => $this->authToken,
             ],
@@ -103,8 +96,6 @@ class StackflowsClient
                 'variables' => $variables,
             ],
         ]);
-
-        return json_decode($response->getBody()->getContents(), true);
     }
 
     public function completeExternalTask($taskId, $workerId, $tenantId, ExternalTaskOutputInterface $task)
@@ -125,7 +116,7 @@ class StackflowsClient
             );
         }
 
-        $response = $this->client->post('external-task/complete', [
+        return $this->makePostRequest('external-task/complete', [
             'headers' => [
                 'Authorization' => $this->authToken,
             ],
@@ -136,13 +127,11 @@ class StackflowsClient
                 'variables' => $variables,
             ],
         ]);
-
-        return json_decode($response->getBody()->getContents(), true);
     }
 
     public function unlock(string $taskId)
     {
-        $response = $this->client->post(
+        return $this->makePostRequest(
             'external-task/unlock/'.$taskId,
             [
                 'headers' => [
@@ -150,13 +139,11 @@ class StackflowsClient
                 ],
             ]
         );
-
-        return json_decode($response->getBody()->getContents(), true);
     }
 
     public function authenticateToken(string $token)
     {
-        $response = $this->client->post('environment/auth', [
+        return $this->makePostRequest('environment/auth', [
             'headers' => [
                 'Authorization' => $this->authToken,
             ],
@@ -164,24 +151,20 @@ class StackflowsClient
                 'token' => $token,
             ],
         ]);
-
-        return json_decode($response->getBody()->getContents(), true);
     }
 
     public function getFormVariables(string $definitionId)
     {
-        $response = $this->client->get("process-definition/{$definitionId}/form-variables", [
+        return $this->makeGetRequest("process-definition/{$definitionId}/form-variables", [
             'headers' => [
                 'Authorization' => $this->authToken,
             ],
         ]);
-
-        return json_decode($response->getBody()->getContents(), true);
     }
 
     public function startForm(string $definitionId, array $variables)
     {
-        $response = $this->client->post("process-definition/{$definitionId}/start", [
+        return $this->makePostRequest("process-definition/{$definitionId}/start", [
             'headers' => [
                 'Authorization' => $this->authToken,
             ],
@@ -189,7 +172,44 @@ class StackflowsClient
                 'variables' => $variables,
             ],
         ]);
+    }
 
+    private function makeGetRequest(string $uri, array $params)
+    {
+        try {
+            $response = $this->client->get($uri, $params);
+        } catch (RequestException $exception) {
+            return $this->createErrorResponse($exception->getResponse());
+        }
+
+        return $this->parseResponse($response);
+    }
+
+    private function makePostRequest(string $uri, array $params)
+    {
+        try {
+            $response = $this->client->post($uri, $params);
+        } catch (ClientException $exception) {
+            return $this->createErrorResponse($exception->getResponse());
+        }
+
+        return $this->parseResponse($response);
+    }
+
+    private function createErrorResponse($response): array
+    {
+        $response = $this->parseResponse($response);
+
+        $message = $response['error'] ?? null;
+        if (isset($response['errorCode'])) {
+            $message = ErrorMap::map($response['errorCode'], $message);
+        }
+
+        return ['error' => $message];
+    }
+
+    private function parseResponse(ResponseInterface $response)
+    {
         return json_decode($response->getBody()->getContents(), true);
     }
 }
