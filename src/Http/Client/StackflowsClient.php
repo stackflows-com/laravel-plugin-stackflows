@@ -182,7 +182,7 @@ class StackflowsClient
 
     public function getProcessesByTag(string $tag)
     {
-        return $this->makePostRequest("process-definition/get-by-tag/{$tag}", [
+        return $this->makeGetRequest("process-definition/get-by-tag/{$tag}", [
             'headers' => [
                 'Authorization' => $this->authToken,
             ],
