@@ -153,16 +153,20 @@ class StackflowsClient
         ]);
     }
 
-    public function getFormVariables(string $definitionId)
+    public function getFormVariables(string $definitionId, string $envId, string $version)
     {
         return $this->makeGetRequest("process-definition/{$definitionId}/form-variables", [
             'headers' => [
                 'Authorization' => $this->authToken,
             ],
+            'json' => [
+                'env_id' => $envId,
+                'version' => $version,
+            ],
         ]);
     }
 
-    public function startForm(string $definitionId, array $variables)
+    public function startForm(string $definitionId, array $variables, string $envId, string $version)
     {
         return $this->makePostRequest("process-definition/{$definitionId}/start", [
             'headers' => [
@@ -170,6 +174,8 @@ class StackflowsClient
             ],
             'json' => [
                 'variables' => $variables,
+                'env_id' => $envId,
+                'version' => $version,
             ],
         ]);
     }
