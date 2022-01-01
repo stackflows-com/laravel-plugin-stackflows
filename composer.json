@@ -33,7 +33,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Stackflows\\StackflowsPlugin\\": "src"
+            "Stackflows\\": "src"
         }
     },
     "config": {
@@ -42,10 +42,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Stackflows\\StackflowsPlugin\\StackflowsServiceProvider"
+                "Stackflows\\StackflowsServiceProvider"
             ],
             "aliases": {
-                "LaravelPluginStackflows": "Stackflows\\StackflowsPlugin\\StackflowsPluginFacade"
+                "Stackflows": "Stackflows\\StackflowsFacade"
             }
         }
     },

@@ -11,7 +11,7 @@ composer require stackflows/laravel-plugin-stackflows
 
 You can publish the config file with:
 ```bash
-php artisan vendor:publish --provider="Stackflows\StackflowsPlugin\StackflowsServiceProvider" --tag="stackflows-config"
+php artisan vendor:publish --provider="Stackflows\StackflowsServiceProvider" --tag="stackflows-config"
 ```
 
 This is the contents of the published config file:
@@ -33,7 +33,7 @@ return [
 ## Usage
 
 ```php
-$client = new Stackflows\StackflowsPlugin\Stackflows();
+$client = new Stackflows\Stackflows();
 ```
 
 ## Testing

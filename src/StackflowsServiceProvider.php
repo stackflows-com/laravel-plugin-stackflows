@@ -1,12 +1,14 @@
 <?php
 
-namespace Stackflows\StackflowsPlugin;
+namespace Stackflows;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Stackflows\StackflowsPlugin\Commands\ServiceTaskSubscribeCommand;
-use Stackflows\StackflowsPlugin\Exceptions\InvalidConfiguration;
-use Stackflows\StackflowsPlugin\Http\Client\StackflowsClient;
+use Stackflows\Commands\BusinessProcesses\ExecuteServiceTasksCommand;
+use Stackflows\Exceptions\InvalidConfiguration;
+use Stackflows\Http\Client\AbstractStackflowsClient;
+use Stackflows\Http\Client\StackflowsClient;
+use Stackflows\Http\Client\StackflowsDirectCamundaClient;
 
 class StackflowsServiceProvider extends PackageServiceProvider
 {
@@ -15,7 +17,7 @@ class StackflowsServiceProvider extends PackageServiceProvider
         $package
             ->name('stackflows')
             ->hasConfigFile('stackflows')
-            ->hasCommands([ServiceTaskSubscribeCommand::class]);
+            ->hasCommands([ExecuteServiceTasksCommand::class]);
     }
 
     public function packageRegistered()
@@ -23,15 +25,43 @@ class StackflowsServiceProvider extends PackageServiceProvider
         $this->app->bind(
             StackflowsClient::class,
             function () {
-                $this->guardAgainstInvalidConfiguration(config('stackflows'));
-
-                return new StackflowsClient(config('stackflows.authToken'), config('stackflows.apiHost'));
+                return $this->buildClient(StackflowsClient::class);
             }
         );
 
+        $this->app->bind(
+            StackflowsDirectCamundaClient::class,
+            function () {
+                return $this->buildClient(StackflowsDirectCamundaClient::class);
+            }
+        );
 
-        $this->app->tag(config('stackflows.external_task_executors'), 'stackflows-external-task');
-//        $this->app->tag(config('stackflows.user_task_sync'), 'stackflows-user-task');
+        // TODO: Rethink this later, config will contains hundreds of executors and might even have naming conflicts
+        //$this->app->tag(config('stackflows.external_task_executors'), 'stackflows-external-task');
+        //$this->app->tag(config('stackflows.user_task_sync'), 'stackflows-user-task');
+    }
+
+    private function buildClient($clientClassName): AbstractStackflowsClient
+    {
+        $this->guardAgainstInvalidConfiguration(config('stackflows'));
+
+        $version = config('stackflows.version');
+        switch ($version) {
+            case '2':
+                return new $clientClassName(
+                    config('stackflows.token'),
+                    sprintf(
+                        '%s://%s/api/v2/auth/environment/',
+                        config('stackflows.host') ? 'https' : 'http',
+                        config('stackflows.host')
+                    )
+                );
+            default:
+                throw new \Exception(sprintf(
+                    'Stackflows plugin does not support "%s" version. Try using latest version of a plugin.',
+                    $version
+                ));
+        }
     }
 
     /**
@@ -39,12 +69,16 @@ class StackflowsServiceProvider extends PackageServiceProvider
      */
     protected function guardAgainstInvalidConfiguration(array $config = null)
     {
-        if (empty($config['apiHost'])) {
-            throw InvalidConfiguration::apiHostNotSpecified();
+        if (empty($config['host'])) {
+            throw InvalidConfiguration::hostNotSpecified();
         }
 
-        if (empty($config['authToken'])) {
-            throw InvalidConfiguration::authTokenNotSpecified();
+        if (empty($config['version'])) {
+            throw InvalidConfiguration::versionNotSpecified();
+        }
+
+        if (empty($config['token'])) {
+            throw InvalidConfiguration::tokenNotSpecified();
         }
     }
 }

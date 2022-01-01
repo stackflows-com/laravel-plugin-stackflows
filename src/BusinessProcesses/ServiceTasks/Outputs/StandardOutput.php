@@ -1,7 +1,7 @@
 <?php
-namespace Stackflows\StackflowsPlugin\Bpmn\Outputs;
+namespace Stackflows\BusinessProcesses\ServiceTasks\Outputs;
 
-class StandardOutput extends AbstractExternalTaskOutput
+class StandardOutput extends AbstractServiceTaskOutput
 {
     public function getNamesForRequiredProperties(): array
     {

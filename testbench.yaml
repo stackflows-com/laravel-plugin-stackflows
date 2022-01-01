@@ -1,2 +1,2 @@
 providers:
-  - Stackflows\StackflowsPlugin\StackflowsServiceProvider
+  - Stackflows\StackflowsServiceProvider

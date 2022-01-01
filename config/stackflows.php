@@ -1,19 +1,15 @@
 <?php
 
 return [
-    // Address of the Stack Flows API.
-    'apiHost' => env('STACKFLOWS_API_HOST'),
+    // For debugging purposes you might want to set this to false, otherwise it should always be true
+    'secure' => env('STACKFLOWS_SECURE', true),
 
-    // API Auth token
-    'authToken' => env('STACKFLOWS_AUTH_TOKEN'),
-    'environmentToken' => env('STACKFLOWS_ENVIRONMENT_TOKEN'),
+    // Host of the Stackflows API
+    'host' => env('STACKFLOWS_HOST', 'backoffice.stackflows.com'),
 
-    /*
-     * External task executors are classes that handle Stackflows external tasks.
-     * Must implements interface Stackflows\StackflowsPlugin\Bpmn\ExternalTasks\ExternalTaskExecutorInterface
-     */
-    'external_task_executors' => [],
+    // You can use specific version for calling Stackflows API
+    'version' => env('STACKFLOWS_VERSION', '2'),
 
-    // Implementation is in the development
-    'user_task_sync' => [],
+    // Company environment token that is used for application wide authentication
+    'token' => env('STACKFLOWS_TOKEN'),
 ];

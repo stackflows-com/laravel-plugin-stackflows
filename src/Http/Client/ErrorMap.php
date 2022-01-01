@@ -1,11 +1,11 @@
 <?php
 
-namespace Stackflows\StackflowsPlugin\Http\Client;
+namespace Stackflows\Http\Client;
 
 class ErrorMap
 {
     private const MAP = [
-        1 => 'Bpmn resources cannot be parsed',
+        1 => 'BusinessProcesses resources cannot be parsed',
         2 => 'Process definition not created',
         3 => 'Deployment or a deployment resource for the given deployment does not exist',
         4 => 'Unexpected deployment exception',
@@ -30,8 +30,6 @@ class ErrorMap
         54 => 'User unauthorized to update the process instance',
         55 => 'Unexpected task exception',
         61 => 'Identity service is read-only',
-        62 => 'The tenant could not be created due to an internal server error',
-        63 => 'Unexpected tenant exception',
     ];
 
     public static function map(int $code, string $defaultMessage = null): ?string
