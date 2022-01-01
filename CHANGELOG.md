@@ -12,6 +12,6 @@ All notable changes to `laravel-plugin-stackflows` will be documented in this fi
 - "BPMN" namespace now became "BusinessProcesses", as "BPMN" does not make sense in our context
 - "ExternalTask" naming changed to "ServiceTask" everywhere, because "ServiceTask" is BPMN naming
 - "ServiceTaskType" was introduced, it is part of "Camunda" decoupling progress
-- Service task input abstract class was removed, because no longer needed after "ServiceTaskType" introduction
+- Service task input abstraction was decoupled from "Camunda" logic
 - "Stackflows" HTTP client was split into two, one is "Stackflows" generic client and another one is for "Camunda" direct communication, later is deprecated as part of decoupling process
 - "Stackflows" "Laravel" facade begins to shape into something useful as it will be used for common operations
