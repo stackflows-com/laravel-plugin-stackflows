@@ -52,7 +52,7 @@ class StackflowsServiceProvider extends PackageServiceProvider
                     config('stackflows.token'),
                     sprintf(
                         '%s://%s/api/v2/auth/environment/',
-                        config('stackflows.host') ? 'https' : 'http',
+                        config('stackflows.secure') ? 'https' : 'http',
                         config('stackflows.host')
                     )
                 );
