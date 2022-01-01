@@ -2,13 +2,13 @@
 
 namespace Stackflows\Commands\BusinessProcesses;
 
+use function config;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Application;
 use Stackflows\BusinessProcesses\ServiceTasks\Inputs\ServiceTaskInputInterface;
 use Stackflows\BusinessProcesses\ServiceTasks\ServiceTaskExecutorInterface;
 use Stackflows\BusinessProcesses\Types\ServiceTaskType;
 use Stackflows\Http\Client\StackflowsDirectCamundaClient;
-use function config;
 
 class ExecuteServiceTasksCommand extends Command
 {
@@ -42,7 +42,7 @@ class ExecuteServiceTasksCommand extends Command
                     $input = new $inputClass($serviceTask);
 
                     $output = $executor->execute($input);
-                    if (!$output) {
+                    if (! $output) {
                         continue;
                     }
 
