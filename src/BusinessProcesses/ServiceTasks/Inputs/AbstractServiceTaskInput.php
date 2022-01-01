@@ -6,15 +6,15 @@ use Stackflows\BusinessProcesses\Types\ServiceTaskType;
 
 abstract class AbstractServiceTaskInput implements ServiceTaskInputInterface
 {
-    private ServiceTaskType $serviceTaskType;
+    private ServiceTaskType $serviceTask;
 
-    public function __construct(ServiceTaskType $serviceTaskType)
+    public function __construct(ServiceTaskType $serviceTask)
     {
-        $this->serviceTaskType = $serviceTaskType;
+        $this->serviceTask = $serviceTask;
     }
 
-    public function getServiceTaskType(): ServiceTaskType
+    public function getServiceTask(): ServiceTaskType
     {
-        return $this->serviceTaskType;
+        return $this->serviceTask;
     }
 }
