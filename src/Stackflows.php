@@ -29,13 +29,12 @@ class Stackflows
     /**
      * Trigger tagged business processes
      *
-     * @param string $tag
+     * @param array $tags
      * @param array $variables
-     * @param int|null $version
-     * @return void
+     * @return mixed
      */
-    public function startBusinessProcesses(string $tag, array $variables = [], int $version = null): void
+    public function startBusinessProcesses(array $tags, array $variables = [])
     {
-        //TODO: Trigger business processes based on specified tag and version
+        return $this->getClient()->startTaggedProcessModels($tags, $variables);
     }
 }
