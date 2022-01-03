@@ -10,7 +10,7 @@ class StackflowsClient extends AbstractStackflowsClient
             'json' => [
                 'tags' => $tags,
                 'variables' => $variables,
-            ]
+            ],
         ]);
     }
 
