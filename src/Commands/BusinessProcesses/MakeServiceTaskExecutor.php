@@ -41,7 +41,7 @@ class MakeServiceTaskExecutor extends Command
      */
     public function handle()
     {
-        if (!class_exists(Nette\PhpGenerator\ClassType::class)) {
+        if (! class_exists(Nette\PhpGenerator\ClassType::class)) {
             $this->output->error(sprintf('Package "nette/php-generator" is not installed.'));
         }
 
@@ -55,14 +55,14 @@ class MakeServiceTaskExecutor extends Command
         $this->output->info('Use "int:someVariableName" format. Following types will be accepted: int, float, array, string, bool');
         $inputVariable = $this->ask('Provide first input variable (leave blank to continue)');
         $inputVariables = [];
-        while (!empty($inputVariable)) {
+        while (! empty($inputVariable)) {
             $inputVariables[] = $inputVariable;
             $inputVariable = $this->ask('Provide another input variable (leave blank to continue)');
         }
 
         $outputVariable = $this->ask('Provide first output variable (leave blank to continue)');
         $outputVariables = [];
-        while (!empty($outputVariable)) {
+        while (! empty($outputVariable)) {
             $outputVariables[] = $outputVariable;
             $outputVariable = $this->ask('Provide another output variable (leave blank to continue)');
         }
