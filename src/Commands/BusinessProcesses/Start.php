@@ -51,7 +51,7 @@ class Start extends Command
             $variables = json_decode($variables);
         }
 
-        $this->stackflows->startBusinessProcesses($tag, (array)$variables);
+        $this->stackflows->startBusinessProcesses((array) $tag, (array)$variables);
 
         $this->output->success(sprintf('Business processes tagged as "%s" was started successfully', $tag));
     }
