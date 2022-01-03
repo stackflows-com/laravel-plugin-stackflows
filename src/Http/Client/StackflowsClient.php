@@ -6,7 +6,7 @@ class StackflowsClient extends AbstractStackflowsClient
 {
     public function startTaggedProcessModels(array $tags, array $variables = [])
     {
-        return $this->makePostRequest("tagged/process-models", [
+        return $this->makePostRequest("tagged/process-models/start", [
             'tags' => $tags,
             'variables' => $variables,
         ]);
