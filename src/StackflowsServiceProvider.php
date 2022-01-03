@@ -4,7 +4,9 @@ namespace Stackflows;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Stackflows\Commands\BusinessProcesses\ExecuteServiceTasksCommand;
+use Stackflows\Commands\BusinessProcesses\ExecuteServiceTasks as BusinessProcessesExecuteServiceTasks;
+use Stackflows\Commands\BusinessProcesses\MakeServiceTaskExecutor as BusinessProcessesMakeServiceTaskExecutor;
+use Stackflows\Commands\BusinessProcesses\Start as BusinessProcessesStart;
 use Stackflows\Exceptions\InvalidConfiguration;
 use Stackflows\Http\Client\AbstractStackflowsClient;
 use Stackflows\Http\Client\StackflowsClient;
@@ -17,7 +19,11 @@ class StackflowsServiceProvider extends PackageServiceProvider
         $package
             ->name('stackflows')
             ->hasConfigFile('stackflows')
-            ->hasCommands([ExecuteServiceTasksCommand::class]);
+            ->hasCommands([
+                BusinessProcessesExecuteServiceTasks::class,
+                BusinessProcessesMakeServiceTaskExecutor::class,
+                BusinessProcessesStart::class,
+            ]);
     }
 
     public function packageRegistered()

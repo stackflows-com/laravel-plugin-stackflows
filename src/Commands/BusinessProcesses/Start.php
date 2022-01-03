@@ -5,7 +5,7 @@ namespace Stackflows\Commands\BusinessProcesses;
 use Illuminate\Console\Command;
 use Stackflows\Stackflows;
 
-class StartCommand extends Command
+class Start extends Command
 {
     /**
      * The name and signature of the console command.

@@ -10,7 +10,7 @@ use Stackflows\BusinessProcesses\ServiceTasks\ServiceTaskExecutorInterface;
 use Stackflows\BusinessProcesses\Types\ServiceTaskType;
 use Stackflows\Http\Client\StackflowsDirectCamundaClient;
 
-class ExecuteServiceTasksCommand extends Command
+class ExecuteServiceTasks extends Command
 {
     public $signature = 'stackflows:business-processes:execute-service-tasks';
 
