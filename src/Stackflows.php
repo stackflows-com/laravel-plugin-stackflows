@@ -1,20 +1,40 @@
 <?php
 
-namespace Stackflows\StackflowsPlugin;
+namespace Stackflows;
 
-use Stackflows\StackflowsPlugin\Http\Client\StackflowsClient;
+use Stackflows\Http\Client\StackflowsClient;
+use Stackflows\Http\Client\StackflowsDirectCamundaClient;
 
 class Stackflows
 {
-    private StackflowsClient $stackFlowsClient;
+    private StackflowsClient $client;
+    private StackflowsDirectCamundaClient $directCamundaClient;
 
-    public function __construct(StackflowsClient $stackFlowsClient)
+    public function __construct(StackflowsClient $client, StackflowsDirectCamundaClient $directCamundaClient)
     {
-        $this->stackFlowsClient = $stackFlowsClient;
+        $this->client = $client;
+        $this->directCamundaClient = $directCamundaClient;
     }
 
-    public function getStackFlowsClient(): StackflowsClient
+    public function getClient(): StackflowsClient
     {
-        return $this->stackFlowsClient;
+        return $this->client;
+    }
+
+    public function getDirectCamundaClient(): StackflowsDirectCamundaClient
+    {
+        return $this->directCamundaClient;
+    }
+
+    /**
+     * Trigger tagged business processes
+     *
+     * @param array $tags
+     * @param array $variables
+     * @return mixed
+     */
+    public function startBusinessProcesses(array $tags, array $variables = [])
+    {
+        return $this->getClient()->startTaggedProcessModels($tags, $variables);
     }
 }

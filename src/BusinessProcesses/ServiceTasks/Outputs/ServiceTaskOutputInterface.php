@@ -1,8 +1,8 @@
 <?php
 
-namespace Stackflows\StackflowsPlugin\Bpmn\Outputs;
+namespace Stackflows\BusinessProcesses\ServiceTasks\Outputs;
 
-interface ExternalTaskOutputInterface
+interface ServiceTaskOutputInterface
 {
     /**
      * It is necessary to provide the conversion from the object to the array output to pass to the model.

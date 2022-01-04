@@ -1,6 +1,6 @@
 <?php
 
-namespace Stackflows\StackflowsPlugin\Exceptions;
+namespace Stackflows\Exceptions;
 
 use Exception;
 use JetBrains\PhpStorm\Pure;

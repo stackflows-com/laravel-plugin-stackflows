@@ -1,6 +1,6 @@
 <?php
 
-namespace Stackflows\StackflowsPlugin\Bpmn\Outputs;
+namespace Stackflows\BusinessProcesses\ServiceTasks\Outputs;
 
 class Variable
 {

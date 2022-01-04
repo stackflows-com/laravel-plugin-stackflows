@@ -1,11 +1,11 @@
 <?php
 
-namespace Stackflows\StackflowsPlugin;
+namespace Stackflows;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \Stackflows\StackflowsPlugin\Stackflows
+ * @see \Stackflows\Stackflows
  */
 class StackflowsFacade extends Facade
 {

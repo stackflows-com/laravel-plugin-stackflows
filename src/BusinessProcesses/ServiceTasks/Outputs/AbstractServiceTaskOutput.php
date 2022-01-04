@@ -1,8 +1,8 @@
 <?php
 
-namespace Stackflows\StackflowsPlugin\Bpmn\Outputs;
+namespace Stackflows\BusinessProcesses\ServiceTasks\Outputs;
 
-abstract class AbstractExternalTaskOutput implements ExternalTaskOutputInterface
+abstract class AbstractServiceTaskOutput implements ServiceTaskOutputInterface
 {
     private array $variables;
 
