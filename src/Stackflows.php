@@ -2,8 +2,10 @@
 
 namespace Stackflows;
 
+use Illuminate\Support\Collection;
 use Stackflows\Http\Client\StackflowsClient;
 use Stackflows\Http\Client\StackflowsDirectCamundaClient;
+use Stackflows\Types\UserTaskType;
 
 class Stackflows
 {
@@ -36,5 +38,18 @@ class Stackflows
     public function startBusinessProcesses(array $tags, array $variables = [])
     {
         return $this->getClient()->startTaggedProcessModels($tags, $variables);
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getUserTasks(): Collection
+    {
+        $tasks = new Collection();
+        foreach ($this->getClient()->getUserTasks() as $task) {
+            $tasks->add(new UserTaskType($task));
+        }
+
+        return $tasks;
     }
 }

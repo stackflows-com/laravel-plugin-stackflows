@@ -18,4 +18,9 @@ class StackflowsClient extends AbstractStackflowsClient
     {
         return $this->makeGetRequest("direct/camunda/process-definition/get-by-tag/{$tag}");
     }
+
+    public function getUserTasks()
+    {
+        return $this->makeGetRequest("user-tasks");
+    }
 }
