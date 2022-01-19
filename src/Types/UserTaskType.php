@@ -18,6 +18,22 @@ class UserTaskType implements Arrayable, \JsonSerializable
         $this->subject = $userTask['subject'];
     }
 
+    /**
+     * @return mixed|string
+     */
+    public function getReference()
+    {
+        return $this->reference;
+    }
+
+    /**
+     * @return mixed|string
+     */
+    public function getSubject()
+    {
+        return $this->subject;
+    }
+
     public function toArray()
     {
         return [

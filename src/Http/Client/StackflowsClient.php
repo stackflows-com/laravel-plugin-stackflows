@@ -21,6 +21,6 @@ class StackflowsClient extends AbstractStackflowsClient
 
     public function getUserTasks()
     {
-        return $this->makeGetRequest("user-tasks");
+        return $this->makeGetRequest("user-tasks")['data'];
     }
 }
