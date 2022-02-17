@@ -55,6 +55,28 @@ abstract class AbstractStackflowsClient
         return $this->parseResponse($response);
     }
 
+    protected function makePutRequest(string $uri, array $params = [])
+    {
+        try {
+            $response = $this->client->put($uri, $params);
+        } catch (ClientException $exception) {
+            return $this->createErrorResponse($exception->getResponse());
+        }
+
+        return $this->parseResponse($response);
+    }
+
+    protected function makeDeleteRequest(string $uri, array $params = [])
+    {
+        try {
+            $response = $this->client->delete($uri, $params);
+        } catch (ClientException $exception) {
+            return $this->createErrorResponse($exception->getResponse());
+        }
+
+        return $this->parseResponse($response);
+    }
+
     protected function createErrorResponse($response): array
     {
         $response = $this->parseResponse($response);

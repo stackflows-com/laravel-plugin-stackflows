@@ -23,4 +23,38 @@ class StackflowsClient extends AbstractStackflowsClient
     {
         return $this->makeGetRequest("user-tasks")['data'];
     }
+
+    public function getVariables()
+    {
+        return $this->makeGetRequest("variables")['data'];
+    }
+
+    public function getVariableById($id)
+    {
+        return $this->makeGetRequest("variables/{$id}")['data'];
+    }
+
+    public function createVariable(string $name, string $type, $values, array $options)
+    {
+        return $this->makePostRequest("variables", [
+            'json' => [
+                'name' => $name,
+                'type' => $type,
+                'value' => $values,
+                'option' => $options,
+            ],
+        ]);
+    }
+
+    public function updateVariable(string $id, string $name, string $type, $values, array $options)
+    {
+        return $this->makePutRequest("variables/{$id}", [
+            'json' => [
+                'name' => $name,
+                'type' => $type,
+                'value' => $values,
+                'option' => $options,
+            ],
+        ]);
+    }
 }
