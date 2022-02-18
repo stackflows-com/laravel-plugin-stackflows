@@ -100,7 +100,7 @@ class Stackflows
 
         $response = $this->getClient()->createVariable($name, $type, $values, $options);
 
-        return !array_key_exists('error', $response) && array_key_exists('data', $response);
+        return ! array_key_exists('error', $response) && array_key_exists('data', $response);
     }
 
     public function updateVariable(string $id, string $name, string $type, $values, $options)
@@ -116,6 +116,6 @@ class Stackflows
 
         $response = $this->getClient()->updateVariable($id, $name, $type, $values, $options);
 
-        return !array_key_exists('error', $response) && array_key_exists('data', $response);
+        return ! array_key_exists('error', $response) && array_key_exists('data', $response);
     }
 }
