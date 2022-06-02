@@ -4,13 +4,12 @@ namespace Stackflows;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Stackflows\Commands\BusinessProcesses\ExecuteServiceTasks as BusinessProcessesExecuteServiceTasks;
-use Stackflows\Commands\BusinessProcesses\MakeServiceTaskExecutor as BusinessProcessesMakeServiceTaskExecutor;
-use Stackflows\Commands\BusinessProcesses\Start as BusinessProcessesStart;
+use Stackflows\Commands\BusinessProcesses\ExecuteServiceTasks;
+use Stackflows\Commands\BusinessProcesses\MakeServiceTaskExecutor;
+use Stackflows\Commands\BusinessProcesses\Start;
 use Stackflows\Exceptions\InvalidConfiguration;
 use Stackflows\Http\Client\AbstractStackflowsClient;
 use Stackflows\Http\Client\StackflowsClient;
-use Stackflows\Http\Client\StackflowsDirectCamundaClient;
 
 class StackflowsServiceProvider extends PackageServiceProvider
 {
@@ -20,9 +19,9 @@ class StackflowsServiceProvider extends PackageServiceProvider
             ->name('stackflows')
             ->hasConfigFile('stackflows')
             ->hasCommands([
-                BusinessProcessesExecuteServiceTasks::class,
-                BusinessProcessesMakeServiceTaskExecutor::class,
-                BusinessProcessesStart::class,
+                ExecuteServiceTasks::class,
+                MakeServiceTaskExecutor::class,
+                Start::class,
             ]);
     }
 
@@ -34,17 +33,6 @@ class StackflowsServiceProvider extends PackageServiceProvider
                 return $this->buildClient(StackflowsClient::class);
             }
         );
-
-        $this->app->bind(
-            StackflowsDirectCamundaClient::class,
-            function () {
-                return $this->buildClient(StackflowsDirectCamundaClient::class);
-            }
-        );
-
-        // TODO: Rethink this later, config will contains hundreds of executors and might even have naming conflicts
-        //$this->app->tag(config('stackflows.external_task_executors'), 'stackflows-external-task');
-        //$this->app->tag(config('stackflows.user_task_sync'), 'stackflows-user-task');
     }
 
     private function buildClient($clientClassName): AbstractStackflowsClient

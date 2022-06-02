@@ -3,13 +3,12 @@
 namespace Stackflows\Http\Client;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\RequestException;
+use Illuminate\Support\Collection;
 use Psr\Http\Message\ResponseInterface;
 
 abstract class AbstractStackflowsClient
 {
-    private Client $client;
+    protected Client $client;
 
     public function __construct($token, $baseUri)
     {
@@ -33,64 +32,28 @@ abstract class AbstractStackflowsClient
         return null;
     }
 
-    protected function makeGetRequest(string $uri, array $params = [])
-    {
-        try {
-            $response = $this->client->get($uri, $params);
-        } catch (RequestException $exception) {
-            return $this->createErrorResponse($exception->getResponse());
-        }
-
-        return $this->parseResponse($response);
-    }
-
-    protected function makePostRequest(string $uri, array $params = [])
-    {
-        try {
-            $response = $this->client->post($uri, $params);
-        } catch (ClientException $exception) {
-            return $this->createErrorResponse($exception->getResponse());
-        }
-
-        return $this->parseResponse($response);
-    }
-
-    protected function makePutRequest(string $uri, array $params = [])
-    {
-        try {
-            $response = $this->client->put($uri, $params);
-        } catch (ClientException $exception) {
-            return $this->createErrorResponse($exception->getResponse());
-        }
-
-        return $this->parseResponse($response);
-    }
-
-    protected function makeDeleteRequest(string $uri, array $params = [])
-    {
-        try {
-            $response = $this->client->delete($uri, $params);
-        } catch (ClientException $exception) {
-            return $this->createErrorResponse($exception->getResponse());
-        }
-
-        return $this->parseResponse($response);
-    }
-
-    protected function createErrorResponse($response): array
-    {
-        $response = $this->parseResponse($response);
-
-        $message = $response['error'] ?? null;
-        if (isset($response['errorCode'])) {
-            $message = ErrorMap::map($response['errorCode'], $message);
-        }
-
-        return ['error' => $message];
-    }
-
-    protected function parseResponse(ResponseInterface $response)
+    protected function decodeResponse(ResponseInterface $response): array
     {
         return json_decode($response->getBody()->getContents(), true);
+    }
+
+    protected function fetchResponseMeta(ResponseInterface $response): array
+    {
+        $responseArray = $this->decodeResponse($response);
+        if (!isset($responseArray['meta'])) {
+            throw new \Exception('Response has no meta');
+        }
+
+        return $responseArray['meta'];
+    }
+
+    protected function fetchResponseData(ResponseInterface $response): Collection
+    {
+        $responseArray = $this->decodeResponse($response);
+        if (!isset($responseArray['data'])) {
+            throw new \Exception('Response has no data');
+        }
+
+        return $responseArray['data'];
     }
 }
