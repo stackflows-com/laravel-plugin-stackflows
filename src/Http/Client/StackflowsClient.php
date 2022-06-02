@@ -16,7 +16,7 @@ class StackflowsClient extends AbstractStackflowsClient
                 "tagged/process-models",
                 [
                     'json' => [
-                        'tags'      => $tags,
+                        'tags' => $tags,
                         'variables' => $variables,
                     ],
                 ]
@@ -65,7 +65,7 @@ class StackflowsClient extends AbstractStackflowsClient
                         'topic' => $topic,
                         'duration' => $duration,
                         'limit' => $limit,
-                    ]
+                    ],
                 ]
             )
         ));
@@ -85,7 +85,7 @@ class StackflowsClient extends AbstractStackflowsClient
                 "service-tasks/{$reference}/serve",
                 [
                     'json' => [
-                        'lock'      => $lock,
+                        'lock' => $lock,
                         'variables' => $output->getVariables(),
                     ],
                 ]

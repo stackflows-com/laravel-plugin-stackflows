@@ -40,7 +40,7 @@ abstract class AbstractStackflowsClient
     protected function fetchResponseMeta(ResponseInterface $response): array
     {
         $responseArray = $this->decodeResponse($response);
-        if (!isset($responseArray['meta'])) {
+        if (! isset($responseArray['meta'])) {
             throw new \Exception('Response has no meta');
         }
 
@@ -50,7 +50,7 @@ abstract class AbstractStackflowsClient
     protected function fetchResponseData(ResponseInterface $response): Collection
     {
         $responseArray = $this->decodeResponse($response);
-        if (!isset($responseArray['data'])) {
+        if (! isset($responseArray['data'])) {
             throw new \Exception('Response has no data');
         }
 
