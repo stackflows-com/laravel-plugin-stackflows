@@ -2,6 +2,8 @@
 
 namespace Stackflows\BusinessProcesses\ServiceTasks\Outputs;
 
+use Stackflows\Types\VariableType;
+
 abstract class AbstractServiceTaskOutput implements ServiceTaskOutputInterface
 {
     private array $variables;
@@ -11,9 +13,9 @@ abstract class AbstractServiceTaskOutput implements ServiceTaskOutputInterface
         $this->variables = $variables;
     }
 
-    public function addVariable(string $key, $value): self
+    public function addVariable(string $key, VariableType $variable): self
     {
-        $this->variables[$key] = $value;
+        $this->variables[$key] = $variable;
 
         return $this;
     }

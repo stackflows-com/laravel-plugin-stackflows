@@ -10,12 +10,13 @@ class UserTaskType implements Arrayable, \JsonSerializable
     private string $subject;
 
     /**
-     * @param array $userTask
+     * @param string $reference
+     * @param string $subject
      */
-    public function __construct(array $userTask)
+    public function __construct(string $reference, string $subject)
     {
-        $this->reference = $userTask['reference'];
-        $this->subject = $userTask['subject'];
+        $this->reference = $reference;
+        $this->subject = $subject;
     }
 
     /**

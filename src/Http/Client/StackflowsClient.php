@@ -2,59 +2,103 @@
 
 namespace Stackflows\Http\Client;
 
+use Illuminate\Support\Collection;
+use Stackflows\BusinessProcesses\ServiceTasks\Outputs\ServiceTaskOutputInterface;
+use Stackflows\BusinessProcesses\Types\ServiceTaskType;
+use Stackflows\Types\UserTaskType;
+
 class StackflowsClient extends AbstractStackflowsClient
 {
     public function startTaggedProcessModels(array $tags, array $variables = [])
     {
-        return $this->makePostRequest("tagged/process-models/start", [
-            'json' => [
-                'tags' => $tags,
-                'variables' => $variables,
-            ],
-        ]);
+        return $this->fetchResponseData(
+            $this->client->post(
+                "tagged/process-models",
+                [
+                    'json' => [
+                        'tags' => $tags,
+                        'variables' => $variables,
+                    ],
+                ]
+            )
+        );
     }
 
-    public function getProcessesByTag(string $tag)
+    public function getUserTasks(): Collection
     {
-        return $this->makeGetRequest("direct/camunda/process-definition/get-by-tag/{$tag}");
+        $collection = collect($this->fetchResponseData($this->client->get("user-tasks")));
+
+        return $collection->map(function ($data) {
+            return new UserTaskType($data['reference'], $data['subject']);
+        });
     }
 
-    public function getUserTasks()
+    public function completeUserTask(string $id)
     {
-        return $this->makeGetRequest("user-tasks")['data'];
+        $data = $this->fetchResponseData($this->client->post("user-tasks/{$id}/complete"));
+
+        return new UserTaskType($data['reference'], $data['subject']);
     }
 
-    public function getVariables()
+    public function escalateUserTask(string $id)
     {
-        return $this->makeGetRequest("variables")['data'];
+        $data = $this->fetchResponseData($this->client->post("user-tasks/{$id}/escalate"));
+
+        return new UserTaskType($data['reference'], $data['subject']);
     }
 
-    public function getVariableById($id)
+    public function errorizeUserTask(string $id)
     {
-        return $this->makeGetRequest("variables/{$id}")['data'];
+        $data = $this->fetchResponseData($this->client->post("user-tasks/{$id}/errorize"));
+
+        return new UserTaskType($data['reference'], $data['subject']);
     }
 
-    public function createVariable(string $name, string $type, $values, array $options)
+    public function lockServiceTasks(string $lock, string $topic, int $duration = 300, int $limit = 100): Collection
     {
-        return $this->makePostRequest("variables", [
-            'json' => [
-                'name' => $name,
-                'type' => $type,
-                'value' => $values,
-                'option' => $options,
-            ],
-        ]);
+        $collection = collect($this->fetchResponseData(
+            $this->client->post(
+                "service-tasks",
+                [
+                    'json' => [
+                        'lock' => $lock,
+                        'topic' => $topic,
+                        'duration' => $duration,
+                        'limit' => $limit,
+                    ],
+                ]
+            )
+        ));
+
+        return $collection->map(function ($data) {
+            return new ServiceTaskType($data['reference'], $data['topic'], null);
+        });
     }
 
-    public function updateVariable(string $id, string $name, string $type, $values, array $options)
+    public function serveServiceTask(
+        string $lock,
+        string $reference,
+        ServiceTaskOutputInterface $output
+    ): ServiceTaskType {
+        $data = $this->fetchResponseData(
+            $this->client->post(
+                "service-tasks/{$reference}/serve",
+                [
+                    'json' => [
+                        'lock' => $lock,
+                        'variables' => $output->getVariables(),
+                    ],
+                ]
+            )
+        );
+
+        return new ServiceTaskType($data['reference'], $data['topic'], null);
+    }
+
+    public function unlockServiceTask(string $reference): ServiceTaskType
     {
-        return $this->makePutRequest("variables/{$id}", [
-            'json' => [
-                'name' => $name,
-                'type' => $type,
-                'value' => $values,
-                'option' => $options,
-            ],
-        ]);
+        $data = $this->fetchResponseData($this->client->post("service-tasks/{$reference}/unlock"));
+
+        return new ServiceTaskType($data['reference'], $data['topic'], null);
     }
 }

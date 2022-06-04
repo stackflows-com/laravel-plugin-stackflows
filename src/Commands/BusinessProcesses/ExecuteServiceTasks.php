@@ -8,7 +8,7 @@ use Illuminate\Foundation\Application;
 use Stackflows\BusinessProcesses\ServiceTasks\Inputs\ServiceTaskInputInterface;
 use Stackflows\BusinessProcesses\ServiceTasks\ServiceTaskExecutorInterface;
 use Stackflows\BusinessProcesses\Types\ServiceTaskType;
-use Stackflows\Http\Client\StackflowsDirectCamundaClient;
+use Stackflows\Http\Client\StackflowsClient;
 
 class ExecuteServiceTasks extends Command
 {
@@ -18,7 +18,7 @@ class ExecuteServiceTasks extends Command
 
     public function handle(
         Application $app,
-        StackflowsDirectCamundaClient $client
+        StackflowsClient $client
     ): void {
         /** @var ServiceTaskExecutorInterface[] $executors */
         $executors = $app->tagged('stackflows:business-process:service-task');
@@ -29,10 +29,9 @@ class ExecuteServiceTasks extends Command
             return;
         }
 
-        $workerId = config('app.key');
-
+        $lock = config('app.key');
         foreach ($executors as $executor) {
-            $tasks = $client->fetchAndLock($executor->getTopic(), $executor->getLockDuration(), $workerId);
+            $tasks = $client->lockServiceTasks($lock, $executor->getTopic(), $executor->getLockDuration());
             foreach ($tasks as $task) {
                 $serviceTask = new ServiceTaskType($task['id'], $task['topicName'], $task['priority']);
 
@@ -46,9 +45,9 @@ class ExecuteServiceTasks extends Command
                         continue;
                     }
 
-                    $client->completeExternalTask($serviceTask->getReference(), $workerId, $output);
+                    $client->serveServiceTask($lock, $serviceTask->getReference(), $output);
                 } catch (\Exception $e) {
-                    $client->unlock($serviceTask->getReference());
+                    $client->unlockServiceTask($serviceTask->getReference());
 
                     // TODO: Fix this, execution process should not be halted because of one faulty node
                     throw new \Exception($e);

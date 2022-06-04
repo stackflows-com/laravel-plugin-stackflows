@@ -12,4 +12,9 @@ interface ServiceTaskOutputInterface
      * @return mixed
      */
     public function getNamesForRequiredProperties(): array;
+
+    /**
+     * @return array
+     */
+    public function getVariables(): array;
 }
