@@ -17,7 +17,7 @@ class StackflowsClient extends AbstractStackflowsClient
                 "tagged/process-models",
                 [
                     'json' => [
-                        'tags'      => $tags,
+                        'tags' => $tags,
                         'variables' => $variables,
                     ],
                 ]

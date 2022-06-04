@@ -2,12 +2,12 @@
 
 namespace Stackflows\Commands\BusinessProcesses;
 
-use Stackflows\Http\Client\StackflowsClient;
 use function config;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Application;
 use Stackflows\BusinessProcesses\ServiceTasks\Inputs\ServiceTaskInputInterface;
 use Stackflows\BusinessProcesses\ServiceTasks\ServiceTaskExecutorInterface;
+use Stackflows\Http\Client\StackflowsClient;
 
 class ExecuteServiceTasks extends Command
 {
