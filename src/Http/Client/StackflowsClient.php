@@ -2,10 +2,11 @@
 
 namespace Stackflows\Http\Client;
 
-use Illuminate\Support\Collection;
 use Stackflows\BusinessProcesses\ServiceTasks\Outputs\ServiceTaskOutputInterface;
-use Stackflows\BusinessProcesses\Types\ServiceTaskType;
-use Stackflows\Types\UserTaskType;
+use Stackflows\Types\DataTransfer\ServiceTaskCollectionType;
+use Stackflows\Types\DataTransfer\ServiceTaskType;
+use Stackflows\Types\DataTransfer\UserTaskCollectionType;
+use Stackflows\Types\DataTransfer\UserTaskType;
 
 class StackflowsClient extends AbstractStackflowsClient
 {
@@ -24,55 +25,47 @@ class StackflowsClient extends AbstractStackflowsClient
         );
     }
 
-    public function getUserTasks(): Collection
+    public function getUserTasks(): UserTaskCollectionType
     {
-        $collection = collect($this->fetchResponseData($this->client->get("user-tasks")));
-
-        return $collection->map(function ($data) {
-            return new UserTaskType($data['reference'], $data['subject']);
-        });
+        return new UserTaskCollectionType($this->fetchResponseData($this->client->get("user-tasks")));
     }
 
     public function completeUserTask(string $id)
     {
-        $data = $this->fetchResponseData($this->client->post("user-tasks/{$id}/complete"));
-
-        return new UserTaskType($data['reference'], $data['subject']);
+        return new UserTaskType($this->fetchResponseData($this->client->post("user-tasks/{$id}/complete")));
     }
 
-    public function escalateUserTask(string $id)
+    public function escalateUserTask(string $id): UserTaskType
     {
-        $data = $this->fetchResponseData($this->client->post("user-tasks/{$id}/escalate"));
-
-        return new UserTaskType($data['reference'], $data['subject']);
+        return new UserTaskType($this->fetchResponseData($this->client->post("user-tasks/{$id}/escalate")));
     }
 
-    public function errorizeUserTask(string $id)
+    public function errorizeUserTask(string $id): UserTaskType
     {
-        $data = $this->fetchResponseData($this->client->post("user-tasks/{$id}/errorize"));
-
-        return new UserTaskType($data['reference'], $data['subject']);
+        return new UserTaskType($this->fetchResponseData($this->client->post("user-tasks/{$id}/errorize")));
     }
 
-    public function lockServiceTasks(string $lock, string $topic, int $duration = 300, int $limit = 100): Collection
-    {
-        $collection = collect($this->fetchResponseData(
-            $this->client->post(
-                "service-tasks",
-                [
-                    'json' => [
-                        'lock' => $lock,
-                        'topic' => $topic,
-                        'duration' => $duration,
-                        'limit' => $limit,
+    public function lockServiceTasks(
+        string $lock,
+        string $topic,
+        int $duration = 300,
+        int $limit = 100
+    ): ServiceTaskCollectionType {
+        return new ServiceTaskCollectionType(
+            $this->fetchResponseData(
+                $this->client->post(
+                    "service-tasks",
+                    [
+                        'json' => [
+                            'lock' => $lock,
+                            'topic' => $topic,
+                            'duration' => $duration,
+                            'limit' => $limit,
+                        ]
                     ]
-                ]
+                )
             )
-        ));
-
-        return $collection->map(function ($data) {
-            return new ServiceTaskType($data['reference'], $data['topic'], null);
-        });
+        );
     }
 
     public function serveServiceTask(
@@ -80,25 +73,23 @@ class StackflowsClient extends AbstractStackflowsClient
         string $reference,
         ServiceTaskOutputInterface $output
     ): ServiceTaskType {
-        $data = $this->fetchResponseData(
-            $this->client->post(
-                "service-tasks/{$reference}/serve",
-                [
-                    'json' => [
-                        'lock'      => $lock,
-                        'variables' => $output->getVariables(),
-                    ],
-                ]
+        return new ServiceTaskType(
+            $this->fetchResponseData(
+                $this->client->post(
+                    "service-tasks/{$reference}/serve",
+                    [
+                        'json' => [
+                            'lock'      => $lock,
+                            'variables' => $output->getVariables(),
+                        ],
+                    ]
+                )
             )
         );
-
-        return new ServiceTaskType($data['reference'], $data['topic'], null);
     }
 
     public function unlockServiceTask(string $reference): ServiceTaskType
     {
-        $data = $this->fetchResponseData($this->client->post("service-tasks/{$reference}/unlock"));
-
-        return new ServiceTaskType($data['reference'], $data['topic'], null);
+        return new ServiceTaskType($this->fetchResponseData($this->client->post("service-tasks/{$reference}/unlock")));
     }
 }

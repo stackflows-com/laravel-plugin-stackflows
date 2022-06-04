@@ -5,7 +5,7 @@ namespace Stackflows;
 use Illuminate\Support\Collection;
 use Stackflows\Http\Client\StackflowsClient;
 use Stackflows\Http\Client\StackflowsDirectCamundaClient;
-use Stackflows\Types\UserTaskType;
+use Stackflows\Types\DataTransfer\UserTaskType;
 
 class Stackflows
 {

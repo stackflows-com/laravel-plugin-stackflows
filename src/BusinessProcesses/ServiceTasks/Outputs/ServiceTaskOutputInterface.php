@@ -2,6 +2,8 @@
 
 namespace Stackflows\BusinessProcesses\ServiceTasks\Outputs;
 
+use Stackflows\Types\DataTransfer\VariableCollectionType;
+
 interface ServiceTaskOutputInterface
 {
     /**
@@ -16,5 +18,5 @@ interface ServiceTaskOutputInterface
     /**
      * @return array
      */
-    public function getVariables(): array;
+    public function getVariables(): VariableCollectionType;
 }

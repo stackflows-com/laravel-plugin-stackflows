@@ -3,7 +3,6 @@
 namespace Stackflows\Http\Client;
 
 use GuzzleHttp\Client;
-use Illuminate\Support\Collection;
 use Psr\Http\Message\ResponseInterface;
 
 abstract class AbstractStackflowsClient
@@ -47,7 +46,7 @@ abstract class AbstractStackflowsClient
         return $responseArray['meta'];
     }
 
-    protected function fetchResponseData(ResponseInterface $response): Collection
+    protected function fetchResponseData(ResponseInterface $response): array
     {
         $responseArray = $this->decodeResponse($response);
         if (!isset($responseArray['data'])) {

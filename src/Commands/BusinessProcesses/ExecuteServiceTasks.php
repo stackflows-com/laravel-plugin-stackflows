@@ -8,7 +8,6 @@ use Illuminate\Console\Command;
 use Illuminate\Foundation\Application;
 use Stackflows\BusinessProcesses\ServiceTasks\Inputs\ServiceTaskInputInterface;
 use Stackflows\BusinessProcesses\ServiceTasks\ServiceTaskExecutorInterface;
-use Stackflows\BusinessProcesses\Types\ServiceTaskType;
 
 class ExecuteServiceTasks extends Command
 {
@@ -33,21 +32,19 @@ class ExecuteServiceTasks extends Command
         foreach ($executors as $executor) {
             $tasks = $client->lockServiceTasks($lock, $executor->getTopic(), $executor->getLockDuration());
             foreach ($tasks as $task) {
-                $serviceTask = new ServiceTaskType($task['id'], $task['topicName'], $task['priority']);
-
                 try {
                     $inputClass = $executor->getInputClass();
                     /** @var ServiceTaskInputInterface $input */
-                    $input = new $inputClass($serviceTask);
+                    $input = new $inputClass($task);
 
                     $output = $executor->execute($input);
                     if (! $output) {
                         continue;
                     }
 
-                    $client->serveServiceTask($lock, $serviceTask->getReference(), $output);
+                    $client->serveServiceTask($lock, $task->reference, $output);
                 } catch (\Exception $e) {
-                    $client->unlockServiceTask($serviceTask->getReference());
+                    $client->unlockServiceTask($task->reference);
 
                     // TODO: Fix this, execution process should not be halted because of one faulty node
                     throw new \Exception($e);

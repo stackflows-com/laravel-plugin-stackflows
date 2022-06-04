@@ -2,7 +2,7 @@
 
 namespace Stackflows\BusinessProcesses\ServiceTasks\Inputs;
 
-use Stackflows\BusinessProcesses\Types\ServiceTaskType;
+use Stackflows\Types\DataTransfer\ServiceTaskType;
 
 interface ServiceTaskInputInterface
 {
