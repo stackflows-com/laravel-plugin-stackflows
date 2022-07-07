@@ -2,18 +2,18 @@
 
 namespace Stackflows\BusinessProcesses\ServiceTasks\Inputs;
 
-use Stackflows\BusinessProcesses\Types\ServiceTaskType;
+use Stackflows\Clients\Stackflows\Model\ServiceTaskTypeResource;
 
 abstract class AbstractServiceTaskInput implements ServiceTaskInputInterface
 {
-    private ServiceTaskType $serviceTask;
+    private ServiceTaskTypeResource $serviceTask;
 
-    public function __construct(ServiceTaskType $serviceTask)
+    public function __construct(ServiceTaskTypeResource $serviceTask)
     {
         $this->serviceTask = $serviceTask;
     }
 
-    public function getServiceTask(): ServiceTaskType
+    public function getServiceTask(): ServiceTaskTypeResource
     {
         return $this->serviceTask;
     }

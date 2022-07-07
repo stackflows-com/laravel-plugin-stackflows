@@ -14,13 +14,21 @@
             "email": "support@stackflows.com"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/stackflows-com/php-client-stackflows.git"
+        }
+    ],
     "require": {
         "php": "^7.4|^8.0",
         "ext-json": "*",
         "ext-pcntl": "*",
         "guzzlehttp/guzzle": "^7.3",
         "nette/php-generator": "^3.6",
-        "spatie/laravel-package-tools": "^1.4.3"
+        "spatie/data-transfer-object": "^2.0",
+        "spatie/laravel-package-tools": "^1.4.3",
+        "stackflows-com/php-client-stackflows": "*"
     },
     "require-dev": {
         "brianium/paratest": "^6.2",
