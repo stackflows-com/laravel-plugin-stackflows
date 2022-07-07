@@ -41,6 +41,7 @@ class Start extends Command
 
     /**
      * @return void
+     * @throws \Stackflows\Clients\Stackflows\ApiException
      */
     public function handle()
     {
