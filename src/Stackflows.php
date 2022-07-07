@@ -3,29 +3,21 @@
 namespace Stackflows;
 
 use Illuminate\Support\Collection;
-use Stackflows\Http\Client\StackflowsClient;
-use Stackflows\Http\Client\StackflowsDirectCamundaClient;
-use Stackflows\Types\DataTransfer\UserTaskType;
+use Stackflows\Clients\Stackflows\Api\EnvironmentApi;
+use Stackflows\Clients\Stackflows\Model\PostEnvironmentTaggedBusinessModelsStartRequest;
 
 class Stackflows
 {
-    private StackflowsClient $client;
-    private StackflowsDirectCamundaClient $directCamundaClient;
+    private EnvironmentApi $environmentApi;
 
-    public function __construct(StackflowsClient $client, StackflowsDirectCamundaClient $directCamundaClient)
+    public function __construct(EnvironmentApi $environmentApi)
     {
-        $this->client = $client;
-        $this->directCamundaClient = $directCamundaClient;
+        $this->environmentApi = $environmentApi;
     }
 
-    public function getClient(): StackflowsClient
+    public function getEnvironmentApi(): EnvironmentApi
     {
-        return $this->client;
-    }
-
-    public function getDirectCamundaClient(): StackflowsDirectCamundaClient
-    {
-        return $this->directCamundaClient;
+        return $this->environmentApi;
     }
 
     /**
@@ -34,20 +26,27 @@ class Stackflows
      * @param array $tags
      * @param array $variables
      * @return mixed
+     * @throws Clients\Stackflows\ApiException
      */
-    public function startBusinessProcesses(array $tags, array $variables = [])
+    public function startBusinessProcesses(array $tags, array $variables = []): Collection
     {
-        return $this->getClient()->startTaggedProcessModels($tags, $variables);
+        return new Collection($this->getEnvironmentApi()->postEnvironmentTaggedBusinessModelsStart(
+            new PostEnvironmentTaggedBusinessModelsStartRequest([
+                'tags' => $tags,
+                'variables' => $variables,
+            ])
+        ));
     }
 
     /**
      * @return Collection
+     * @throws Clients\Stackflows\ApiException
      */
     public function getUserTasks(): Collection
     {
         $tasks = new Collection();
-        foreach ($this->getClient()->getUserTasks() as $task) {
-            $tasks->add(new UserTaskType($task));
+        foreach ($this->getEnvironmentApi()->getEnvironmentUserTasksList() as $task) {
+            $tasks->add($task);
         }
 
         return $tasks;

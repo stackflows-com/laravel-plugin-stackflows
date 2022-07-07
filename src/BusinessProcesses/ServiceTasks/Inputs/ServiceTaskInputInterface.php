@@ -2,9 +2,9 @@
 
 namespace Stackflows\BusinessProcesses\ServiceTasks\Inputs;
 
-use Stackflows\Types\DataTransfer\ServiceTaskType;
+use Stackflows\Clients\Stackflows\Model\ServiceTaskTypeResource;
 
 interface ServiceTaskInputInterface
 {
-    public function getServiceTask(): ServiceTaskType;
+    public function getServiceTask(): ServiceTaskTypeResource;
 }
