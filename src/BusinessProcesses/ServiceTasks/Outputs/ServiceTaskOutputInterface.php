@@ -2,7 +2,7 @@
 
 namespace Stackflows\BusinessProcesses\ServiceTasks\Outputs;
 
-use Stackflows\Types\DataTransfer\VariableCollectionType;
+use Stackflows\Types\SubmissionType;
 
 interface ServiceTaskOutputInterface
 {
@@ -16,7 +16,7 @@ interface ServiceTaskOutputInterface
     public function getNamesForRequiredProperties(): array;
 
     /**
-     * @return array
+     * @return SubmissionType
      */
-    public function getVariables(): VariableCollectionType;
+    public function getSubmission(): SubmissionType;
 }

@@ -5,6 +5,7 @@ namespace Stackflows;
 use Illuminate\Support\Collection;
 use Stackflows\Clients\Stackflows\Api\EnvironmentApi;
 use Stackflows\Clients\Stackflows\Model\PostEnvironmentTaggedBusinessModelsStartRequest;
+use Stackflows\Types\SubmissionType;
 
 class Stackflows
 {
@@ -24,16 +25,16 @@ class Stackflows
      * Trigger tagged business processes
      *
      * @param array $tags
-     * @param array $variables
+     * @param SubmissionType $submission
      * @return mixed
      * @throws Clients\Stackflows\ApiException
      */
-    public function startBusinessProcesses(array $tags, array $variables = []): Collection
+    public function startBusinessProcesses(array $tags, SubmissionType $submission): Collection
     {
         return new Collection($this->getEnvironmentApi()->postEnvironmentTaggedBusinessModelsStart(
             new PostEnvironmentTaggedBusinessModelsStartRequest([
                 'tags' => $tags,
-                'variables' => $variables,
+                'submission' => $submission,
             ])
         ));
     }

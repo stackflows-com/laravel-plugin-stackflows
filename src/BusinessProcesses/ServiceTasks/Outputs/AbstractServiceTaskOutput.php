@@ -2,39 +2,22 @@
 
 namespace Stackflows\BusinessProcesses\ServiceTasks\Outputs;
 
-use Stackflows\Types\DataTransfer\VariableCollectionType;
-use Stackflows\Types\DataTransfer\VariableType;
+use Stackflows\Types\SubmissionType;
 
 abstract class AbstractServiceTaskOutput implements ServiceTaskOutputInterface
 {
-    private VariableCollectionType $variables;
+    private SubmissionType $submission;
 
-    public function __construct(array $variables = [])
+    public function __construct(SubmissionType $submission)
     {
-        $this->variables = new VariableCollectionType($variables);
+        $this->submission = $submission;
     }
 
-    public function addVariable(string $key, VariableType $variable): self
+    /**
+     * @return SubmissionType
+     */
+    public function getSubmission(): SubmissionType
     {
-        $this->variables[$key] = $variable;
-
-        return $this;
-    }
-
-    public function reset()
-    {
-        $this->variables = new VariableCollectionType();
-    }
-
-    public function getVariables(): VariableCollectionType
-    {
-        return $this->variables;
-    }
-
-    public function setVariables(array $variables): self
-    {
-        $this->variables = new VariableCollectionType($variables);
-
-        return $this;
+        return $this->submission;
     }
 }
