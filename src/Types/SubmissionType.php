@@ -36,7 +36,7 @@ class SubmissionType implements \JsonSerializable
 
     public function addItem(string $name, string $type, $value): self
     {
-        if (!in_array($type, static::getTypeOptions())) {
+        if (! in_array($type, static::getTypeOptions())) {
             throw new SubmissionItemUnexpectedTypeException($type);
         }
 
