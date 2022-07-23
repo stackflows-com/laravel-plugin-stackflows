@@ -47,7 +47,7 @@ class SubmissionType implements \JsonSerializable
         }
 
         $this->items[$name] = [
-            'type'  => $type,
+            'type' => $type,
             'value' => $value,
         ];
 

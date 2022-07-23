@@ -2,11 +2,11 @@
 
 namespace Stackflows\Commands;
 
-use Illuminate\Support\Facades\Log;
-use Stackflows\Stackflows;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use Stackflows\BusinessProcesses\ServiceTasks\Inputs\ServiceTaskInputInterface;
 use Stackflows\BusinessProcesses\ServiceTasks\ServiceTaskExecutorInterface;
+use Stackflows\Stackflows;
 
 class Serve extends Command
 {
@@ -41,7 +41,7 @@ class Serve extends Command
                     $input = new $inputClass($task);
 
                     $submission = $executor->execute($input);
-                    if (!$submission) {
+                    if (! $submission) {
                         continue;
                     }
 

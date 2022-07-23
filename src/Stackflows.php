@@ -39,7 +39,7 @@ class Stackflows
         return new Collection(
             $this->environmentApi->postEnvironmentTaggedBusinessModelsStart(
                 new PostEnvironmentTaggedBusinessModelsStartRequest([
-                    'tags'       => $tags,
+                    'tags' => $tags,
                     'submission' => $submission,
                 ])
             )
@@ -62,12 +62,10 @@ class Stackflows
 
     public function completeUserTask(string $reference): UserTaskTypeResource
     {
-
     }
 
     public function escalateUserTask(string $reference, SubmissionType $submission = null): UserTaskTypeResource
     {
-
     }
 
     /**
@@ -82,10 +80,10 @@ class Stackflows
     {
         $data = $this->environmentApi->postEnvironmentServiceTasksLock(
             new PostEnvironmentServiceTasksLockRequest([
-                'lock'     => $lock,
-                'topic'    => $topic,
+                'lock' => $lock,
+                'topic' => $topic,
                 'duration' => $duration,
-                'limit'    => $limit,
+                'limit' => $limit,
             ])
         );
 
@@ -107,7 +105,7 @@ class Stackflows
         return $this->environmentApi->postEnvironmentServiceTasksServe(
             $reference,
             new PostEnvironmentServiceTasksServeRequest([
-                'lock'       => $lock,
+                'lock' => $lock,
                 'submission' => $submission,
             ])
         );
