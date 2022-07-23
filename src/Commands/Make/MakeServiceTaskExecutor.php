@@ -1,6 +1,6 @@
 <?php
 
-namespace Stackflows\Commands\BusinessProcesses;
+namespace Stackflows\Commands\Make;
 
 use Illuminate\Console\Command;
 use Stackflows\Stackflows;
@@ -12,7 +12,7 @@ class MakeServiceTaskExecutor extends Command
      *
      * @var string
      */
-    protected $signature = 'stackflows:business-processes:make:service-task-executor';
+    protected $signature = 'stackflows:make:service-task-executor';
 
     /**
      * The console command description.

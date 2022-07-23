@@ -1,6 +1,6 @@
 <?php
 
-namespace Stackflows\Commands\BusinessProcesses;
+namespace Stackflows\Commands;
 
 use Illuminate\Console\Command;
 use Stackflows\Stackflows;
@@ -12,7 +12,7 @@ class Start extends Command
      *
      * @var string
      */
-    protected $signature = 'stackflows:business-processes:start
+    protected $signature = 'stackflows:start
         {tag : A tag by which processes will be selected for starting}
         {variables? : A JSON string of variables}
     ';
