@@ -75,7 +75,7 @@ class Stackflows
      * @param string $topic
      * @param int $duration
      * @param int $limit
-     * @return Collection
+     * @return Collection|ServiceTaskTypeResource[]
      * @throws Clients\Stackflows\ApiException
      */
     public function lockServiceTasks(string $lock, string $topic, int $duration = 300, int $limit = 100): Collection

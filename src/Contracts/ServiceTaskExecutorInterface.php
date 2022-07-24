@@ -2,7 +2,7 @@
 
 namespace Stackflows\BusinessProcesses\ServiceTasks;
 
-use Stackflows\Clients\Stackflows\Model\ServiceTaskTypeResource;
+use Stackflows\Clients\Stackflows\Model\ServiceTaskType;
 use Stackflows\Types\SubmissionType;
 
 interface ServiceTaskExecutorInterface
@@ -20,8 +20,8 @@ interface ServiceTaskExecutorInterface
     public static function getLockDuration(): int;
 
     /**
-     * @param ServiceTaskTypeResource $serviceTaskType
+     * @param ServiceTaskType $serviceTask
      * @return SubmissionType
      */
-    public function execute(ServiceTaskTypeResource $serviceTaskType): ?SubmissionType;
+    public function execute(ServiceTaskType $serviceTask): ?SubmissionType;
 }

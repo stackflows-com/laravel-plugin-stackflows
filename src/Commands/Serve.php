@@ -5,7 +5,6 @@ namespace Stackflows\Commands;
 use Illuminate\Support\Facades\Log;
 use Stackflows\Stackflows;
 use Illuminate\Console\Command;
-use Stackflows\BusinessProcesses\ServiceTasks\Inputs\ServiceTaskInputInterface;
 use Stackflows\BusinessProcesses\ServiceTasks\ServiceTaskExecutorInterface;
 
 class Serve extends Command
@@ -35,12 +34,7 @@ class Serve extends Command
             $tasks = $stackflows->lockServiceTasks($lock, $executor::getTopic(), $executor::getLockDuration());
             foreach ($tasks as $task) {
                 try {
-                    $inputClass = $executor->getInputClass();
-
-                    /** @var ServiceTaskInputInterface $input */
-                    $input = new $inputClass($task);
-
-                    $submission = $executor->execute($input);
+                    $submission = $executor->execute($task);
                     if (!$submission) {
                         continue;
                     }
