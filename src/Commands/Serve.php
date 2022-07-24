@@ -2,10 +2,10 @@
 
 namespace Stackflows\Commands;
 
-use Illuminate\Support\Facades\Log;
-use Stackflows\Stackflows;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use Stackflows\BusinessProcesses\ServiceTasks\ServiceTaskExecutorInterface;
+use Stackflows\Stackflows;
 
 class Serve extends Command
 {
