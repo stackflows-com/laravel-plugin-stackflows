@@ -6,10 +6,9 @@ use Illuminate\Support\Collection;
 use Stackflows\Clients\Stackflows\Api\EnvironmentApi;
 use Stackflows\Clients\Stackflows\Model\PostEnvironmentServiceTasksLockRequest;
 use Stackflows\Clients\Stackflows\Model\PostEnvironmentServiceTasksServeRequest;
-use Stackflows\Clients\Stackflows\Model\PostEnvironmentServiceTasksUnlockRequest;
 use Stackflows\Clients\Stackflows\Model\PostEnvironmentTaggedBusinessModelsStartRequest;
-use Stackflows\Clients\Stackflows\Model\ServiceTaskTypeResource;
-use Stackflows\Clients\Stackflows\Model\UserTaskTypeResource;
+use Stackflows\Clients\Stackflows\Model\ServiceTaskType;
+use Stackflows\Clients\Stackflows\Model\UserTaskType;
 use Stackflows\Types\SubmissionType;
 
 class Stackflows
@@ -47,7 +46,7 @@ class Stackflows
     }
 
     /**
-     * @return Collection|UserTaskTypeResource[]
+     * @return Collection|UserTaskType[]
      * @throws Clients\Stackflows\ApiException
      */
     public function getUserTasks(): Collection
@@ -60,11 +59,11 @@ class Stackflows
         return $tasks;
     }
 
-    public function completeUserTask(string $reference): UserTaskTypeResource
+    public function completeUserTask(string $reference): UserTaskType
     {
     }
 
-    public function escalateUserTask(string $reference, SubmissionType $submission = null): UserTaskTypeResource
+    public function escalateUserTask(string $reference, SubmissionType $submission = null): UserTaskType
     {
     }
 
@@ -73,7 +72,7 @@ class Stackflows
      * @param string $topic
      * @param int $duration
      * @param int $limit
-     * @return Collection|ServiceTaskTypeResource[]
+     * @return Collection|ServiceTaskType[]
      * @throws Clients\Stackflows\ApiException
      */
     public function lockServiceTasks(string $lock, string $topic, int $duration = 300, int $limit = 100): Collection
@@ -94,14 +93,14 @@ class Stackflows
      * @param string $reference
      * @param string $lock
      * @param SubmissionType|null $submission
-     * @return ServiceTaskTypeResource
+     * @return ServiceTaskType
      * @throws Clients\Stackflows\ApiException
      */
     public function serveServiceTask(
         string $reference,
         string $lock,
         SubmissionType $submission = null
-    ): ServiceTaskTypeResource {
+    ): ServiceTaskType {
         return $this->environmentApi->postEnvironmentServiceTasksServe(
             $reference,
             new PostEnvironmentServiceTasksServeRequest([
@@ -114,10 +113,10 @@ class Stackflows
     /**
      * @param string $reference
      * @param string $lock
-     * @return ServiceTaskTypeResource
+     * @return ServiceTaskType
      * @throws Clients\Stackflows\ApiException
      */
-    public function unlockServiceTask(string $reference, string $lock): ServiceTaskTypeResource
+    public function unlockServiceTask(string $reference, string $lock): ServiceTaskType
     {
         return $this->environmentApi->postEnvironmentServiceTasksUnlock(
             $reference,
