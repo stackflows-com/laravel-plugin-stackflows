@@ -35,7 +35,7 @@ class Serve extends Command
             foreach ($tasks as $task) {
                 try {
                     $submission = $executor->execute($task);
-                    if (!$submission) {
+                    if (! $submission) {
                         continue;
                     }
 
