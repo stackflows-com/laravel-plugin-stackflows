@@ -3,6 +3,7 @@
 namespace Stackflows\BusinessProcesses\ServiceTasks;
 
 use Stackflows\Clients\Stackflows\Model\ServiceTaskType;
+use Stackflows\Exceptions\ExecutorException;
 use Stackflows\Types\SubmissionType;
 
 interface ServiceTaskExecutorInterface
@@ -21,7 +22,8 @@ interface ServiceTaskExecutorInterface
 
     /**
      * @param ServiceTaskType $serviceTask
-     * @return SubmissionType
+     * @return SubmissionType|null
+     * @throws ExecutorException
      */
     public function execute(ServiceTaskType $serviceTask): ?SubmissionType;
 }

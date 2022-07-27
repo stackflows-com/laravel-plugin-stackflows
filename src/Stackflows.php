@@ -6,7 +6,9 @@ use Illuminate\Support\Collection;
 use Stackflows\Clients\Stackflows\Api\EnvironmentApi;
 use Stackflows\Clients\Stackflows\Model\PostEnvironmentServiceTasksLockRequest;
 use Stackflows\Clients\Stackflows\Model\PostEnvironmentServiceTasksServeRequest;
+use Stackflows\Clients\Stackflows\Model\PostEnvironmentServiceTasksUnlockRequest;
 use Stackflows\Clients\Stackflows\Model\PostEnvironmentTaggedBusinessModelsStartRequest;
+use Stackflows\Clients\Stackflows\Model\PostEnvironmentUserTasksEscalateRequest;
 use Stackflows\Clients\Stackflows\Model\ServiceTaskType;
 use Stackflows\Clients\Stackflows\Model\UserTaskType;
 use Stackflows\Types\SubmissionType;
@@ -59,12 +61,30 @@ class Stackflows
         return $tasks;
     }
 
+    /**
+     * @param string $reference
+     * @return UserTaskType
+     * @throws Clients\Stackflows\ApiException
+     */
     public function completeUserTask(string $reference): UserTaskType
     {
+        return $this->environmentApi->postEnvironmentUserTasksComplete($reference);
     }
 
+    /**
+     * @param string $reference
+     * @param SubmissionType|null $submission
+     * @return UserTaskType
+     * @throws Clients\Stackflows\ApiException
+     */
     public function escalateUserTask(string $reference, SubmissionType $submission = null): UserTaskType
     {
+        return $this->environmentApi->postEnvironmentUserTasksEscalate(
+            $reference,
+            new PostEnvironmentUserTasksEscalateRequest([
+                'variables' => $submission,
+            ])
+        );
     }
 
     /**

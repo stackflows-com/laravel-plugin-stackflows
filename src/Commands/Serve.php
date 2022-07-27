@@ -5,6 +5,7 @@ namespace Stackflows\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Stackflows\BusinessProcesses\ServiceTasks\ServiceTaskExecutorInterface;
+use Stackflows\Exceptions\ExecutorException;
 use Stackflows\Stackflows;
 
 class Serve extends Command
@@ -21,7 +22,7 @@ class Serve extends Command
     public function handle(Stackflows $stackflows): void
     {
         /** @var ServiceTaskExecutorInterface[] $executors */
-        $executors = app()->tagged('stackflows:business-process:service-task');
+        $executors = app()->tagged('stackflows:executor');
 
         if (empty($executors)) {
             $this->error('There are no executors registered at this moment');
@@ -35,15 +36,18 @@ class Serve extends Command
             foreach ($tasks as $task) {
                 try {
                     $submission = $executor->execute($task);
-                    if (! $submission) {
+                    if ($submission === null) {
                         continue;
                     }
 
                     $stackflows->serveServiceTask($task->reference, $lock, $submission);
-                } catch (\Exception $e) {
+                } catch (ExecutorException $e) {
                     $stackflows->unlockServiceTask($task->reference, $lock);
 
-                    Log::warning($e->getMessage(), ['executor' => $executor]);
+                    Log::warning(
+                        $e->getMessage(),
+                        ['service_task' => $task, 'executor' => $executor] + $e->getContext()
+                    );
                 }
             }
         }
