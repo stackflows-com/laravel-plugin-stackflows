@@ -4,7 +4,7 @@ namespace Stackflows\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
-use Stackflows\BusinessProcesses\ServiceTasks\ServiceTaskExecutorInterface;
+use Stackflows\Contracts\ServiceTaskExecutorInterface;
 use Stackflows\Exceptions\ExecutorException;
 use Stackflows\Stackflows;
 

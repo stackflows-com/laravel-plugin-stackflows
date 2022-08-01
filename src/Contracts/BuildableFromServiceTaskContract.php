@@ -1,6 +1,6 @@
 <?php
 
-namespace Stackflows\BusinessProcesses\ServiceTasks;
+namespace Stackflows\Contracts;
 
 use Stackflows\Clients\Stackflows\Model\ServiceTaskType;
 

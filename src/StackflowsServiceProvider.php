@@ -30,7 +30,7 @@ class StackflowsServiceProvider extends PackageServiceProvider
         $this->app->bind(EnvironmentApi::class, function () {
             $cfg = new Configuration();
             $cfg
-                ->setHost(sprintf('%s://%s/api/v2', config('stackflows.protocol'), config('stackflows.host')))
+                ->setHost(sprintf('%s://%s', config('stackflows.protocol'), config('stackflows.host')))
                 ->setAccessToken(config('stackflows.token'));
 
             return new EnvironmentApi(new Client(), $cfg);
