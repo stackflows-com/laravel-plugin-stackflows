@@ -35,7 +35,7 @@ class Serve extends Command
 
         $lock = config('app.key');
 
-        while(true) {
+        while (true) {
             foreach ($executors as $executor) {
                 // Skip if topic does not match the one that was provider via argument
                 if ($topic && $executor::getTopic() !== $topic) {
