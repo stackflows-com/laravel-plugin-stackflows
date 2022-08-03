@@ -58,17 +58,22 @@ class Serve extends Command
                             continue;
                         }
 
-                        $stackflows->serveServiceTask($task->reference, $lock, $submission);
+                        $stackflows->serveServiceTask($task->getReference(), $lock, $submission);
                         $served++;
                     } catch (ExecutorException $e) {
-                        $stackflows->unlockServiceTask($task->reference, $lock);
+                        $stackflows->unlockServiceTask($task->getReference(), $lock);
 
                         Log::warning(
                             $e->getMessage(),
                             ['service_task' => $task, 'executor' => $executor] + $e->getContext()
                         );
 
-                        $this->output->warning($e->getMessage());
+                        $this->output->warning(sprintf(
+                            "%s%s%s",
+                            $e->getMessage(),
+                            PHP_EOL,
+                            json_encode($e->getContext(), JSON_PRETTY_PRINT)
+                        ));
                     }
                 }
 
