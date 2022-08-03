@@ -41,9 +41,9 @@ class Stackflows
             $this->environmentApi->postEnvironmentTaggedBusinessModelsStart(
                 new PostEnvironmentTaggedBusinessModelsStartRequest([
                     'tags' => $tags,
-                    'submission' => $submission,
+                    'submission' => $submission->jsonSerialize(),
                 ])
-            )
+            )->getData()
         );
     }
 
@@ -54,7 +54,7 @@ class Stackflows
     public function getUserTasks(): Collection
     {
         $tasks = new Collection();
-        foreach ($this->environmentApi->getEnvironmentUserTasksList() as $task) {
+        foreach ($this->environmentApi->getEnvironmentUserTasksList()->getData() as $task) {
             $tasks->add($task);
         }
 
@@ -68,7 +68,7 @@ class Stackflows
      */
     public function completeUserTask(string $reference): UserTaskType
     {
-        return $this->environmentApi->postEnvironmentUserTasksComplete($reference);
+        return $this->environmentApi->postEnvironmentUserTasksComplete($reference)->getData();
     }
 
     /**
@@ -82,9 +82,9 @@ class Stackflows
         return $this->environmentApi->postEnvironmentUserTasksEscalate(
             $reference,
             new PostEnvironmentUserTasksEscalateRequest([
-                'variables' => $submission,
+                'variables' => $submission ? $submission->jsonSerialize() : null,
             ])
-        );
+        )->getData();
     }
 
     /**
@@ -97,7 +97,7 @@ class Stackflows
      */
     public function lockServiceTasks(string $lock, string $topic, int $duration = 300, int $limit = 100): Collection
     {
-        $data = $this->environmentApi->postEnvironmentServiceTasksLock(
+        $response = $this->environmentApi->postEnvironmentServiceTasksLock(
             new PostEnvironmentServiceTasksLockRequest([
                 'lock' => $lock,
                 'topic' => $topic,
@@ -106,7 +106,7 @@ class Stackflows
             ])
         );
 
-        return new Collection($data);
+        return new Collection($response->getData());
     }
 
     /**
@@ -125,9 +125,9 @@ class Stackflows
             $reference,
             new PostEnvironmentServiceTasksServeRequest([
                 'lock' => $lock,
-                'submission' => $submission,
+                'submission' => $submission ? $submission->jsonSerialize() : null,
             ])
-        );
+        )->getData();
     }
 
     /**
@@ -143,6 +143,6 @@ class Stackflows
             new PostEnvironmentServiceTasksUnlockRequest([
                 'lock' => $lock,
             ])
-        );
+        )->getData();
     }
 }

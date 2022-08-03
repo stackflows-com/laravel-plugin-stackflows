@@ -14,7 +14,7 @@ class Start extends Command
      */
     protected $signature = 'stackflows:start
         {tag : A tag by which processes will be selected for starting}
-        {variables? : A JSON string of variables}
+        {submission? : A JSON string of variables}
     ';
 
     /**
@@ -46,13 +46,13 @@ class Start extends Command
     public function handle()
     {
         $tag = $this->input->getArgument('tag');
-        $variables = $this->input->getArgument('variables');
+        $submission = $this->input->getArgument('submission');
 
-        if ($variables) {
-            $variables = json_decode($variables);
+        if ($submission) {
+            $submission = json_decode($submission);
         }
 
-        $this->stackflows->startBusinessProcesses((array) $tag, (array)$variables);
+        $this->stackflows->startBusinessProcesses((array) $tag, (array)$submission);
 
         $this->output->success(sprintf('Business processes tagged as "%s" was started successfully', $tag));
     }
