@@ -4,6 +4,7 @@ namespace Stackflows\Commands\Sync;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
+use Stackflows\Contracts\UserTaskSynchronizerContract;
 use Stackflows\Stackflows;
 
 class SyncTasks extends Command
@@ -48,52 +49,40 @@ class SyncTasks extends Command
         ];
         $index = 0;
 
-        $tasks = $stackflows->getUserTasks($criteria);
-        $totalCount = $tasks->getTotal();
-        $bar = $this->output->createProgressBar($tasks->getTotal());
+        /** @var UserTaskSynchronizerContract[] $synchronizers */
+        $synchronizers = app()->tagged('stackflows:user-tasks-synchronizer');
         while (true) {
-            $after = Carbon::now()->format('Y-m-d\TH:i:s.vO');
-
-            $tasks = $stackflows->getUserTasks(
-                $criteria + [
-                    'offset' => $index * $size,
-                ]
-            );
-            $chunkSize = count($tasks);
-
-            if ($totalCount === 0 && $chunkSize > 0) {
-                $totalCount = $tasks->getTotal();
-                $bar->start($totalCount);
-            }
-
-            $synchronizers = app()->tagged('stackflows:tasks-synchronizer');
             foreach ($synchronizers as $synchronizer) {
-                $synchronizer::sync($tasks, $criteria);
+                $after = Carbon::now()->format('Y-m-d\TH:i:s.vO');
+
+                $tasks = $stackflows->getUserTasks(
+                    $criteria + [
+                        'offset' => $index * $size,
+                        'activity' => $synchronizer::getActivityName(),
+                    ]
+                );
+                $chunkSize = count($tasks);
+
+                $synchronizer->sync($tasks);
+
+                if ($chunkSize === $size) {
+                    $index++;
+
+                    continue;
+                }
+
+                $this->output->writeln(
+                    sprintf(
+                        'Total synchronized tasks: %s. Waiting for new ones...',
+                        $tasks->getTotal()
+                    )
+                );
+
+                $criteria['createdAtFrom'] = $after;
+                $index = 0;
+
+                sleep(1);
             }
-
-            $bar->advance($chunkSize);
-
-            if ($chunkSize === $size) {
-                $index++;
-
-                continue;
-            }
-
-            $this->output->writeln(
-                sprintf(
-                    'Total synchronized tasks: %s. Waiting for new ones...',
-                    $totalCount
-                )
-            );
-
-            $criteria['createdAtFrom'] = $after;
-            $index = 0;
-            $totalCount = 0;
-
-            $bar->finish();
-            $bar->clear();
-
-            sleep(1);
         }
     }
 }
