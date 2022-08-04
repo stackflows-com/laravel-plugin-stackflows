@@ -44,10 +44,10 @@ class Serve extends Command
 
                 try {
                     $tasks = $stackflows->lockServiceTasks($lock, $executor::getTopic(), $executor::getLockDuration());
-                } catch (ApiException $e) {
-                    $this->output->error($e->getMessage());
                 } catch (\Exception $e) {
-                    $this->output->error($e->getMessage());
+                    $this->output->error($e->getMessage() . PHP_EOL . $e->getTraceAsString());
+
+                    continue;
                 }
 
                 $served = 0;

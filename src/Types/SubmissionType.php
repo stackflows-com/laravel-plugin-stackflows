@@ -2,6 +2,7 @@
 
 namespace Stackflows\Types;
 
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Stackflows\Exceptions\SubmissionItemUnexpectedTypeException;
 
@@ -94,6 +95,14 @@ class SubmissionType implements \JsonSerializable
         if (count($this->items) === 0) {
             return null;
         }
+
+        array_walk_recursive($this->items, function (&$item) {
+            if ($item instanceof \JsonSerializable) {
+                $item = $item->jsonSerialize();
+            } elseif ($item instanceof Arrayable) {
+                $item = $item->toArray();
+            }
+        });
 
         return $this->items;
     }

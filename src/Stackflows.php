@@ -4,6 +4,7 @@ namespace Stackflows;
 
 use Illuminate\Support\Collection;
 use Stackflows\Clients\Stackflows\Api\EnvironmentApi;
+use Stackflows\Clients\Stackflows\Model\GetEnvironmentUserTasksListRequest;
 use Stackflows\Clients\Stackflows\Model\PostEnvironmentServiceTasksLockRequest;
 use Stackflows\Clients\Stackflows\Model\PostEnvironmentServiceTasksServeRequest;
 use Stackflows\Clients\Stackflows\Model\PostEnvironmentServiceTasksUnlockRequest;
@@ -11,6 +12,7 @@ use Stackflows\Clients\Stackflows\Model\PostEnvironmentTaggedBusinessModelsStart
 use Stackflows\Clients\Stackflows\Model\PostEnvironmentUserTasksEscalateRequest;
 use Stackflows\Clients\Stackflows\Model\ServiceTaskType;
 use Stackflows\Clients\Stackflows\Model\UserTaskType;
+use Stackflows\Collections\PaginatedCollection;
 use Stackflows\Types\SubmissionType;
 
 class Stackflows
@@ -51,12 +53,18 @@ class Stackflows
      * @return Collection|UserTaskType[]
      * @throws Clients\Stackflows\ApiException
      */
-    public function getUserTasks(): Collection
+    public function getUserTasks(array $crtiteria = []): PaginatedCollection
     {
-        $tasks = new Collection();
-        foreach ($this->environmentApi->getEnvironmentUserTasksList()->getData() as $task) {
+        $response = $this->environmentApi->getEnvironmentUserTasksList(
+            new GetEnvironmentUserTasksListRequest($crtiteria)
+        );
+
+        $tasks = new PaginatedCollection();
+        foreach ($response->getData() as $task) {
             $tasks->add($task);
         }
+
+        $tasks->setTotal($response->getMeta()['total']);
 
         return $tasks;
     }

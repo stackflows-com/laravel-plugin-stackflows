@@ -10,6 +10,7 @@ use Stackflows\Clients\Stackflows\Configuration;
 use Stackflows\Commands\Make\MakeServiceTaskExecutor;
 use Stackflows\Commands\Serve;
 use Stackflows\Commands\Start;
+use Stackflows\Commands\Sync\SyncTasks;
 
 class StackflowsServiceProvider extends PackageServiceProvider
 {
@@ -20,6 +21,7 @@ class StackflowsServiceProvider extends PackageServiceProvider
             ->hasConfigFile('stackflows')
             ->hasCommands([
                 MakeServiceTaskExecutor::class,
+                SyncTasks::class,
                 Serve::class,
                 Start::class,
             ]);
