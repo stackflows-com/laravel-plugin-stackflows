@@ -67,7 +67,7 @@ class Serve extends Command
                         $context = [
                             'service_task' => $task,
                             'executor' => get_class($executor),
-                            'submission' => $submission ?? null
+                            'submission' => $submission ?? null,
                         ];
                         if ($e instanceof ExecutorException) {
                             $context += $e->getContext();

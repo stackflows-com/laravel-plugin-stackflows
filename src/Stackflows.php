@@ -81,7 +81,8 @@ class Stackflows
     public function completeUserTask(string $reference, SubmissionType $submission = null): UserTaskType
     {
         return $this->environmentApi->postEnvironmentUserTasksComplete(
-            $reference, new PostEnvironmentUserTasksCompleteRequest([
+            $reference,
+            new PostEnvironmentUserTasksCompleteRequest([
                 'submission' => $submission ? $submission->jsonSerialize() : null,
             ])
         )->getData();

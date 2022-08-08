@@ -6,7 +6,6 @@ use GuzzleHttp\Client;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Stackflows\Clients\Stackflows\Api\EnvironmentApi;
-use Stackflows\Clients\Stackflows\ApiException;
 use Stackflows\Clients\Stackflows\Configuration;
 use Stackflows\Commands\Make\MakeServiceTaskExecutor;
 use Stackflows\Commands\Serve;
