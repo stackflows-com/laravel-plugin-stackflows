@@ -92,7 +92,7 @@ class SubmissionType implements \JsonSerializable
 
     public function jsonSerialize()
     {
-        if (count($this->items) === 0) {
+        if ($this->items === null || count($this->items) === 0) {
             return null;
         }
 

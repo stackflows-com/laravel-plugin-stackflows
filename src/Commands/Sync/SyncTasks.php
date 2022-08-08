@@ -4,6 +4,7 @@ namespace Stackflows\Commands\Sync;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
+use Stackflows\Clients\Stackflows\ApiException;
 use Stackflows\Contracts\UserTaskSynchronizerContract;
 use Stackflows\Stackflows;
 
@@ -39,28 +40,48 @@ class SyncTasks extends Command
      */
     public function handle(Stackflows $stackflows)
     {
-        $after = Carbon::now()->startOfWeek()->format('Y-m-d\TH:i:s.vO');
+        $nextAfter = Carbon::now()->startOfWeek()->format('Y-m-d\TH:i:s.vO');
 
         $size = 10;
-        $criteria = [
-            'createdAtFrom' => $after,
-            'activeOnly' => true,
-            'limit' => $size,
-        ];
         $index = 0;
 
         /** @var UserTaskSynchronizerContract[] $synchronizers */
         $synchronizers = app()->tagged('stackflows:user-tasks-synchronizer');
-        while (true) {
-            foreach ($synchronizers as $synchronizer) {
-                $after = Carbon::now()->format('Y-m-d\TH:i:s.vO');
 
-                $tasks = $stackflows->getUserTasks(
-                    $criteria + [
+        $this->output->writeln('Starting synchronization process');
+
+        while (true) {
+            $after = $nextAfter;
+            $nextAfter = Carbon::now()->format('Y-m-d\TH:i:s.vO');
+
+            foreach ($synchronizers as $synchronizer) {
+                try {
+                    $criteria = [
+                        'createdAtFrom' => $after,
+                        'activeOnly' => true,
+                        'limit' => $size,
                         'offset' => $index * $size,
                         'activity' => $synchronizer::getActivityName(),
-                    ]
-                );
+                    ];
+
+                    $tasks = $stackflows->getUserTasks($criteria);
+                } catch (ApiException $e) {
+                    $data = json_decode($e->getResponseBody(), true);
+                    $context = [
+                        'synchronizer' => get_class($synchronizer),
+                        'criteria' => $criteria,
+                    ];
+
+                    $this->output->error(sprintf(
+                        "%s%s%s",
+                        $data['message'] ?? 'None',
+                        PHP_EOL,
+                        json_encode($context, JSON_PRETTY_PRINT)
+                    ));
+
+                    continue;
+                }
+
                 $chunkSize = count($tasks);
 
                 $synchronizer->sync($tasks);
@@ -71,18 +92,19 @@ class SyncTasks extends Command
                     continue;
                 }
 
-                $this->output->writeln(
-                    sprintf(
-                        'Total synchronized tasks: %s. Waiting for new ones...',
-                        $tasks->getTotal()
-                    )
-                );
+                if ($tasks->getTotal() > 0) {
+                    $this->output->writeln(
+                        sprintf(
+                            'Total tasks processes: %s. Waiting for new ones...',
+                            $tasks->getTotal()
+                        )
+                    );
+                }
 
-                $criteria['createdAtFrom'] = $after;
                 $index = 0;
-
-                sleep(1);
             }
+
+            sleep(1);
         }
     }
 }

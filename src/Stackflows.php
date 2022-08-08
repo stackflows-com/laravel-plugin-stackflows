@@ -4,11 +4,14 @@ namespace Stackflows;
 
 use Illuminate\Support\Collection;
 use Stackflows\Clients\Stackflows\Api\EnvironmentApi;
+use Stackflows\Clients\Stackflows\ApiException;
 use Stackflows\Clients\Stackflows\Model\GetEnvironmentUserTasksListRequest;
 use Stackflows\Clients\Stackflows\Model\PostEnvironmentServiceTasksLockRequest;
 use Stackflows\Clients\Stackflows\Model\PostEnvironmentServiceTasksServeRequest;
 use Stackflows\Clients\Stackflows\Model\PostEnvironmentServiceTasksUnlockRequest;
 use Stackflows\Clients\Stackflows\Model\PostEnvironmentTaggedBusinessModelsStartRequest;
+use Stackflows\Clients\Stackflows\Model\PostEnvironmentUserTasksCompleteRequest;
+use Stackflows\Clients\Stackflows\Model\PostEnvironmentUserTasksErrorizeRequest;
 use Stackflows\Clients\Stackflows\Model\PostEnvironmentUserTasksEscalateRequest;
 use Stackflows\Clients\Stackflows\Model\ServiceTaskType;
 use Stackflows\Clients\Stackflows\Model\UserTaskType;
@@ -71,26 +74,57 @@ class Stackflows
 
     /**
      * @param string $reference
+     * @param SubmissionType|null $submission
      * @return UserTaskType
-     * @throws Clients\Stackflows\ApiException
+     * @throws ApiException
      */
-    public function completeUserTask(string $reference): UserTaskType
+    public function completeUserTask(string $reference, SubmissionType $submission = null): UserTaskType
     {
-        return $this->environmentApi->postEnvironmentUserTasksComplete($reference)->getData();
+        return $this->environmentApi->postEnvironmentUserTasksComplete(
+            $reference, new PostEnvironmentUserTasksCompleteRequest([
+                'submission' => $submission ? $submission->jsonSerialize() : null,
+            ])
+        )->getData();
     }
 
     /**
      * @param string $reference
+     * @param string $code
      * @param SubmissionType|null $submission
      * @return UserTaskType
-     * @throws Clients\Stackflows\ApiException
+     * @throws ApiException
      */
-    public function escalateUserTask(string $reference, SubmissionType $submission = null): UserTaskType
+    public function escalateUserTask(string $reference, string $code, SubmissionType $submission = null): UserTaskType
     {
         return $this->environmentApi->postEnvironmentUserTasksEscalate(
             $reference,
             new PostEnvironmentUserTasksEscalateRequest([
-                'variables' => $submission ? $submission->jsonSerialize() : null,
+                'code' => $code,
+                'submission' => $submission ? $submission->jsonSerialize() : null,
+            ])
+        )->getData();
+    }
+
+    /**
+     * @param string $reference
+     * @param string $code
+     * @param string $message
+     * @param SubmissionType|null $submission
+     * @return UserTaskType
+     * @throws ApiException
+     */
+    public function errorizeUserTask(
+        string $reference,
+        string $code,
+        string $message,
+        SubmissionType $submission = null
+    ): UserTaskType {
+        return $this->environmentApi->postEnvironmentUserTasksErrorize(
+            $reference,
+            new PostEnvironmentUserTasksErrorizeRequest([
+                'code' => $code,
+                'message' => $message,
+                'submission' => $submission ? $submission->jsonSerialize() : null,
             ])
         )->getData();
     }

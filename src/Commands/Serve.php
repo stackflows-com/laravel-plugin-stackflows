@@ -4,13 +4,14 @@ namespace Stackflows\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use Stackflows\Clients\Stackflows\ApiException;
 use Stackflows\Contracts\ServiceTaskExecutorInterface;
 use Stackflows\Exceptions\ExecutorException;
 use Stackflows\Stackflows;
 
 class Serve extends Command
 {
-    public $signature = 'stackflows:serve {topic? : Serve a specific topic}';
+    public $signature = 'stackflows:serve {topic? : Serve a specific topic} {--once : Run only once}';
 
     public $description = 'This command will start executing business processes service tasks endlessly';
 
@@ -59,19 +60,29 @@ class Serve extends Command
 
                         $stackflows->serveServiceTask($task->getReference(), $lock, $submission);
                         $served++;
-                    } catch (ExecutorException $e) {
+                    } catch (ExecutorException | ApiException $e) {
                         $stackflows->unlockServiceTask($task->getReference(), $lock);
 
-                        Log::warning(
-                            $e->getMessage(),
-                            ['service_task' => $task, 'executor' => $executor] + $e->getContext()
-                        );
+                        $message = $e->getMessage();
+                        $context = [
+                            'service_task' => $task,
+                            'executor' => get_class($executor),
+                            'submission' => $submission ?? null
+                        ];
+                        if ($e instanceof ExecutorException) {
+                            $context += $e->getContext();
+                        } elseif ($e instanceof ApiException) {
+                            $message = 'Stackflows responded with an error';
+                            $context['error'] = json_decode($e->getResponseBody(), true);
+                        }
 
-                        $this->output->warning(sprintf(
+                        Log::error($message, $context);
+
+                        $this->output->error(sprintf(
                             "%s%s%s",
-                            $e->getMessage(),
+                            $message,
                             PHP_EOL,
-                            json_encode($e->getContext(), JSON_PRETTY_PRINT)
+                            json_encode($context, JSON_PRETTY_PRINT)
                         ));
                     }
                 }
@@ -81,6 +92,10 @@ class Serve extends Command
                     $served,
                     count($tasks)
                 ));
+            }
+
+            if ($this->option('once')) {
+                break;
             }
 
             sleep(1);
