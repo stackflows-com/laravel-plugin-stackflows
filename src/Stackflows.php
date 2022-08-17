@@ -109,7 +109,7 @@ class Stackflows
     /**
      * @param string $reference
      * @param string $code
-     * @param string $message
+     * @param string|null $message
      * @param SubmissionType|null $submission
      * @return UserTaskType
      * @throws ApiException
@@ -117,7 +117,7 @@ class Stackflows
     public function errorizeUserTask(
         string $reference,
         string $code,
-        string $message,
+        string $message = null,
         SubmissionType $submission = null
     ): UserTaskType {
         return $this->environmentApi->postEnvironmentUserTasksErrorize(
