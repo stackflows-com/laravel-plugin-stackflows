@@ -33,7 +33,7 @@ class Serve extends Command
             return;
         }
 
-        $lock = config('app.key');
+        $lock = uniqid();
 
         while (true) {
             foreach ($executors as $executor) {
