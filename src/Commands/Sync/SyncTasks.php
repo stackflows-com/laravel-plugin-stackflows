@@ -42,7 +42,7 @@ class SyncTasks extends Command
     {
         $nextAfter = Carbon::now()->startOfWeek()->format('Y-m-d\TH:i:s.vO');
 
-        $size = 10;
+        $size = 100;
         $index = 0;
 
         /** @var UserTaskSynchronizerContract[] $synchronizers */
@@ -95,7 +95,7 @@ class SyncTasks extends Command
                 if ($tasks->getTotal() > 0) {
                     $this->output->writeln(
                         sprintf(
-                            'Total tasks processes: %s. Waiting for new ones...',
+                            'Total tasks processed: %s. Waiting for new ones...',
                             $tasks->getTotal()
                         )
                     );
