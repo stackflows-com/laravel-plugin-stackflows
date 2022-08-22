@@ -88,7 +88,8 @@ class Serve extends Command
                 }
 
                 $this->output->success(sprintf(
-                    'Successfully executed %s out of %s service tasks',
+                    'Successfully executed %s out of %s service tasks with topic "%s"',
+                    $executor::getTopic(),
                     $served,
                     count($tasks)
                 ));
