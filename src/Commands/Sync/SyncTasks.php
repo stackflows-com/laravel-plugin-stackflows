@@ -4,6 +4,7 @@ namespace Stackflows\Commands\Sync;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 use Stackflows\Clients\Stackflows\ApiException;
 use Stackflows\Contracts\UserTaskSynchronizerContract;
 use Stackflows\Stackflows;
@@ -40,7 +41,7 @@ class SyncTasks extends Command
      */
     public function handle(Stackflows $stackflows)
     {
-        $nextAfter = Carbon::now()->startOfWeek()->format('Y-m-d\TH:i:s.vO');
+        $nextAfter = Carbon::now()->subDays(7)->format('Y-m-d\TH:i:s.vO');
 
         $size = 100;
         $index = 0;
@@ -48,13 +49,20 @@ class SyncTasks extends Command
         /** @var UserTaskSynchronizerContract[] $synchronizers */
         $synchronizers = app()->tagged('stackflows:user-tasks-synchronizer');
 
-        $this->output->writeln('Starting synchronization process');
-
         while (true) {
             $after = $nextAfter;
             $nextAfter = Carbon::now()->format('Y-m-d\TH:i:s.vO');
 
+            $successful = 0;
             foreach ($synchronizers as $synchronizer) {
+                $this->output->writeln(
+                    sprintf(
+                        '[%s][%s][Fetching]',
+                        Carbon::now()->toIso8601String(),
+                        $synchronizer::getActivityName(),
+                    )
+                );
+
                 try {
                     $criteria = [
                         'createdAtFrom' => $after,
@@ -72,19 +80,25 @@ class SyncTasks extends Command
                         'criteria' => $criteria,
                     ];
 
-                    $this->output->error(sprintf(
-                        "%s%s%s",
-                        $data['message'] ?? 'None',
-                        PHP_EOL,
-                        json_encode($context, JSON_PRETTY_PRINT)
-                    ));
+                    Log::error($data['message'] ?? 'None', $context);
 
                     continue;
                 }
 
                 $chunkSize = count($tasks);
 
+                $this->output->writeln(
+                    sprintf(
+                        '[%s][%s][Chunk][Size: %s]',
+                        Carbon::now()->toIso8601String(),
+                        $synchronizer::getActivityName(),
+                        $chunkSize
+                    )
+                );
+
                 $synchronizer->sync($tasks);
+
+                $successful += $chunkSize;
 
                 if ($chunkSize === $size) {
                     $index++;
@@ -95,8 +109,11 @@ class SyncTasks extends Command
                 if ($tasks->getTotal() > 0) {
                     $this->output->writeln(
                         sprintf(
-                            'Total tasks processed: %s. Waiting for new ones...',
-                            $tasks->getTotal()
+                            '[%s][%s][Completed][%s successful out of %s]',
+                            Carbon::now()->toIso8601String(),
+                            $synchronizer::getActivityName(),
+                            $successful,
+                            $tasks->getTotal(),
                         )
                     );
                 }
