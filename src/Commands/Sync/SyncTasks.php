@@ -53,8 +53,9 @@ class SyncTasks extends Command
             $after = $nextAfter;
             $nextAfter = Carbon::now()->format('Y-m-d\TH:i:s.vO');
 
-            $successful = 0;
             foreach ($synchronizers as $synchronizer) {
+                $successful = 0;
+
                 $this->output->writeln(
                     sprintf(
                         '[%s][%s][Fetching]',
