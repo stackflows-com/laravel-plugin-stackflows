@@ -43,7 +43,12 @@ class Serve extends Command
                 }
 
                 try {
-                    $tasks = $stackflows->lockServiceTasks($lock, $executor::getTopic(), $executor::getLockDuration());
+                    $tasks = $stackflows->lockServiceTasks(
+                        $lock,
+                        $executor::getTopic(),
+                        $executor::getLockDuration(),
+                        $this->input->getArgument('chunk')
+                    );
                 } catch (\Exception $e) {
                     $this->output->error($e->getMessage() . PHP_EOL . $e->getTraceAsString());
 
