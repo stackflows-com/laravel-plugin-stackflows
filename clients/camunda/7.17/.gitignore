@@ -1,0 +1,4 @@
+/.openapi-generator
+/src
+/composer.json
+/composer.lock

@@ -1,0 +1,23 @@
+{
+  "name": "laravel-plugin-stackflows",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate-client": "./node_modules/.bin/openapi-generator-cli generate"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stackflows-com/laravel-plugin-stackflows.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stackflows-com/laravel-plugin-stackflows/issues"
+  },
+  "homepage": "https://github.com/stackflows-com/laravel-plugin-stackflows#readme",
+  "dependencies": {
+    "@openapitools/openapi-generator-cli": "^2.5.1"
+  }
+}

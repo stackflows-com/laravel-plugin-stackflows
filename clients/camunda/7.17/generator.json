@@ -1,0 +1,17 @@
+{
+  "composerPackageName": "stackflows/php-client-camunda-v7.17",
+  "invokerPackage": "Stackflows\\Clients\\Camunda\\v7_17",
+  "packageName": "Stackflows Camunda 7.17 REST API Client",
+  "variableNamingConvention": "camelCase",
+  "sortParamsByRequiredFlag": true,
+  "srcBasePath": "src",
+  "globalProperties": {
+    "supportingFiles": "",
+    "models": "",
+    "apis": "",
+    "apiDocs": false,
+    "modelDocs": false,
+    "apiTests": false,
+    "modelTests": false
+  }
+}
