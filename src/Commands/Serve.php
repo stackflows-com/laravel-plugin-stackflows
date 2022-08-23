@@ -11,7 +11,7 @@ use Stackflows\Stackflows;
 
 class Serve extends Command
 {
-    public $signature = 'stackflows:serve {topic? : Serve a specific topic} {--once : Run only once}';
+    public $signature = 'stackflows:serve {topic? : Serve a specific topic} {chunk?=10 : Single chunk size} {--once : Run only once}';
 
     public $description = 'This command will start executing business processes service tasks endlessly';
 
