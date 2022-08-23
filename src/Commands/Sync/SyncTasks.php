@@ -44,7 +44,6 @@ class SyncTasks extends Command
         $nextAfter = Carbon::now()->subDays(7)->format('Y-m-d\TH:i:s.vO');
 
         $size = 100;
-        $index = 0;
 
         /** @var UserTaskSynchronizerContract[] $synchronizers */
         $synchronizers = app()->tagged('stackflows:user-tasks-synchronizer');
@@ -54,58 +53,58 @@ class SyncTasks extends Command
             $nextAfter = Carbon::now()->format('Y-m-d\TH:i:s.vO');
 
             foreach ($synchronizers as $synchronizer) {
+                $index = 0;
                 $successful = 0;
 
-                $this->output->writeln(
-                    sprintf(
-                        '[%s][%s][Fetching]',
-                        Carbon::now()->toIso8601String(),
-                        $synchronizer::getActivityName(),
-                    )
-                );
+                do {
+                    $this->output->writeln(
+                        sprintf(
+                            '[%s][%s][Fetching]',
+                            Carbon::now()->toIso8601String(),
+                            $synchronizer::getActivityName(),
+                        )
+                    );
 
-                try {
-                    $criteria = [
-                        'createdAtFrom' => $after,
-                        'activeOnly' => true,
-                        'limit' => $size,
-                        'offset' => $index * $size,
-                        'activity' => $synchronizer::getActivityName(),
-                    ];
+                    try {
+                        $criteria = [
+                            'createdAtFrom' => $after,
+                            'activeOnly' => true,
+                            'limit' => $size,
+                            'offset' => $index * $size,
+                            'activity' => $synchronizer::getActivityName(),
+                        ];
 
-                    $tasks = $stackflows->getUserTasks($criteria);
-                } catch (ApiException $e) {
-                    $data = json_decode($e->getResponseBody(), true);
-                    $context = [
-                        'synchronizer' => get_class($synchronizer),
-                        'criteria' => $criteria,
-                    ];
+                        $tasks = $stackflows->getUserTasks($criteria);
+                    } catch (ApiException $e) {
+                        $data = json_decode($e->getResponseBody(), true);
+                        $context = [
+                            'synchronizer' => get_class($synchronizer),
+                            'criteria' => $criteria,
+                        ];
 
-                    Log::error($data['message'] ?? 'None', $context);
+                        Log::error($data['message'] ?? 'None', $context);
 
-                    continue;
-                }
+                        continue;
+                    }
 
-                $chunkSize = count($tasks);
+                    $chunkSize = count($tasks);
 
-                $this->output->writeln(
-                    sprintf(
-                        '[%s][%s][Chunk][Size: %s]',
-                        Carbon::now()->toIso8601String(),
-                        $synchronizer::getActivityName(),
-                        $chunkSize
-                    )
-                );
+                    $this->output->writeln(
+                        sprintf(
+                            '[%s][%s][Chunk][%s/%s]',
+                            Carbon::now()->toIso8601String(),
+                            $synchronizer::getActivityName(),
+                            $chunkSize,
+                            $tasks->getTotal()
+                        )
+                    );
 
-                $synchronizer->sync($tasks);
+                    $synchronizer->sync($tasks);
 
-                $successful += $chunkSize;
+                    $successful += $chunkSize;
 
-                if ($chunkSize === $size) {
                     $index++;
-
-                    continue;
-                }
+                } while ($chunkSize === $size);
 
                 if ($tasks->getTotal() > 0) {
                     $this->output->writeln(
