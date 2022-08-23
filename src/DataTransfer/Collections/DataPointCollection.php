@@ -2,8 +2,8 @@
 
 namespace Stackflows\DataTransfer\Collections;
 
-use Stackflows\DataTransfer\Types\DataPointType;
 use Illuminate\Support\Collection;
+use Stackflows\DataTransfer\Types\DataPointType;
 
 class DataPointCollection extends Collection
 {

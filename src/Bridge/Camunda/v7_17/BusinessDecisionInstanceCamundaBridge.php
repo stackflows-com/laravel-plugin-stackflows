@@ -2,15 +2,15 @@
 
 namespace Stackflows\Bridge\Camunda\v7_17;
 
+use Illuminate\Support\Collection;
 use Stackflows\Bridge\AbstractBridge;
 use Stackflows\Bridge\BusinessDecisionInstanceBridgeContract;
 use Stackflows\Bridge\LoggableBridgeContract;
-use Stackflows\Types\EnvironmentType;
-use Illuminate\Support\Collection;
 use Stackflows\Clients\Camunda\v7_17\Api\HistoricDecisionInstanceApi;
 
-class BusinessDecisionInstanceCamundaBridge extends AbstractBridge implements BusinessDecisionInstanceBridgeContract,
-                                                                              LoggableBridgeContract
+class BusinessDecisionInstanceCamundaBridge extends AbstractBridge implements
+    BusinessDecisionInstanceBridgeContract,
+    LoggableBridgeContract
 {
     public function __construct(
         protected Environment $environment,

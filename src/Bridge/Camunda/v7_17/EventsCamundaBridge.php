@@ -3,16 +3,14 @@
 namespace Stackflows\Bridge\Camunda\v7_17;
 
 use Stackflows\Bridge\AbstractBridge;
-use Stackflows\Bridge\Camunda\Apis\TaskApiContract;
 use Stackflows\Bridge\EventsBridgeContract;
-use Stackflows\DataTransfer\Collections\DataPointCollection;
-use Stackflows\DataTransfer\Types\EventType;
-use Stackflows\Types\EnvironmentType;
-use Stackflows\Transformers\Bridge\Camunda\DataPointCollectionToVariablesTransformer;
 use Stackflows\Clients\Camunda\v7_17\Api\MessageApi;
 use Stackflows\Clients\Camunda\v7_17\Api\SignalApi;
 use Stackflows\Clients\Camunda\v7_17\Model\CorrelationMessageDto;
 use Stackflows\Clients\Camunda\v7_17\Model\SignalDto;
+use Stackflows\DataTransfer\Collections\DataPointCollection;
+use Stackflows\DataTransfer\Types\EventType;
+use Stackflows\Transformers\Bridge\Camunda\DataPointCollectionToVariablesTransformer;
 
 class EventsCamundaBridge extends AbstractBridge implements EventsBridgeContract
 {
@@ -22,7 +20,6 @@ class EventsCamundaBridge extends AbstractBridge implements EventsBridgeContract
         protected SignalApi $signalApi,
         protected DataPointCollectionToVariablesTransformer $dataObjectToVariablesTransformer
     ) {
-
     }
 
     public function sendMessage(string $reference, string $context = null, DataPointCollection $submission = null): EventType

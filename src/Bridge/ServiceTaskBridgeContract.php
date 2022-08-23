@@ -2,9 +2,9 @@
 
 namespace Stackflows\Bridge;
 
+use Illuminate\Support\Collection;
 use Stackflows\DataTransfer\Collections\DataPointCollection;
 use Stackflows\DataTransfer\Types\ServiceTaskType;
-use Illuminate\Support\Collection;
 
 interface ServiceTaskBridgeContract
 {

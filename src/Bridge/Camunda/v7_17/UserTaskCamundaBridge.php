@@ -2,18 +2,11 @@
 
 namespace Stackflows\Bridge\Camunda\v7_17;
 
-use Stackflows\Bridge\AbstractBridge;
-use Stackflows\Bridge\Camunda\Apis\TaskApiContract;
-use Stackflows\Bridge\UserTaskBridgeContract;
-use Stackflows\DataTransfer\Collections\DataPointCollection;
-use Stackflows\DataTransfer\Types\DataAttributeType;
-use Stackflows\DataTransfer\Types\DataPointType;
-use Stackflows\DataTransfer\Types\UserTaskType;
-use Stackflows\Types\EnvironmentType;
-use Stackflows\Transformers\Bridge\Camunda\UserTaskListRequestToApiParamsTransformer;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Stackflows\Bridge\AbstractBridge;
+use Stackflows\Bridge\UserTaskBridgeContract;
 use Stackflows\Clients\Camunda\v7_17\Api\TaskApi;
 use Stackflows\Clients\Camunda\v7_17\Api\TaskVariableApi;
 use Stackflows\Clients\Camunda\v7_17\Model\CompleteTaskDto;
@@ -21,6 +14,11 @@ use Stackflows\Clients\Camunda\v7_17\Model\TaskBpmnErrorDto;
 use Stackflows\Clients\Camunda\v7_17\Model\TaskDto;
 use Stackflows\Clients\Camunda\v7_17\Model\TaskEscalationDto;
 use Stackflows\Clients\Camunda\v7_17\Model\VariableValueDto;
+use Stackflows\DataTransfer\Collections\DataPointCollection;
+use Stackflows\DataTransfer\Types\DataAttributeType;
+use Stackflows\DataTransfer\Types\DataPointType;
+use Stackflows\DataTransfer\Types\UserTaskType;
+use Stackflows\Transformers\Bridge\Camunda\UserTaskListRequestToApiParamsTransformer;
 
 class UserTaskCamundaBridge extends AbstractBridge implements UserTaskBridgeContract
 {
@@ -37,7 +35,6 @@ class UserTaskCamundaBridge extends AbstractBridge implements UserTaskBridgeCont
         'Boolean' => DataAttributeType::TYPE_BOOLEAN,
         'Null' => DataAttributeType::TYPE_STRING,
     ];
-
 
     protected function transform(TaskDto $datum): UserTaskType
     {
@@ -146,10 +143,10 @@ class UserTaskCamundaBridge extends AbstractBridge implements UserTaskBridgeCont
             ->transform(function (VariableValueDto $value, $name) {
                 return new DataPointType(
                     new DataAttributeType([
-                        DataAttributeType::KEY_REFERENCE        => Str::snake($name),
+                        DataAttributeType::KEY_REFERENCE => Str::snake($name),
                         DataAttributeType::KEY_ENGINE_REFERENCE => $name,
-                        DataAttributeType::KEY_TYPE             => $this->fieldTypesMap[$value->getType()],
-                        DataAttributeType::KEY_LABEL            => ucwords(Str::replace('_', ' ', Str::snake($name)))
+                        DataAttributeType::KEY_TYPE => $this->fieldTypesMap[$value->getType()],
+                        DataAttributeType::KEY_LABEL => ucwords(Str::replace('_', ' ', Str::snake($name))),
                     ]),
                     $value->getValue()
                 );
@@ -174,10 +171,10 @@ class UserTaskCamundaBridge extends AbstractBridge implements UserTaskBridgeCont
             })
             ->transform(function (VariableValueDto $value, $name) {
                 return new DataAttributeType([
-                    DataAttributeType::KEY_REFERENCE        => Str::snake($name),
+                    DataAttributeType::KEY_REFERENCE => Str::snake($name),
                     DataAttributeType::KEY_ENGINE_REFERENCE => $name,
-                    DataAttributeType::KEY_TYPE             => $this->fieldTypesMap[$value->getType()],
-                    DataAttributeType::KEY_LABEL            => ucwords(Str::replace('_', ' ', Str::snake($name)))
+                    DataAttributeType::KEY_TYPE => $this->fieldTypesMap[$value->getType()],
+                    DataAttributeType::KEY_LABEL => ucwords(Str::replace('_', ' ', Str::snake($name))),
                 ]);
             });
     }

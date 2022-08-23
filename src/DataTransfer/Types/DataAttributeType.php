@@ -2,8 +2,8 @@
 
 namespace Stackflows\DataTransfer\Types;
 
-use Stackflows\Exceptions\UnexpectedPropertyValueException;
 use Spatie\DataTransferObject\DataTransferObject;
+use Stackflows\Exceptions\UnexpectedPropertyValueException;
 
 class DataAttributeType extends DataTransferObject
 {
@@ -57,7 +57,7 @@ class DataAttributeType extends DataTransferObject
         $this->type = $dataAttribute[static::KEY_TYPE];
         $this->label = $dataAttribute[static::KEY_LABEL] ?? null;
 
-        if (!in_array($this->type, static::getTypeOptions())) {
+        if (! in_array($this->type, static::getTypeOptions())) {
             throw new UnexpectedPropertyValueException(sprintf(
                 'Type \'%s\' is not an option. Supported options are %s.',
                 $this->type,

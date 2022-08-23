@@ -2,8 +2,8 @@
 
 namespace Stackflows\DataTransfer\Types;
 
-use Stackflows\DataTransfer\Collections\DataPointCollection;
 use Spatie\DataTransferObject\DataTransferObject;
+use Stackflows\DataTransfer\Collections\DataPointCollection;
 
 class UserTaskType extends DataTransferObject
 {

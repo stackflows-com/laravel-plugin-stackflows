@@ -2,11 +2,10 @@
 
 namespace Stackflows\Bridge\Camunda\v7_17;
 
+use Illuminate\Support\Collection;
 use Stackflows\Bridge\AbstractBridge;
 use Stackflows\Bridge\ActivityBridgeContract;
 use Stackflows\Bridge\LoggableBridgeContract;
-use Stackflows\Types\EnvironmentType;
-use Illuminate\Support\Collection;
 use Stackflows\Clients\Camunda\v7_17\Api\HistoricActivityInstanceApi;
 
 class ActivityCamundaBridge extends AbstractBridge implements ActivityBridgeContract, LoggableBridgeContract

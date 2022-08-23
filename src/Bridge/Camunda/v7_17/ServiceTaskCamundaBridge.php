@@ -2,18 +2,11 @@
 
 namespace Stackflows\Bridge\Camunda\v7_17;
 
+use App\Models\BusinessProcessModelPublication;
+use Illuminate\Support\Collection;
 use Stackflows\Bridge\AbstractBridge;
 use Stackflows\Bridge\LoggableBridgeContract;
 use Stackflows\Bridge\ServiceTaskBridgeContract;
-use Stackflows\DataTransfer\Types\ActivityType;
-use Stackflows\DataTransfer\Types\BusinessProcessInstanceType;
-use Stackflows\DataTransfer\Collections\DataPointCollection;
-use Stackflows\DataTransfer\Types\ServiceTaskType;
-use App\Models\BusinessProcessModelPublication;
-use Stackflows\Types\EnvironmentType;
-use Stackflows\Transformers\Bridge\Camunda\DataPointCollectionToVariablesTransformer;
-use Stackflows\Transformers\Bridge\Camunda\VariableInstanceToDataPointCollectionTransformer;
-use Illuminate\Support\Collection;
 use Stackflows\Clients\Camunda\v7_17\Api\ExternalTaskApi;
 use Stackflows\Clients\Camunda\v7_17\Api\HistoricExternalTaskLogApi;
 use Stackflows\Clients\Camunda\v7_17\Api\VariableInstanceApi;
@@ -23,6 +16,12 @@ use Stackflows\Clients\Camunda\v7_17\Model\FetchExternalTasksDto;
 use Stackflows\Clients\Camunda\v7_17\Model\FetchExternalTaskTopicDto;
 use Stackflows\Clients\Camunda\v7_17\Model\LockedExternalTaskDto;
 use Stackflows\Clients\Camunda\v7_17\Model\LockExternalTaskDto;
+use Stackflows\DataTransfer\Collections\DataPointCollection;
+use Stackflows\DataTransfer\Types\ActivityType;
+use Stackflows\DataTransfer\Types\BusinessProcessInstanceType;
+use Stackflows\DataTransfer\Types\ServiceTaskType;
+use Stackflows\Transformers\Bridge\Camunda\DataPointCollectionToVariablesTransformer;
+use Stackflows\Transformers\Bridge\Camunda\VariableInstanceToDataPointCollectionTransformer;
 
 class ServiceTaskCamundaBridge extends AbstractBridge implements ServiceTaskBridgeContract, LoggableBridgeContract
 {
@@ -48,22 +47,22 @@ class ServiceTaskCamundaBridge extends AbstractBridge implements ServiceTaskBrid
             ->first();
 
         return new ServiceTaskType([
-            'reference'   => $datum->getId(),
-            'topic'       => $datum->getTopicName(),
-            'suspended'   => $datum->getSuspended(),
-            'priority'    => $datum->getPriority(),
-            'activity'    => new ActivityType([
-                'name'      => $datum->getActivityId(),
+            'reference' => $datum->getId(),
+            'topic' => $datum->getTopicName(),
+            'suspended' => $datum->getSuspended(),
+            'priority' => $datum->getPriority(),
+            'activity' => new ActivityType([
+                'name' => $datum->getActivityId(),
                 'reference' => $datum->getActivityInstanceId(),
             ]),
-            'instance'    => new BusinessProcessInstanceType([
-                'reference'   => $datum->getProcessInstanceId(),
+            'instance' => new BusinessProcessInstanceType([
+                'reference' => $datum->getProcessInstanceId(),
                 'publication' => $publication,
             ]),
             'attributes' => $this->variableInstanceToDataObjectTransformer->convert(
                 $this->variableInstanceApi->getVariableInstances(...[
                     'processInstanceIdIn' => [
-                        $datum->getProcessInstanceId()
+                        $datum->getProcessInstanceId(),
                     ],
                 ])
             ),
@@ -74,7 +73,7 @@ class ServiceTaskCamundaBridge extends AbstractBridge implements ServiceTaskBrid
     {
         return new Collection(
             array_map(
-                fn($datum) => $this->transform($datum),
+                fn ($datum) => $this->transform($datum),
                 $this->externalTaskApi->getExternalTasks()
             )
         );
@@ -89,19 +88,19 @@ class ServiceTaskCamundaBridge extends AbstractBridge implements ServiceTaskBrid
     {
         $data = $this->externalTaskApi->fetchAndLock(
             new FetchExternalTasksDto([
-                'topics'               => [
+                'topics' => [
                     new FetchExternalTaskTopicDto([
                         'topicName' => $topic,
                         'lockDuration' => $duration,
-                        'tenantIdIn' => [$this->environment->getAttribute('engine_reference')]
-                    ])
+                        'tenantIdIn' => [$this->environment->getAttribute('engine_reference')],
+                    ]),
                 ],
-                'workerId'             => $lock,
-                'maxTasks'             => $limit
+                'workerId' => $lock,
+                'maxTasks' => $limit,
             ])
         );
 
-        return (new Collection($data))->map(fn($datum) => $this->transform($datum));
+        return (new Collection($data))->map(fn ($datum) => $this->transform($datum));
     }
 
     public function lock(string $reference, string $lock, int $duration = 300): ServiceTaskType
@@ -132,7 +131,7 @@ class ServiceTaskCamundaBridge extends AbstractBridge implements ServiceTaskBrid
             $reference,
             new CompleteExternalTaskDto([
                 'variables' => $this->dataObjectToVariablesTransformer->convert($dataObject),
-                'workerId'  => $lock,
+                'workerId' => $lock,
             ])
         );
 

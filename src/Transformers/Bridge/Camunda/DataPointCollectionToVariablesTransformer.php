@@ -2,10 +2,10 @@
 
 namespace Stackflows\Transformers\Bridge\Camunda;
 
-use Stackflows\DataTransfer\Types\DataAttributeType;
-use Stackflows\DataTransfer\Collections\DataPointCollection;
-use Stackflows\DataTransfer\Types\DataPointType;
 use Stackflows\Clients\Camunda\v7_17\Model\VariableValueDto;
+use Stackflows\DataTransfer\Collections\DataPointCollection;
+use Stackflows\DataTransfer\Types\DataAttributeType;
+use Stackflows\DataTransfer\Types\DataPointType;
 
 class DataPointCollectionToVariablesTransformer
 {
@@ -25,7 +25,7 @@ class DataPointCollectionToVariablesTransformer
         }
 
         $variables = null;
-        if ($data instanceof DataPointCollection && !$data->isEmpty()) {
+        if ($data instanceof DataPointCollection && ! $data->isEmpty()) {
             /** @var DataPointType $dataPoint */
             foreach ($data->all() as $dataPoint) {
                 $variables[$dataPoint->attribute->getReference()] = new VariableValueDto([

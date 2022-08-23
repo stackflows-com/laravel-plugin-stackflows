@@ -2,9 +2,9 @@
 
 namespace Stackflows\DataTransfer\Types;
 
-use Stackflows\DataTransfer\Collections\DataPointCollection;
 use Illuminate\Contracts\Support\Arrayable;
 use Spatie\DataTransferObject\DataTransferObject;
+use Stackflows\DataTransfer\Collections\DataPointCollection;
 
 class ServiceTaskType extends DataTransferObject implements Arrayable
 {

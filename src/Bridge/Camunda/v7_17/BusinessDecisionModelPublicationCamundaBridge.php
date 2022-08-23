@@ -2,27 +2,23 @@
 
 namespace Stackflows\Bridge\Camunda\v7_17;
 
-use Stackflows\Bridge\BusinessDecisionModelPublicationBridgeContract;
-use Stackflows\DataTransfer\Types\BusinessDecisionScoreType;
-use Stackflows\DataTransfer\Collections\DataPointCollection;
-use Stackflows\DataTransfer\Types\DataPointType;
 use App\Models\BusinessDecisionModelPublication;
-use Stackflows\Types\EnvironmentType;
+use Stackflows\Bridge\BusinessDecisionModelPublicationBridgeContract;
 use Stackflows\Clients\Camunda\v7_17\Api\DecisionDefinitionApi;
 use Stackflows\Clients\Camunda\v7_17\Api\DeploymentApi;
 use Stackflows\Clients\Camunda\v7_17\Model\EvaluateDecisionDto;
 use Stackflows\Clients\Camunda\v7_17\Model\VariableValueDto;
+use Stackflows\DataTransfer\Collections\DataPointCollection;
+use Stackflows\DataTransfer\Types\BusinessDecisionScoreType;
+use Stackflows\DataTransfer\Types\DataPointType;
 
-class BusinessDecisionModelPublicationCamundaBridge
-    extends BusinessModelPublicationCamundaBridge
-    implements BusinessDecisionModelPublicationBridgeContract
+class BusinessDecisionModelPublicationCamundaBridge extends BusinessModelPublicationCamundaBridge implements BusinessDecisionModelPublicationBridgeContract
 {
     public function __construct(
         protected Environment $environment,
         protected DeploymentApi $deploymentApi,
         protected DecisionDefinitionApi $decisionDefinitionApi
     ) {
-
     }
 
     public function evaluate(
@@ -34,7 +30,7 @@ class BusinessDecisionModelPublicationCamundaBridge
             $variables = $submission->getPoints()->map(function (DataPointType $dataPoint) {
                 return new VariableValueDto([
                     'type' => $dataPoint->attribute,
-                    'value' => $dataPoint->value
+                    'value' => $dataPoint->value,
                 ]);
             });
         }

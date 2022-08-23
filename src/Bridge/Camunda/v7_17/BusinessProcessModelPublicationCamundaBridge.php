@@ -2,23 +2,18 @@
 
 namespace Stackflows\Bridge\Camunda\v7_17;
 
-use Stackflows\Bridge\BusinessProcessModelPublicationBridgeContract;
-use Stackflows\DataTransfer\Types\BusinessProcessInstanceType;
-use Stackflows\DataTransfer\Collections\DataPointCollection;
-use Stackflows\DataTransfer\Types\DataPointType;
 use App\Models\BusinessProcessModelPublication;
-use Stackflows\Types\EnvironmentType;
 use App\Statistics\BusinessProcessActivityStatisticalUnit;
-use Stackflows\Transformers\Bridge\Camunda\DataPointCollectionToVariablesTransformer;
 use Illuminate\Support\Collection;
+use Stackflows\Bridge\BusinessProcessModelPublicationBridgeContract;
 use Stackflows\Clients\Camunda\v7_17\Api\DeploymentApi;
 use Stackflows\Clients\Camunda\v7_17\Api\ProcessDefinitionApi;
 use Stackflows\Clients\Camunda\v7_17\Model\StartProcessInstanceFormDto;
-use Stackflows\Clients\Camunda\v7_17\Model\VariableValueDto;
+use Stackflows\DataTransfer\Collections\DataPointCollection;
+use Stackflows\DataTransfer\Types\BusinessProcessInstanceType;
+use Stackflows\Transformers\Bridge\Camunda\DataPointCollectionToVariablesTransformer;
 
-class BusinessProcessModelPublicationCamundaBridge
-    extends BusinessModelPublicationCamundaBridge
-    implements BusinessProcessModelPublicationBridgeContract
+class BusinessProcessModelPublicationCamundaBridge extends BusinessModelPublicationCamundaBridge implements BusinessProcessModelPublicationBridgeContract
 {
     public function __construct(
         Environment $environment,
@@ -26,7 +21,6 @@ class BusinessProcessModelPublicationCamundaBridge
         protected ProcessDefinitionApi $processDefinitionApi,
         protected DataPointCollectionToVariablesTransformer $dataPointCollectionToVariablesTransformer
     ) {
-
     }
 
     protected function transform(array $datum): array

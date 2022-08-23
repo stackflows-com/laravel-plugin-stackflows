@@ -4,7 +4,6 @@ namespace Stackflows\Bridge\Camunda\v7_17;
 
 use Stackflows\Bridge\AbstractBridge;
 use Stackflows\Bridge\EnvironmentBridgeContract;
-use Stackflows\Types\EnvironmentType;
 use Stackflows\Clients\Camunda\v7_17\Api\TenantApi;
 use Stackflows\Clients\Camunda\v7_17\Model\TenantDto;
 
@@ -14,7 +13,6 @@ class EnvironmentCamundaBridge extends AbstractBridge implements EnvironmentBrid
         protected Environment $environment,
         protected TenantApi $tenantApi
     ) {
-
     }
 
     public function save(Environment $environment): Environment

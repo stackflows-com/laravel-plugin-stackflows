@@ -2,9 +2,9 @@
 
 namespace Stackflows\Bridge;
 
-use Stackflows\DataTransfer\Types\BusinessDecisionScoreType;
-use Stackflows\DataTransfer\Collections\DataPointCollection;
 use App\Models\BusinessDecisionModelPublication;
+use Stackflows\DataTransfer\Collections\DataPointCollection;
+use Stackflows\DataTransfer\Types\BusinessDecisionScoreType;
 
 interface BusinessDecisionModelPublicationBridgeContract extends BusinessModelPublicationBridgeContract
 {

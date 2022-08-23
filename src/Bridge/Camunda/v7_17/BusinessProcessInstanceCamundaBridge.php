@@ -2,19 +2,19 @@
 
 namespace Stackflows\Bridge\Camunda\v7_17;
 
+use App\Models\BusinessProcessModelPublication;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Stackflows\Bridge\AbstractBridge;
 use Stackflows\Bridge\BusinessProcessInstanceBridgeContract;
 use Stackflows\Bridge\LoggableBridgeContract;
-use Stackflows\DataTransfer\Types\BusinessProcessInstanceType;
-use App\Models\BusinessProcessModelPublication;
-use Stackflows\Types\EnvironmentType;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
 use Stackflows\Clients\Camunda\v7_17\Api\HistoricProcessInstanceApi;
 use Stackflows\Clients\Camunda\v7_17\Api\ProcessInstanceApi;
+use Stackflows\DataTransfer\Types\BusinessProcessInstanceType;
 
-class BusinessProcessInstanceCamundaBridge extends AbstractBridge implements BusinessProcessInstanceBridgeContract,
-                                                                             LoggableBridgeContract
+class BusinessProcessInstanceCamundaBridge extends AbstractBridge implements
+    BusinessProcessInstanceBridgeContract,
+    LoggableBridgeContract
 {
     public function __construct(
         protected Environment $environment,
@@ -26,11 +26,11 @@ class BusinessProcessInstanceCamundaBridge extends AbstractBridge implements Bus
     protected function transform(array $datum): BusinessProcessInstanceType
     {
         return new BusinessProcessInstanceType([
-            'reference'   => $datum['reference'],
+            'reference' => $datum['reference'],
             'publication' => BusinessProcessModelPublication::query()
                 ->where('engine_diagram_reference', $datum['publication'])
                 ->first(),
-            'context'     => $datum['context'],
+            'context' => $datum['context'],
         ]);
     }
 
@@ -42,9 +42,9 @@ class BusinessProcessInstanceCamundaBridge extends AbstractBridge implements Bus
             $data = $this->processInstanceApi->getProcessInstance($reference);
 
             return [
-                'reference'   => $reference,
+                'reference' => $reference,
                 'publication' => $data['definitionId'],
-                'context'     => $data['businessKey'],
+                'context' => $data['businessKey'],
             ];
         });
 

@@ -2,11 +2,11 @@
 
 namespace Stackflows\Bridge;
 
+use Illuminate\Support\Collection;
 use Stackflows\DataTransfer\Collections\DataPointCollection;
 use Stackflows\DataTransfer\Types\DataAttributeType;
 use Stackflows\DataTransfer\Types\DataPointType;
 use Stackflows\DataTransfer\Types\UserTaskType;
-use Illuminate\Support\Collection;
 
 interface UserTaskBridgeContract
 {

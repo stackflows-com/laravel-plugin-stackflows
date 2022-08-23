@@ -2,8 +2,8 @@
 
 namespace Stackflows\DataTransfer\Types;
 
-use Stackflows\DataTransfer\Collections\DataPointCollection;
 use Spatie\DataTransferObject\DataTransferObject;
+use Stackflows\DataTransfer\Collections\DataPointCollection;
 
 class TaskContextType extends DataTransferObject
 {
@@ -11,11 +11,11 @@ class TaskContextType extends DataTransferObject
 
     public function __construct(array $attributes = [])
     {
-        $attributes = (new DataPointCollection($attributes))->map(fn(array $attribute) => new DataPointType([
+        $attributes = (new DataPointCollection($attributes))->map(fn (array $attribute) => new DataPointType([
             'attribute' => new DataAttributeType($attribute['attribute']),
             'value' => $attribute['value'],
         ]));
-        $attributes->keyBy(fn(DataPointType $attribute) => $attribute->attribute->getReference());
+        $attributes->keyBy(fn (DataPointType $attribute) => $attribute->attribute->getReference());
 
         parent::__construct(['attributes' => $attributes]);
     }
@@ -61,7 +61,7 @@ class TaskContextType extends DataTransferObject
     public function jsonSerialize()
     {
         return [
-            'attributes' => $this->attributes->toArray()
+            'attributes' => $this->attributes->toArray(),
         ];
     }
 }

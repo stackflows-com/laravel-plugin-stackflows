@@ -2,12 +2,12 @@
 
 namespace Stackflows\Transformers\Bridge\Camunda;
 
-use Stackflows\DataTransfer\Types\DataAttributeType;
-use Stackflows\DataTransfer\Collections\DataPointCollection;
-use Stackflows\DataTransfer\Types\DataPointType;
-use Stackflows\Transformers\BasicTransformerContract;
 use Illuminate\Support\Str;
 use Stackflows\Clients\Camunda\v7_17\Model\VariableInstanceDto;
+use Stackflows\DataTransfer\Collections\DataPointCollection;
+use Stackflows\DataTransfer\Types\DataAttributeType;
+use Stackflows\DataTransfer\Types\DataPointType;
+use Stackflows\Transformers\BasicTransformerContract;
 
 class VariableInstanceToDataPointCollectionTransformer implements BasicTransformerContract
 {

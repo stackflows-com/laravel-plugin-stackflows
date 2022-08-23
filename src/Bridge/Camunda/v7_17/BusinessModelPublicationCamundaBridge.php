@@ -2,21 +2,18 @@
 
 namespace Stackflows\Bridge\Camunda\v7_17;
 
+use App\Models\BusinessBaseModelPublication;
 use Stackflows\Bridge\AbstractBridge;
 use Stackflows\Bridge\BusinessModelPublicationBridgeContract;
-use App\Models\BusinessBaseModelPublication;
-use Stackflows\Types\EnvironmentType;
 use Stackflows\Clients\Camunda\v7_17\Api\DeploymentApi;
 use Stackflows\Clients\Camunda\v7_17\ApiException;
 
-class BusinessModelPublicationCamundaBridge extends AbstractBridge
-    implements BusinessModelPublicationBridgeContract
+class BusinessModelPublicationCamundaBridge extends AbstractBridge implements BusinessModelPublicationBridgeContract
 {
     public function __construct(
         protected Environment $environment,
         protected DeploymentApi $deploymentApi
     ) {
-
     }
 
     public function delete(BusinessBaseModelPublication $publication): BusinessBaseModelPublication

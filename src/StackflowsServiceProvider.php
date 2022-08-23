@@ -109,7 +109,7 @@ class StackflowsServiceProvider extends PackageServiceProvider
             $apiClass,
             [
                 'client' => new Client(['verify' => false, 'auth' => [$cfg->getUsername(), $cfg->getPassword()]]),
-                'config' => $cfg
+                'config' => $cfg,
             ]
         );
     }

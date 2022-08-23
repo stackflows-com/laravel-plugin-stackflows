@@ -2,8 +2,8 @@
 
 namespace Stackflows\Bridge;
 
-use Stackflows\DataTransfer\Types\BusinessProcessInstanceType;
 use Illuminate\Support\Collection;
+use Stackflows\DataTransfer\Types\BusinessProcessInstanceType;
 
 interface BusinessProcessInstanceBridgeContract
 {
