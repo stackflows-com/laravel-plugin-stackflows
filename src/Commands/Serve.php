@@ -3,6 +3,7 @@
 namespace Stackflows\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Stackflows\Clients\Stackflows\ApiException;
 use Stackflows\Contracts\ServiceTaskExecutorInterface;
@@ -11,7 +12,7 @@ use Stackflows\Stackflows;
 
 class Serve extends Command
 {
-    public $signature = 'stackflows:serve {topic? : Serve a specific topic} {chunk?=10 : Single chunk size} {--once : Run only once}';
+    public $signature = 'stackflows:serve {topic? : Serve a specific topic} {chunk=10 : Single chunk size} {--once : Run only once}';
 
     public $description = 'This command will start executing business processes service tasks endlessly';
 
@@ -42,12 +43,29 @@ class Serve extends Command
                     continue;
                 }
 
+                $this->output->writeln(
+                    sprintf(
+                        '[%s][%s][Fetching]',
+                        Carbon::now()->toIso8601String(),
+                        $executor::getTopic()
+                    )
+                );
+
                 try {
                     $tasks = $stackflows->lockServiceTasks(
                         $lock,
                         $executor::getTopic(),
                         $executor::getLockDuration(),
                         $this->input->getArgument('chunk')
+                    );
+
+                    $this->output->writeln(
+                        sprintf(
+                            '[%s][%s][Serving][%s]',
+                            Carbon::now()->toIso8601String(),
+                            $executor::getTopic(),
+                            count($tasks)
+                        )
                     );
                 } catch (\Exception $e) {
                     $this->output->error($e->getMessage() . PHP_EOL . $e->getTraceAsString());
@@ -83,21 +101,26 @@ class Serve extends Command
 
                         Log::error($message, $context);
 
-                        $this->output->error(sprintf(
-                            "%s%s%s",
-                            $message,
-                            PHP_EOL,
-                            json_encode($context, JSON_PRETTY_PRINT)
-                        ));
+                        if ($this->output->isDebug()) {
+                            $this->output->error(sprintf(
+                                "%s%s%s",
+                                $message,
+                                PHP_EOL,
+                                json_encode($context, JSON_PRETTY_PRINT)
+                            ));
+                        }
                     }
                 }
 
-                $this->output->success(sprintf(
-                    'Successfully executed %s out of %s service tasks with topic "%s"',
-                    $executor::getTopic(),
-                    $served,
-                    count($tasks)
-                ));
+                $this->output->writeln(
+                    sprintf(
+                        '[%s][%s][Served][%s successful out of %s]',
+                        Carbon::now()->toIso8601String(),
+                        $executor::getTopic(),
+                        $served,
+                        count($tasks)
+                    )
+                );
             }
 
             if ($this->option('once')) {
