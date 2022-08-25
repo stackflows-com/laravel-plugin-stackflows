@@ -56,7 +56,7 @@ class Serve extends Command
                     sprintf('stackflows_locking_service_task_%s', strtolower($executor::getTopic())),
                     60
                 );
-                if (!$commandLock->get()) {
+                if (! $commandLock->get()) {
                     $this->output->writeln(
                         sprintf(
                             '[%s][%s][Locked]',
