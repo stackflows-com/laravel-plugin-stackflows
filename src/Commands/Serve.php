@@ -4,6 +4,7 @@ namespace Stackflows\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Stackflows\Clients\Stackflows\ApiException;
 use Stackflows\Contracts\ServiceTaskExecutorInterface;
@@ -51,6 +52,15 @@ class Serve extends Command
                     )
                 );
 
+                $commandLock = Cache::lock(
+                    sprintf('stackflows_locking_service_task_%s', strtolower($executor::getTopic())),
+                    60
+                );
+                if (!$commandLock->get()) {
+                    // If locked then go for next executor
+                    continue;
+                }
+
                 try {
                     $tasks = $stackflows->lockServiceTasks(
                         $lock,
@@ -68,9 +78,22 @@ class Serve extends Command
                         )
                     );
                 } catch (\Exception $e) {
-                    $this->output->error($e->getMessage() . PHP_EOL . $e->getTraceAsString());
+                    if ($this->output->isDebug()) {
+                        $this->output->error($e->getMessage() . PHP_EOL . $e->getTraceAsString());
+                    }
+
+                    $this->output->writeln(
+                        sprintf(
+                            '[%s][%s][Failed][%s]',
+                            Carbon::now()->toIso8601String(),
+                            $executor::getTopic(),
+                            count($tasks)
+                        )
+                    );
 
                     continue;
+                } finally {
+                    $commandLock->forceRelease();
                 }
 
                 $served = 0;
@@ -84,8 +107,6 @@ class Serve extends Command
                         $stackflows->serveServiceTask($task->getReference(), $lock, $submission);
                         $served++;
                     } catch (ExecutorException | ApiException $e) {
-                        $stackflows->unlockServiceTask($task->getReference(), $lock);
-
                         $message = $e->getMessage();
                         $context = [
                             'service_task' => $task,
