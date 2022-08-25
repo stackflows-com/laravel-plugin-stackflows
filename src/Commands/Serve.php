@@ -56,7 +56,7 @@ class Serve extends Command
                     sprintf('stackflows_locking_service_task_%s', strtolower($executor::getTopic())),
                     60
                 );
-                if (!$commandLock->get()) {
+                if (! $commandLock->get()) {
                     // If locked then go for next executor
                     continue;
                 }
