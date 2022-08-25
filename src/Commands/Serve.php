@@ -57,7 +57,14 @@ class Serve extends Command
                     60
                 );
                 if (!$commandLock->get()) {
-                    // If locked then go for next executor
+                    $this->output->writeln(
+                        sprintf(
+                            '[%s][%s][Locked]',
+                            Carbon::now()->toIso8601String(),
+                            $executor::getTopic()
+                        )
+                    );
+
                     continue;
                 }
 
