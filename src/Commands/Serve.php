@@ -24,6 +24,7 @@ class Serve extends Command
      */
     public function handle(Stackflows $stackflows): void
     {
+        $chunk = $this->input->getArgument('chunk');
         $topic = $this->input->getArgument('topic');
 
         /** @var ServiceTaskExecutorInterface[] $executors */
@@ -54,7 +55,7 @@ class Serve extends Command
 
                 $commandLock = Cache::lock(
                     sprintf('stackflows_locking_service_task_%s', strtolower($executor::getTopic())),
-                    60
+                    20 * $chunk
                 );
                 if (! $commandLock->get()) {
                     $this->output->writeln(
@@ -73,7 +74,7 @@ class Serve extends Command
                         $lock,
                         $executor::getTopic(),
                         $executor::getLockDuration(),
-                        $this->input->getArgument('chunk')
+                        $chunk
                     );
 
                     $this->output->writeln(
