@@ -2,6 +2,7 @@
 
 namespace Stackflows\Contracts;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Stackflows\Clients\Stackflows\Model\UserTaskType;
 
@@ -13,8 +14,40 @@ interface UserTaskSynchronizerContract
     public static function getActivityName(): string;
 
     /**
-     * @param Collection|UserTaskType[] $userTasks
+     * @param \DateTime $referenceTime
      * @return void
      */
-    public function sync(Collection $userTasks): void;
+    public function setReferenceTimestamp(\DateTime $referenceTime): void;
+
+    /**
+     * Must be keyed by external task reference
+     *
+     * @return Builder
+     */
+    public function getReflectionsQuery(): Builder;
+
+    /**
+     * @param Collection|StackflowsTaskReflectionContract[] $reflections
+     * @return void
+     */
+    public function setReflections(Collection $reflections): void;
+
+    /**
+     * @param UserTaskType $userTask
+     * @return void
+     */
+    public function create(UserTaskType $userTask): void;
+
+    /**
+     * @param UserTaskType $task
+     * @param StackflowsTaskReflectionContract $reflection
+     * @return void
+     */
+    public function update(UserTaskType $task, StackflowsTaskReflectionContract $reflection): void;
+
+    /**
+     * @param Collection|StackflowsTaskReflectionContract[] $reflections
+     * @return void
+     */
+    public function remove(Collection $reflections): void;
 }
