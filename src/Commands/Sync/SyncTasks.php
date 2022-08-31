@@ -99,9 +99,6 @@ class SyncTasks extends Command
 
                 $synchronizer->setReflections($taskReflections);
 
-                // All task reflections that has not met its task will be removed
-                $taskReflectionsToBeRemoved = clone $taskReflections;
-
                 do {
                     $this->output->writeln(
                         sprintf(
@@ -152,9 +149,6 @@ class SyncTasks extends Command
                             $synchronizer->update($task, $taskReflections->get($task->getReference()));
                             $updated++;
 
-                            // Task is still present, so lets remove it from removal list
-                            $taskReflectionsToBeRemoved->pull($task->getReference());
-
                             continue;
                         }
 
@@ -165,21 +159,17 @@ class SyncTasks extends Command
                     $index++;
                 } while ($chunkSize === $size);
 
-                $removed = $synchronizer->remove($taskReflectionsToBeRemoved)->count();
-
                 $commandLock->forceRelease();
 
                 if ($tasks->getTotal() > 0) {
                     $this->output->writeln(
                         sprintf(
-                            '[%s][%s][Completed][Processed: %s][Created: %s][Updated: %s][Removed: %s of %s]',
+                            '[%s][%s][Completed][Processed: %s][Created: %s][Updated: %s]',
                             Carbon::now()->toIso8601String(),
                             $synchronizer::getActivityName(),
                             $tasks->getTotal(),
                             $created,
-                            $updated,
-                            $removed,
-                            $taskReflectionsToBeRemoved->count()
+                            $updated
                         )
                     );
                 }
