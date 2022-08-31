@@ -68,7 +68,7 @@ class SyncTasks extends Command
                         $after->format('YmdHi'),
                         $nextAfter->format('YmdHi'),
                     ),
-                    10 * $size
+                    2 * $size
                 );
                 if (! $commandLock->get()) {
                     $this->output->writeln(sprintf(

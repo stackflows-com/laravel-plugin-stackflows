@@ -55,7 +55,7 @@ class Serve extends Command
 
                 $commandLock = Cache::lock(
                     sprintf('stackflows_locking_service_task_%s', strtolower($executor::getTopic())),
-                    20 * $chunk
+                    5 * $chunk
                 );
                 if (! $commandLock->get()) {
                     $this->output->writeln(
