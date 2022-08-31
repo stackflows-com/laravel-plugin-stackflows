@@ -5,6 +5,7 @@ namespace Stackflows\Commands\Sync;
 use App\Exceptions\MissingInheritanceException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Stackflows\Clients\Stackflows\ApiException;
 use Stackflows\Contracts\StackflowsTaskReflectionContract;
@@ -60,6 +61,25 @@ class SyncTasks extends Command
                 $created = 0;
                 $updated = 0;
 
+                $commandLock = Cache::lock(
+                    sprintf(
+                        'stackflows_locking_sync_tasks_%s_%s_to_%s',
+                        strtolower($synchronizer::getActivityName()),
+                        $after->format('YmdHi'),
+                        $nextAfter->format('YmdHi'),
+                    ),
+                    10 * $size
+                );
+                if (! $commandLock->get()) {
+                    $this->output->writeln(sprintf(
+                        '[%s][%s][Locked]',
+                        Carbon::now()->toIso8601String(),
+                        $synchronizer::getActivityName()
+                    ));
+
+                    continue;
+                }
+
                 $synchronizer->setReferenceTimestamp($nextAfter);
 
                 $taskReflectionsQuery = $synchronizer->getReflectionsQuery();
@@ -110,6 +130,8 @@ class SyncTasks extends Command
 
                         Log::error($data['message'] ?? 'None', $context);
 
+                        $commandLock->forceRelease();
+
                         continue;
                     }
 
@@ -144,6 +166,8 @@ class SyncTasks extends Command
                 } while ($chunkSize === $size);
 
                 $removed = $synchronizer->remove($taskReflectionsToBeRemoved)->count();
+
+                $commandLock->forceRelease();
 
                 if ($tasks->getTotal() > 0) {
                     $this->output->writeln(
