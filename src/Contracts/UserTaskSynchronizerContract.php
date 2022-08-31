@@ -13,6 +13,12 @@ interface UserTaskSynchronizerContract
      */
     public static function getActivityName(): string;
 
+    public static function getReferenceAttributeName(): string;
+
+    public static function getActivityAttributeName(): string;
+
+    public static function getCreatedAtAttributeName(): string;
+
     /**
      * @param \DateTime $referenceTime
      * @return void
@@ -47,7 +53,7 @@ interface UserTaskSynchronizerContract
 
     /**
      * @param Collection|StackflowsTaskReflectionContract[] $reflections
-     * @return void
+     * @return Collection|StackflowsTaskReflectionContract[]
      */
-    public function remove(Collection $reflections): void;
+    public function remove(Collection $reflections): Collection;
 }

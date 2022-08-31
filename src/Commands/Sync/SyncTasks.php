@@ -57,7 +57,8 @@ class SyncTasks extends Command
 
             foreach ($synchronizers as $synchronizer) {
                 $index = 0;
-                $successful = 0;
+                $created = 0;
+                $updated = 0;
 
                 $synchronizer->setReferenceTimestamp($nextAfter);
 
@@ -71,9 +72,10 @@ class SyncTasks extends Command
                 }
 
                 $taskReflections = $taskReflectionsQuery
-                    ->where($taskReflectionModel::getStackflowsActivityKeyName(), static::getActivityName())
+                    ->where($synchronizer::getActivityAttributeName(), $synchronizer::getActivityName())
+                    ->where($synchronizer::getCreatedAtAttributeName(), '>=', $after)
                     ->get()
-                    ->keyBy($taskReflectionModel::getStackflowsReferenceKeyName());
+                    ->keyBy($synchronizer::getReferenceAttributeName());
 
                 $synchronizer->setReflections($taskReflections);
 
@@ -126,6 +128,7 @@ class SyncTasks extends Command
                     foreach ($tasks as $task) {
                         if ($taskReflections->has($task->getReference())) {
                             $synchronizer->update($task, $taskReflections->get($task->getReference()));
+                            $updated++;
 
                             // Task is still present, so lets remove it from removal list
                             $taskReflectionsToBeRemoved->pull($task->getReference());
@@ -134,23 +137,25 @@ class SyncTasks extends Command
                         }
 
                         $synchronizer->create($task);
+                        $created++;
                     }
-
-                    $successful += $chunkSize;
 
                     $index++;
                 } while ($chunkSize === $size);
 
-                $synchronizer->remove($taskReflectionsToBeRemoved);
+                $removed = $synchronizer->remove($taskReflectionsToBeRemoved)->count();
 
                 if ($tasks->getTotal() > 0) {
                     $this->output->writeln(
                         sprintf(
-                            '[%s][%s][Completed][%s successful out of %s]',
+                            '[%s][%s][Completed][Processed: %s][Created: %s][Updated: %s][Removed: %s of %s]',
                             Carbon::now()->toIso8601String(),
                             $synchronizer::getActivityName(),
-                            $successful,
                             $tasks->getTotal(),
+                            $created,
+                            $updated,
+                            $removed,
+                            $taskReflectionsToBeRemoved->count()
                         )
                     );
                 }
