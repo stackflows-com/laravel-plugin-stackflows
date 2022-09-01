@@ -93,7 +93,6 @@ class SyncTasks extends Command
 
                 $taskReflections = $taskReflectionsQuery
                     ->where($synchronizer::getActivityAttributeName(), $synchronizer::getActivityName())
-                    ->where($synchronizer::getCreatedAtAttributeName(), '>=', $after)
                     ->get()
                     ->keyBy($synchronizer::getReferenceAttributeName());
 
