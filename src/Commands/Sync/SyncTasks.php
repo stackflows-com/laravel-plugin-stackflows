@@ -2,7 +2,6 @@
 
 namespace Stackflows\Commands\Sync;
 
-use App\Exceptions\MissingInheritanceException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -10,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Stackflows\Clients\Stackflows\ApiException;
 use Stackflows\Contracts\StackflowsTaskReflectionContract;
 use Stackflows\Contracts\UserTaskSynchronizerContract;
+use Stackflows\Exceptions\MissingInheritanceException;
 use Stackflows\Stackflows;
 
 class SyncTasks extends Command
