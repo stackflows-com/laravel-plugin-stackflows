@@ -2,7 +2,6 @@
 
 namespace Stackflows\Commands\Sync;
 
-use App\Exceptions\MissingInheritanceException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
