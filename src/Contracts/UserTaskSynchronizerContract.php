@@ -13,6 +13,8 @@ interface UserTaskSynchronizerContract
      */
     public static function getActivityName(): string;
 
+    public static function getCachePrefix(): string;
+
     public static function getReferenceAttributeName(): string;
 
     public static function getActivityAttributeName(): string;

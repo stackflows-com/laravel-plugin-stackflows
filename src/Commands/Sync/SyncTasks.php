@@ -8,6 +8,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Stackflows\Clients\Stackflows\ApiException;
+use Stackflows\Clients\Stackflows\Model\UserTaskType;
 use Stackflows\Contracts\StackflowsTaskReflectionContract;
 use Stackflows\Contracts\UserTaskSynchronizerContract;
 use Stackflows\Stackflows;
@@ -29,6 +30,16 @@ class SyncTasks extends Command
     protected $description = 'Sync Stackflows tasks with local tasks';
 
     /**
+     * @var Stackflows
+     */
+    protected Stackflows $stackflows;
+
+    /**
+     * @var UserTaskSynchronizerContract|null
+     */
+    protected ?UserTaskSynchronizerContract $synchronizer;
+
+    /**
      * Create a new command instance.
      *
      * @return void
@@ -45,21 +56,16 @@ class SyncTasks extends Command
      */
     public function handle(Stackflows $stackflows)
     {
-        $nextAfter = Carbon::now()->subDays(7);
-
-        $size = 100;
+        $this->stackflows = $stackflows;
 
         /** @var UserTaskSynchronizerContract[] $synchronizers */
         $synchronizers = app()->tagged('stackflows:user-tasks-synchronizer');
+        foreach ($synchronizers as $synchronizer) {
+            $this->synchronizer = $synchronizer;
 
-        while (true) {
-            $after = clone $nextAfter;
-            $nextAfter = Carbon::now();
-
-            foreach ($synchronizers as $synchronizer) {
-                $index = 0;
-                $created = 0;
-                $updated = 0;
+            $chunk = $this->getAvailableChunk();
+        }
+    }
 
                 $commandLock = Cache::lock(
                     sprintf(
@@ -80,16 +86,8 @@ class SyncTasks extends Command
                     continue;
                 }
 
-                $synchronizer->setReferenceTimestamp($nextAfter);
-
-                $taskReflectionsQuery = $synchronizer->getReflectionsQuery();
-                $taskReflectionModel = $taskReflectionsQuery->getModel();
-                if (! $taskReflectionModel instanceof StackflowsTaskReflectionContract) {
-                    throw new MissingInheritanceException(
-                        get_class($taskReflectionModel),
-                        StackflowsTaskReflectionContract::class
-                    );
-                }
+            $startOfDay = Carbon::parse($date)->startOfDay();
+            $endOfDay = Carbon::parse($date)->endOfDay();
 
                 $taskReflections = $taskReflectionsQuery
                     ->where($synchronizer::getActivityAttributeName(), $synchronizer::getActivityName())
@@ -97,7 +95,7 @@ class SyncTasks extends Command
                     ->get()
                     ->keyBy($synchronizer::getReferenceAttributeName());
 
-                $synchronizer->setReflections($taskReflections);
+            $size = count($tasks) + count($reflections);
 
                 // All task reflections that has not met its task will be removed
                 $taskReflectionsToBeRemoved = clone $taskReflections;
@@ -132,20 +130,17 @@ class SyncTasks extends Command
 
                         $commandLock->forceRelease();
 
-                        continue;
-                    }
+                continue;
+            }
 
-                    $chunkSize = count($tasks);
+            return [
+                'tasks' => $tasks,
+                'reflections' => $reflections,
+            ]; //TODO: Retrieve everything for this period
+        }
 
-                    $this->output->writeln(
-                        sprintf(
-                            '[%s][%s][Chunk][%s/%s]',
-                            Carbon::now()->toIso8601String(),
-                            $synchronizer::getActivityName(),
-                            $chunkSize,
-                            $tasks->getTotal()
-                        )
-                    );
+        return [];
+    }
 
                     foreach ($tasks as $task) {
                         if ($taskReflections->has($task->getReference())) {
@@ -158,12 +153,20 @@ class SyncTasks extends Command
                             continue;
                         }
 
-                        $synchronizer->create($task);
-                        $created++;
-                    }
+        Cache::forget(sprintf('%s_period_start', $this->synchronizer::getCachePrefix()));
+        Cache::forget(sprintf('%s_period_end', $this->synchronizer::getCachePrefix()));
+    }
 
-                    $index++;
-                } while ($chunkSize === $size);
+    /**
+     * @return \DatePeriod
+     * @throws ApiException
+     */
+    private function getPeriod(): \DatePeriod
+    {
+        /** @var UserTaskType $oldestTask */
+        $oldestTask = $this->stackflows
+            ->getUserTasks(['sort_by' => 'created', 'sort_order' => 'asc', 'limit' => 1])
+            ->first();
 
                 $removed = $synchronizer->remove($taskReflectionsToBeRemoved)->count();
 
@@ -185,7 +188,19 @@ class SyncTasks extends Command
                 }
             }
 
-            sleep(1);
-        }
+        $end = Cache::get(
+            sprintf('%s_period_end', $this->synchronizer::getCachePrefix()),
+            function () use ($newestTask) {
+                return max([
+                    $this->synchronizer
+                        ->getReflectionsQuery()
+                        ->orderBy($this->synchronizer::getCreatedAtAttributeName(), 'desc')
+                        ->first(),
+                    Carbon::parse($newestTask->getCreatedAt()), // Destination end date
+                ]);
+            }
+        );
+
+        return new \DatePeriod($start, new \DateInterval('P1D'), $end);
     }
 }
