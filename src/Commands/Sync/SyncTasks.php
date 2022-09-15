@@ -64,7 +64,7 @@ class SyncTasks extends Command
 
                 $taskReflectionsQuery = $synchronizer->getReflectionsQuery();
                 $taskReflectionModel = $taskReflectionsQuery->getModel();
-                if (!$taskReflectionModel instanceof StackflowsTaskReflectionContract) {
+                if (! $taskReflectionModel instanceof StackflowsTaskReflectionContract) {
                     throw new MissingInheritanceException(
                         get_class($taskReflectionModel),
                         StackflowsTaskReflectionContract::class
