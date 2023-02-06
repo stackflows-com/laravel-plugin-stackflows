@@ -13,7 +13,7 @@ use Stackflows\Stackflows;
 
 class Serve extends Command
 {
-    public $signature = 'stackflows:serve {chunk=10 : Single chunk size} {topic? : Serve a specific topic} {--once : Run only once}';
+    public $signature = 'stackflows:serve {chunk=10 : Single chunk size} {topic? : Serve a specific topic} {--once : Run only once} {--max-time=0 : The maximum number of seconds the service should run}';
 
     public $description = 'This command will start executing business processes service tasks endlessly';
 
@@ -26,6 +26,7 @@ class Serve extends Command
     {
         $chunk = $this->input->getArgument('chunk');
         $topic = $this->input->getArgument('topic');
+        $startTime = Carbon::now()->timestamp;
 
         /** @var ServiceTaskExecutorInterface[] $executors */
         $executors = app()->tagged('stackflows:executor');
@@ -153,6 +154,15 @@ class Serve extends Command
             }
 
             if ($this->option('once')) {
+                break;
+            }
+            if ((int)$this->option('max-time') !== 0 && $this->option('max-time') <= (Carbon::now()->timestamp - $startTime)) {
+                $this->output->writeln(
+                    sprintf(
+                        'Service is restarting after %s seconds.',
+                        (Carbon::now()->timestamp - $startTime)
+                    )
+                );
                 break;
             }
 
