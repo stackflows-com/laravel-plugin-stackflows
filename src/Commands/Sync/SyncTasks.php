@@ -19,7 +19,7 @@ class SyncTasks extends Command
      *
      * @var string
      */
-    protected $signature = 'stackflows:sync:tasks';
+    protected $signature = 'stackflows:sync:tasks {--max-time=0 : The maximum number of seconds the service should run}';
 
     /**
      * The console command description.
@@ -46,6 +46,7 @@ class SyncTasks extends Command
     public function handle(Stackflows $stackflows)
     {
         $nextAfter = Carbon::now()->subDays(7);
+        $startTime = Carbon::now()->timestamp;
 
         $size = 100;
 
@@ -173,6 +174,17 @@ class SyncTasks extends Command
                     );
                 }
             }
+
+            if ((int)$this->option('max-time') !== 0 && $this->option('max-time') <= (Carbon::now()->timestamp - $startTime)) {
+                $this->output->writeln(
+                    sprintf(
+                        'Service is restarting after %s seconds.',
+                        (Carbon::now()->timestamp - $startTime)
+                    )
+                );
+                break;
+            }
+
 
             sleep(1);
         }
