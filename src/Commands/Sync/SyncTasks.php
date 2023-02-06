@@ -185,7 +185,6 @@ class SyncTasks extends Command
                 break;
             }
 
-
             sleep(1);
         }
     }
