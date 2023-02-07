@@ -163,6 +163,7 @@ class Serve extends Command
                         (Carbon::now()->timestamp - $startTime)
                     )
                 );
+
                 break;
             }
 

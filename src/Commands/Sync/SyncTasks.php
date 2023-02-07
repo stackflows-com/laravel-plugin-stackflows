@@ -182,6 +182,7 @@ class SyncTasks extends Command
                         (Carbon::now()->timestamp - $startTime)
                     )
                 );
+
                 break;
             }
 
